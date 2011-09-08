@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>beamtest</class>
+ <widget class="QWidget" name="beamtest">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>107</width>
+    <height>200</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>beamtest</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>4</x>
+     <y>5</y>
+     <width>98</width>
+     <height>189</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Point Cloud Tool</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="testbeam">
+      <property name="text">
+       <string>loadtext</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="writebinary">
+      <property name="text">
+       <string>writebinary</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="readbinary">
+      <property name="text">
+       <string>readbinary</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="writebinarychunks">
+      <property name="text">
+       <string>writechunks</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="writebinarychunkswithcolor">
+      <property name="text">
+       <string>writechunks_color</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="readbinarywithcolor">
+      <property name="text">
+       <string>readbinary_color</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

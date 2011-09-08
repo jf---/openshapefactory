@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="SFMQTGUI_PROPS"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalOptions="/DWNT -Zm200 -w34100 -w34189 -w34100 -w34189"
+		Optimization="2"
+		InlineFunctionExpansion="1"
+		FavorSizeOrSpeed="1"
+		WholeProgramOptimization="true"
+		AdditionalIncludeDirectories="&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include&quot;;&quot;$(QTDIR)\include\ActiveQt&quot;;&quot;$(QTDIR)\mkspecs\win32-msvc2008&quot;;&quot;$(CASROOT)\inc&quot;;.\GeneratedFiles\Release;.\GeneratedFiles\Debug;.\GeneratedFiles;..\SFMQTDLL\src\inc;&quot;$(QTDIR)\include\QtScript&quot;;&quot;$(QTDIR)\src\scripttools\debugging&quot;;&quot;..\Libs\QScintilla-gpl-2.5.1\include&quot;;&quot;..\Libs\QScintilla-gpl-2.5.1\Qt4&quot;;&quot;..\Libs\QScintilla-gpl-2.5.1\lexers&quot;;&quot;..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot;;&quot;..\Libs\kmlocal-1.7.2\src&quot;"
+		PreprocessorDefinitions="_WINDOWS;_DEBUG;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;CSFDB;QOCC_STATIC;WNT;SALOME_GEOM;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_HAVE_MMX;QT_HAVE_3DNOW;QT_HAVE_SSE;QT_HAVE_MMXEXT;QT_HAVE_SSE2;QT_THREAD_SUPPORT;NDEBUG;No_Exception;QT_NO_DEBUG"
+		StringPooling="true"
+		RuntimeLibrary="0"
+		EnableFunctionLevelLinking="true"
+		EnableEnhancedInstructionSet="1"
+		FloatingPointModel="2"
+		ObjectFile="$(TargetDir)\"
+		WarningLevel="3"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="gdi32.lib glu32.lib opengl32.lib QtCore4.lib QtGui4.lib QtScript4.lib QtScriptTools4.lib QtScriptToolsd4.lib qtmaind.lib StdLPlugin.lib StdPlugin.lib BinLPlugin.lib BinPlugin.lib BinXCAFPlugin.lib FWOSPlugin.lib PTKernel.lib QAxServer.lib QAxContainer.lib TKAdvTools.lib TKBin.lib TKBinL.lib TKBinXCAF.lib TKBO.lib TKBool.lib TKBRep.lib TKCAF.lib TKCDF.lib TKernel.lib TKFeat.lib TKFillet.lib TKG2d.lib TKG3d.lib TKGeomAlgo.lib TKGeomBase.lib TKHLR.lib TKIGES.lib TKLCAF.lib TKMath.lib TKMesh.lib TKMeshVS.lib TKNIS.lib TKOffset.lib TKOpenGl.lib TKPCAF.lib TKPLCAF.lib TKPrim.lib TKPShape.lib TKService.lib TKShapeSchema.lib TKShHealing.lib TKStdLSchema.lib TKStdSchema.lib TKSTEP.lib TKSTEP209.lib TKSTEPAttr.lib TKSTEPBase.lib TKSTL.lib TKTopAlgo.lib TKV2d.lib TKV3d.lib TKVRML.lib TKXCAF.lib TKXCAFSchema.lib TKXDEIGES.lib TKXDESTEP.lib TKXml.lib TKXmlL.lib TKXmlXCAF.lib TKXSBase.lib TKXSDRAW.lib user32.lib XCAFPlugin.lib XmlLPlugin.lib XmlPlugin.lib XmlXCAFPlugin.lib OCCTopoDSRead_topods.lib qscintilla2.lib"
+		LinkIncremental="2"
+		AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(CASROOT)/win32/lib&quot;;C:\MinGW\bin;..\Debug;..\SFMQTDLL\src\inc\datakit;&quot;..\Libs\QScintilla-gpl-2.5.1\Qt4\Debug&quot;"
+		SubSystem="2"
+		LargeAddressAware="2"
+		RandomizedBaseAddress="1"
+		DataExecutionPrevention="0"
+		TargetMachine="1"
+	/>
+</VisualStudioPropertySheet>
