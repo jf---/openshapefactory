@@ -86,7 +86,7 @@ class QoccInputOutput;
 
 	//  //points
 		QScriptValue makepoint();
-	//  QScriptValue makepointoncurve();
+	    QScriptValue makepointoncurve();
 	//  QScriptValue makeprojectpointonsurface();
 	//  QScriptValue makeprojectpointoncurve();
 	//  QScriptValue makecenterofgravitypoint();

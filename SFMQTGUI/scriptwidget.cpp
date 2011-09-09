@@ -61,6 +61,7 @@ scriptwidget::scriptwidget(QWidget *parent)
 			QString objname = widgetitem->objectName();
 			connect(widgetitem,SIGNAL(sliderMoved(int)),this,SLOT(evaluatetext()));
 			frontend.setProperty(objname,myengine.newQObject(widgetitem));
+			
 		}
 	}
 
@@ -166,6 +167,9 @@ QScriptValue result;
  if (myengine.hasUncaughtException()) {
      int line = myengine.uncaughtExceptionLineNumber();
 	 ui.listener->addItem( QString("Oops!:")+ QString::number(line) + QString(" ") + result.toString());
+	 myengine.clearExceptions();
+	 myengine.collectGarbage();
+	 
  } else
  {
 	 ui.listener->addItem(result.toString());

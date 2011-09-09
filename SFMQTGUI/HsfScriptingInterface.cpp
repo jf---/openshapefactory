@@ -170,6 +170,38 @@ QScriptValue HsfScriptingInterface::getfile()
  }
 
 
+QScriptValue HsfScriptingInterface::makepointoncurve()
+ {
+	 
+	 TopoDS_Shape myptshape;
+	 gp_Pnt p1;
+	 if (context()->argumentCount() == 2)
+	 {
+		 TopoDS_Shape crv1 = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		 if (crv1.IsNull()) 
+		 {
+			 return engine()->toScriptValue(false);
+		 }
+		 double ratio = context()->argument(1).toNumber();
+		 p1 = hsf::AddNewPointonCurve(crv1,ratio);
+		 myptshape = hsf::AddNewPoint(p1);
+		 
+	 }
+	 
+	 QScriptValue myptval = engine()->toScriptValue(myptshape);
+	 double x,y,z;
+	 x = p1.X();y = p1.Y();z = p1.Z();
+
+	 myptval.setProperty(QString("x"),engine()->toScriptValue(x));
+	 myptval.setProperty(QString("y"),engine()->toScriptValue(y));
+	 myptval.setProperty(QString("z"),engine()->toScriptValue(z));
+
+	QScriptValue xvaltest = myptval.property(QString("x"));
+	double xval = xvaltest.toNumber();
+
+
+     return myptval;
+ }
 
 QScriptValue HsfScriptingInterface::makepoint()
  {
@@ -333,14 +365,47 @@ QScriptValue HsfScriptingInterface::makeline()
      TopoDS_Shape myshape;
 	 if (context()->argumentCount() == 2)
 	 {
-		 gp_Pnt p1 = hsf::getpointfromshape(context()->argument(0).toVariant().value<TopoDS_Shape>());
-		 gp_Pnt p2 = hsf::getpointfromshape(context()->argument(1).toVariant().value<TopoDS_Shape>());
+			QScriptValue arg1 = context()->argument(0);
+			QScriptValue arg2 = context()->argument(1);
+		 if(context()->argument(0).isVariant() && context()->argument(1).isVariant())
+		 {
+			 QVariant arg1variant = arg1.toVariant();
+		     QVariant arg2variant = arg2.toVariant();
 
-		 myshape = hsf::AddNewLineptpt(p1,p2);
-		 	 
+			 QString type1(arg1variant.typeName());
+			 QString type2(arg2variant.typeName());
+			 gp_Pnt p1;
+			 gp_Pnt p2;
+			 if( type1 == "gp_Pnt" && type2 == "gp_Pnt" )
+			 {
+				p1 = arg1variant.value<gp_Pnt>();
+				p2 = arg2variant.value<gp_Pnt>();
+
+				
+			 } else if( type1 == "TopoDS_Shape" && type2 == "TopoDS_Shape" )
+			 {
+				 p1 = hsf::getpointfromshape(arg1variant.value<TopoDS_Shape>());
+				 p2 = hsf::getpointfromshape(arg2variant.value<TopoDS_Shape>());
+				
+			 }
+
+			 if (p1.Distance(p2) > Precision::Confusion())
+			 {
+				 myshape = hsf::AddNewLineptpt(p1,p2);
+			 }
+		 }
+
 	 }
-	      
-     return engine()->toScriptValue(myshape);
+
+	 if (!myshape.IsNull())
+	 {
+		return engine()->toScriptValue(myshape);
+	 } else
+	 {
+		return engine()->toScriptValue(false);
+	 }
+
+     
  }
 
 QScriptValue HsfScriptingInterface::initpart()
@@ -368,6 +433,9 @@ QScriptValue HsfScriptingInterface::endpart()
 				ic->SetDisplayMode(aisp,2,Standard_False);
 				ic->Display(aisp);
 				
+			 }else{
+			   ic = ui::getInstance()->getWindowContext();
+		       HSF::updateUserAIS(folder,aisp,ic);
 			 }
 		 } else {
 			   ic = ui::getInstance()->getWindowContext();
