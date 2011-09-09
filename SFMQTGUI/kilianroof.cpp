@@ -605,6 +605,7 @@ if (!(filename.length() > 0)) return;
 
 
 Handle(TopTools_HSequenceOfShape) famshape1 = io_man->importIGES(filename);
+
 mastersurface = famshape1->Value(1);
 gp_Pnt cog = hsf::GetCOG(mastersurface);
 mastersurface = hsf::movepointopoint(mastersurface,cog,gp::Origin());

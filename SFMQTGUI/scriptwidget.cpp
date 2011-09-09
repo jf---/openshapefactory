@@ -41,6 +41,7 @@ scriptwidget::scriptwidget(QWidget *parent)
 	seteditor();
 
 	HsfScriptingInterface* hsfapi = new HsfScriptingInterface() ;
+	hsfapi->setparentwidget(this);
 	//myengine.globalObject().setProperty("hsf",myengine.newQObject(hsfapi));
 
 	myengine.setGlobalObject(myengine.newQObject(hsfapi));
@@ -59,7 +60,6 @@ scriptwidget::scriptwidget(QWidget *parent)
 		if(widgetitem){
 			QString objname = widgetitem->objectName();
 			connect(widgetitem,SIGNAL(sliderMoved(int)),this,SLOT(evaluatetext()));
-			
 			frontend.setProperty(objname,myengine.newQObject(widgetitem));
 		}
 	}
@@ -109,7 +109,8 @@ void scriptwidget::seteditor()
 
 	textEdit->setEdgeMode(QsciScintilla::EdgeLine);
     textEdit->setEdgeColumn(0);
-    textEdit->setEdgeColor(QColor("#FF0000"));
+	textEdit->setEdgeColor(QColor("green"));
+	
 
 	
 	

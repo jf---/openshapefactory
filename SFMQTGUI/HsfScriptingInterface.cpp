@@ -7,17 +7,169 @@
 #include "SGMGUI_COMMON.h"
 # include <QHBoxLayout>
 #include "AIS_Gauss.hxx" 
+#include <QFileDialog>
+#include <scriptwidget.h>
+#include <QRadioButton>
+#include <QoccInputOutput.h>
+#include <Prs3d_Presentation.hxx>
 
 HsfScriptingInterface::HsfScriptingInterface()
 {
 	UnitsAPI::SetLocalSystem(UnitsAPI_MDTV);
 	Handle_AIS_InteractiveContext ic = ui::getInstance()->getWindowContext();
 	viscount = 0;	 
+	setuprunonce();
+
+	io_man = new QoccInputOutput();
+
+	needstofitall = false;
  }
 
 HsfScriptingInterface::~HsfScriptingInterface()
  {
  }
+
+void HsfScriptingInterface::setuprunonce()
+{
+	runoncecounter =0;
+	runoncefilecounter=0;
+	runoncedircountercounter=0;
+}
+
+void HsfScriptingInterface::finishrunonce()
+{
+
+if (runoncecounter > 0)
+{
+
+} else 
+{
+	runoncefilecounter = 0;
+	if (parentwidget->ui.runonceset->count())
+	{
+		QLayoutItem* widgetitem = parentwidget->ui.runonceset->layout()->takeAt(0);
+		delete widgetitem->widget();
+		delete widgetitem;
+	}
+	
+}
+runoncecounter =0;
+}
+
+
+void HsfScriptingInterface::setparentwidget(scriptwidget* thewidget)
+{
+parentwidget = thewidget;
+
+}
+
+QScriptValue HsfScriptingInterface::getfileonce()
+{	runoncecounter++;
+
+	QScriptValue filename ; 
+	if (runoncefilecounter > 0)
+	{
+		if (parentwidget->ui.runonceset->layout()->count()> 0)
+		{
+			QRadioButton* widgetitem = qobject_cast<QRadioButton*> (parentwidget->ui.runonceset->layout()->itemAt(0)->widget());
+			if (widgetitem && widgetitem->isChecked()) 
+			{
+			  LastSavedrunonceFilename = getfile().toString(); 
+			} else if (widgetitem && !widgetitem->isChecked())
+		    {
+			 // LastSavedrunonceFilename.clear();
+			}
+		} else {
+		LastSavedrunonceFilename.clear();
+		}
+
+	} else {
+		
+		LastSavedrunonceFilename = getfile().toString();
+		if ( LastSavedrunonceFilename.length() > 0 ) 
+		{
+		QRadioButton *button = new QRadioButton("GetFile", 0);
+		button->setObjectName( "getfileonce");
+		QString curobjname = button->objectName();
+		parentwidget->ui.runonceset->addWidget(button);
+
+		connect(button,SIGNAL(toggled()),parentwidget,SLOT(evaluatetext()));
+
+		runoncefilecounter++;
+		}
+	}
+
+	return engine()->toScriptValue(LastSavedrunonceFilename);
+}
+QScriptValue HsfScriptingInterface::getdironce()
+{
+	return getdir();
+}
+
+ QScriptValue HsfScriptingInterface::importigs()
+ {
+
+	 TopoDS_Shape curimport;
+
+	  if(context()->argumentCount() == 1)
+	 {
+		 QString filename = context()->argument(0).toString();
+		 QFileInfo curfile(filename);
+		 if (filename == LastImportFilename)
+		 {
+			curimport = LastImportShape;
+		 }else if (curfile.isFile() && (filename.contains("igs")) || (filename.contains("iges")) )
+		 {
+			 Handle(TopTools_HSequenceOfShape) importedsequence = io_man->importIGES(filename);
+			 if (importedsequence->Length() > 0)
+			 {
+				curimport = importedsequence->Value(1);
+				LastImportShape = curimport;
+			 } // end of check something inside file
+			LastImportFilename  = filename;
+		 } // end of check filename
+
+		 
+	 } // end of check argument
+
+
+return engine()->toScriptValue(curimport);
+
+
+
+ }
+
+QScriptValue HsfScriptingInterface::fitall()
+{
+
+	needstofitall = true;
+
+	return engine()->toScriptValue(true);
+
+}
+
+QScriptValue HsfScriptingInterface::getdir()
+{
+ 
+	 QString myfilename;
+	 myfilename = QFileDialog::getExistingDirectory ( parentwidget->parentWidget(),
+							 tr("Open Folder"),"");
+	      
+     return engine()->toScriptValue(myfilename);
+
+}
+
+QScriptValue HsfScriptingInterface::getfile()
+ {
+	 
+	 QString myfilename;
+	 myfilename = QFileDialog::getOpenFileName ( parentwidget->parentWidget(),
+							 tr("Import File"),"");
+	      
+     return engine()->toScriptValue(myfilename);
+ }
+
+
 
 QScriptValue HsfScriptingInterface::makepoint()
  {
@@ -202,9 +354,34 @@ QScriptValue HsfScriptingInterface::initpart()
 
 QScriptValue HsfScriptingInterface::endpart()
  {
-     if (viscount>0){
-	 ic = ui::getInstance()->getWindowContext();
-	 HSF::updateUserAIS(folder,aisp,ic);}
+     if (viscount>0)
+	 {
+		 if (!aisp.IsNull())
+		 {
+			 if (!aisp->Presentation()->IsVisible())
+			 {
+				ic->Remove(aisp);
+				//delete aisp;
+				aisp = new User_AIS(folder,ic);
+				ic->SetMaterial(aisp,Graphic3d_NOM_NEON_GNC);
+				ic->SetColor(aisp, Quantity_NOC_BLACK);
+				ic->SetDisplayMode(aisp,2,Standard_False);
+				ic->Display(aisp);
+				
+			 }
+		 } else {
+			   ic = ui::getInstance()->getWindowContext();
+		       HSF::updateUserAIS(folder,aisp,ic);
+	     }
+	    
+		
+			
+	 } else {
+		 if (!aisp.IsNull())
+		{
+			aisp->Presentation()->SetVisible(false);
+		}	
+	 }
 	 
 	 if (gaussviscount>0){
 		 if(!mygauss.IsNull())
@@ -219,10 +396,28 @@ QScriptValue HsfScriptingInterface::endpart()
 			ic->Display(mygauss);
 			
 		 }
+
+	 } else
+	 {
+		  if(!mygauss.IsNull())
+		 {
+		    mygauss->setshape(TopoDS_Shape());
+			mygauss->setshowedges(showgaussedges);
+			ic->Redisplay(mygauss);
+		 }
+
 	 }
 
+	
+	 // finish the runonce system
+	 finishrunonce();
 
-
-
+	 if ( needstofitall)
+	 {		
+	needstofitall = false;
+	qGeomApp->myview->viewAxo();
+	qGeomApp->myview->fitAll();
+	 }
+	 
      return engine()->toScriptValue(true);
  }

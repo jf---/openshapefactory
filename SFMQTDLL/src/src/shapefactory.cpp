@@ -3287,12 +3287,15 @@ void HSF::updateUserAIS(TopoDS_Shape aShape, Handle_User_AIS &anAIS, Handle_AIS_
 	//vc->getContext()->Display(AISBottle, 1,0,false,false);
 	if (!anAIS->HasPresentation()){
 		ic->Display(anAIS, 2,0,false,false);
+		ic->Activate(anAIS);
 		}
 	else
 		{
+		ic->Activate(anAIS);
 		anAIS->Set(aShape);
 		//ic->Deactivate(anAIS);
 		ic->Redisplay(anAIS);
+		
 		}
 
 
@@ -3305,10 +3308,11 @@ void HSF::updateAIS(TopoDS_Shape aShape, Handle_AIS_Shape &anAIS, Handle_AIS_Int
 
 	if (anAIS.IsNull()){
 	anAIS=new AIS_Shape(aShape);
-	ic->SetMaterial(anAIS,Graphic3d_NOM_PEWTER);
+	ic->SetMaterial(anAIS,Graphic3d_NOM_NEON_GNC);
 	ic->SetColor(anAIS, Quantity_NOC_BLACK);
 	ic->SetDisplayMode(anAIS,1,Standard_False);
 	}
+
 	
 	
 	//theContext->SetTransparency(AISBottle,0.6);

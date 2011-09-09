@@ -24,9 +24,9 @@ public:
 	//static QScriptValue visshape(QScriptContext *context, QScriptEngine *engine);
 	
 	
-	
-private:
 	Ui::scriptwidget ui;
+private:
+	
 	QScriptEngine myengine;
 	QScriptEdit *myeditor;
 	QsciScintilla *textEdit;

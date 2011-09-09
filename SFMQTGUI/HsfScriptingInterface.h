@@ -15,12 +15,15 @@
 #include "User_AIS.hxx" //ais object for displaying TopoDS_Shape
 #include "AIS_Gauss.hxx" // ais object for displaying TopoDS_Shape with curvature analysis
 
+
  Q_DECLARE_METATYPE(shapefactory)
  Q_DECLARE_METATYPE(gp_Pnt)
  Q_DECLARE_METATYPE(gp_Vec)
  Q_DECLARE_METATYPE(TopoDS_Shape)
  Q_DECLARE_METATYPE(QList<TopoDS_Shape>)
 
+class scriptwidget;
+class QoccInputOutput;
 
  class HsfScriptingInterface: public QObject, protected QScriptable
  {
@@ -41,12 +44,33 @@
 	Handle(AIS_Gauss) mygauss;
 	bool showgaussedges;
 
+	scriptwidget* parentwidget;
+
+	// view system
+	bool needstofitall;
+
+	//do once system
+	int runoncecounter;
+	int runoncefilecounter;
+	int runoncedircountercounter;
+	QString LastSavedrunonceFilename;
+
+
+	//filesystem
+	QoccInputOutput* io_man;
+	QString LastImportFilename;
+	TopoDS_Shape LastImportShape;
 
 
 
  public slots:
 
-     
+     void setparentwidget(scriptwidget* thewidget);
+	 void setuprunonce();
+	 void finishrunonce();
+
+	 /// view functions
+	  QScriptValue fitall();
 
 	//// utility functions
       QScriptValue vis();
@@ -123,9 +147,15 @@
 	//  QScriptValue getbiggestsolid();
 
 	//  // filesystem operations
+		QScriptValue getfile();
+		QScriptValue getdir();
+		
+		QScriptValue getfileonce();
+		QScriptValue getdironce();
+
 	//  QScriptValue loadtextfile();
 	//  QScriptValue loadbinaryfile();
-	//  QScriptValue importigs();
+	    QScriptValue importigs();
 	//  QScriptValue importstp();
 	//  QScriptValue importstl();
 	//  QScriptValue exportigs();
