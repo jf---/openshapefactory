@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
   <ModulePrefs title="openshapefactory mindmap gadget" /> 
-  <Content type="url" href="http://openshapefactory.googlecode.com/files/OpenShapeFactory.html"/>
+  <Content type="url" href="http://openshapefactory.googlecode.com/hg/doc/openshapefactorymindmap/OpenShapeFactory.html"/>
 </Module>
