@@ -368,7 +368,7 @@ QScriptValue HsfScriptingInterface::viscurvature ()
 	 TopoDS_Shape myshape = context()->argument(0).toVariant().value<TopoDS_Shape>();
 	 bool showedges = context()->argument(1).toBool();
 	 double accuracy = context()->argument(2).toNumber();
-	 if (accuracy == 0) accuracy = 0.1;
+	 if (accuracy == 0) accuracy = 10;
 	 showgaussedges =showedges;
 	 int localvis = gaussviscount;
 	 if (!myshape.IsNull()){
