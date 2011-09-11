@@ -56,15 +56,20 @@ scriptwidget::scriptwidget(QWidget *parent)
 	int childcount = ui.sliderset->count();
 	for(int i=0;i<childcount;i++){
 		QSlider* widgetitem = qobject_cast<QSlider*>(ui.sliderset->itemAt(i)->widget());
+		//QLabel* widgetitem2 = qobject_cast<QLabel*>(ui.labelset->itemAt(i)->widget());
 		
 		if(widgetitem){
 			QString objname = widgetitem->objectName();
+			QString obj2name = objname + QString("txt");
+
 			connect(widgetitem,SIGNAL(sliderMoved(int)),this,SLOT(evaluatetext()));
 			frontend.setProperty(objname,myengine.newQObject(widgetitem));
+			//frontend.setProperty(obj2name,myengine.newQObject(widgetitem2));
 			
 		}
 	}
 
+	
 
 	
 

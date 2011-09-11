@@ -25,11 +25,12 @@ public:
 	
 	
 	Ui::scriptwidget ui;
+	QsciScintilla *textEdit;
 private:
 	
 	QScriptEngine myengine;
 	QScriptEdit *myeditor;
-	QsciScintilla *textEdit;
+	
 	//QScriptEngineDebugger *debugger;
 	
 	

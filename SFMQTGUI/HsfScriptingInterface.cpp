@@ -12,6 +12,8 @@
 #include <QRadioButton>
 #include <QoccInputOutput.h>
 #include <Prs3d_Presentation.hxx>
+#include <Qsci/qsciscintilla.h>
+#include <QLabel>
 
 HsfScriptingInterface::HsfScriptingInterface()
 {
@@ -203,9 +205,125 @@ QScriptValue HsfScriptingInterface::makepointoncurve()
      return myptval;
  }
 
+QScriptValue HsfScriptingInterface::getval()
+{
+
+	if (context()->argumentCount() == 3)
+	{
+	 QStringList mylist = context()->backtrace();
+	 QString comand = mylist.at(1);
+	 int linenumber = comand.split("at").at(1).toInt()-2;
+	 QString lineat  = parentwidget->textEdit->text(linenumber);
+	 QString varname = lineat.split("=").at(0).trimmed();
+	 
+	 int pos = context()->argument(0).toInteger();
+	 QString name = varname;
+	 QString namelbl = varname +QString("txt");
+
+	 int minval = context()->argument(1).toInteger();
+	 int maxval = context()->argument(2).toInteger();
+	
+	if (slidermap.contains(name)) // if slider is already in the map ge the value
+	{
+		QSlider* curslider = slidermap[name];
+		int index = parentwidget->ui.sliderset->layout()->indexOf(curslider);
+		 
+		if (pos != index)
+		{
+		QLayoutItem* curitem = parentwidget->ui.sliderset->layout()->takeAt(index);
+		QLayoutItem* curitemlbl = parentwidget->ui.labelset->layout()->takeAt(index);
+		parentwidget->ui.sliderset->insertWidget(pos,curitem->widget());
+		parentwidget->ui.labelset->insertWidget(pos,curitemlbl->widget());
+		}
+		
+		curslider->setMinimum(minval);
+		curslider->setMaximum(maxval);
+		double val = curslider->value();
+		currentslidermap.insert(name,curslider);
+		return engine()->toScriptValue(val);
+	} else // else create a new slider
+	{
+		QSlider* curslider = new QSlider(Qt::Orientation::Horizontal );
+		curslider->setObjectName(name);
+		curslider->setMinimum(minval);
+		curslider->setMaximum(maxval);
+		connect(curslider,SIGNAL(sliderMoved(int)),parentwidget,SLOT(evaluatetext()));
+		
+		slidermap.insert(name,curslider);
+		parentwidget->ui.sliderset->insertWidget(pos,curslider);
+
+		QLabel* curlabel = new QLabel(name);
+		curlabel->setObjectName(namelbl);
+		parentwidget->ui.labelset->insertWidget(pos,curlabel);
+		currentslidermap.insert(name,curslider);
+ 
+		return QScriptValue(false);
+	}
+	}
+
+}
+
+void HsfScriptingInterface::checksliders()
+{
+
+QList<QLayoutItem*> tobedeleted;
+
+QList<QSlider*> sliders = slidermap.values();
+
+	for (int i=0;i<sliders.count();i++)
+	{
+		QSlider* curslider = slidermap[sliders[i]->objectName()];
+		if (!currentslidermap.contains(curslider->objectName()))
+		{
+			slidermap.remove(sliders[i]->objectName());
+			int index = parentwidget->ui.sliderset->layout()->indexOf(sliders[i]);
+			QWidget* curlabel = parentwidget->ui.labelset->layout()->itemAt(index)->widget();
+			delete curlabel;
+			delete curslider;
+		}
+	}
+
+
+	//for (int i=0;i<tobedeleted.count();i++)
+	//{
+	//	QLayoutItem* curitem = tobedeleted[i];
+	//	//tobedeleted.removeLast();
+	//	
+	//	if (curitem)
+	//	{
+	//	if (curitem->isEmpty()) continue;
+	//	QSlider* slideritem = qobject_cast<QSlider*>(curitem->widget());
+	//	QLabel* labelitem = qobject_cast<QLabel*>(curitem->widget());
+	//	QLayoutItem* takenitem;
+	//	if (slideritem)
+	//	{
+	//	int index = parentwidget->ui.sliderset->layout()->indexOf(curitem->widget());
+	//	takenitem = parentwidget->ui.sliderset->layout()->takeAt(index);
+	//	}
+	//	if (labelitem)
+	//	{
+	//	int index = parentwidget->ui.labelset->layout()->indexOf(curitem->widget());
+	//	takenitem = parentwidget->ui.sliderset->layout()->takeAt(index);
+	//	}
+
+	//	QString objname = takenitem->widget()->objectName();
+	//	delete takenitem->widget();
+	//	
+	//	//delete takenitem;
+	//	}
+	//}
+
+
+
+}
 QScriptValue HsfScriptingInterface::makepoint()
  {
 	 
+
+
+
+
+
 	 TopoDS_Shape myptshape;
 	 if (context()->argumentCount() == 3)
 	 {
@@ -414,11 +532,16 @@ QScriptValue HsfScriptingInterface::initpart()
 	gaussviscount =0;
 	B.MakeCompound(folder);
 	B.MakeCompound(gaussfolder);
+
+	currentslidermap.clear();
+
 	return engine()->toScriptValue(true);
  }
 
 QScriptValue HsfScriptingInterface::endpart()
  {
+	checksliders();
+
      if (viscount>0)
 	 {
 		 if (!aisp.IsNull())

@@ -61,6 +61,11 @@ class QoccInputOutput;
 	QString LastImportFilename;
 	TopoDS_Shape LastImportShape;
 
+	//slider system
+	QMap<QString,QSlider*> slidermap;
+	QMap<QString,QSlider*> currentslidermap;
+	
+
 
 
  public slots:
@@ -69,6 +74,9 @@ class QoccInputOutput;
 	 void setuprunonce();
 	 void finishrunonce();
 
+	 //gui
+	 QScriptValue getval();
+	 void checksliders();
 	 /// view functions
 	  QScriptValue fitall();
 
