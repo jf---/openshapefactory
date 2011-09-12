@@ -1233,6 +1233,8 @@ QMap<QString,gp_Ax1>  HSF::BuildPointGridonSrf(TopoDS_Shape aShape,double ucount
 	{
 	theSurface = BRep_Tool::Surface(TopoDS::Face(Ex.Current()));
     }
+
+	if (theSurface.IsNull()) return pointmap;
 	
 	Standard_Real u1, u2, v1, v2;
 	theSurface->Bounds(u1,u2,v1,v2);
@@ -3396,7 +3398,12 @@ gp_Pnt HSF::AddNewUVPt(TopoDS_Shape srf,double u,double v)
 }
 gp_Pnt HSF::getpointfromshape(TopoDS_Shape point)
 {
-	gp_Pnt p1 = BRep_Tool::Pnt(TopoDS::Vertex(point));
+	gp_Pnt p1;
+	if (!point.IsNull())
+	{
+		p1 = BRep_Tool::Pnt(TopoDS::Vertex(point));
+		return p1;
+	}
 	return p1;
 
 }

@@ -15,6 +15,7 @@
 #include <Qsci/qsciscintilla.h>
 #include <QLabel>
 
+
 HsfScriptingInterface::HsfScriptingInterface()
 {
 	UnitsAPI::SetLocalSystem(UnitsAPI_MDTV);
@@ -213,7 +214,8 @@ QScriptValue HsfScriptingInterface::getval()
 	 QStringList mylist = context()->backtrace();
 	 QString comand = mylist.at(1);
 	 int linenumber = comand.split("at").at(1).toInt()-2;
-	 QString lineat  = parentwidget->textEdit->text(linenumber);
+	 
+	 QString lineat  = parentwidget->gettextbyline(linenumber);
 	 QString varname = lineat.split("=").at(0).trimmed();
 	 
 	 int pos = context()->argument(0).toInteger();
@@ -321,10 +323,12 @@ QScriptValue HsfScriptingInterface::makepoint()
 	 
 
 
+	
 
 
 
 	 TopoDS_Shape myptshape;
+	 gp_Pnt mypt ;
 	 if (context()->argumentCount() == 3)
 	 {
 		 double x,y,z;
@@ -333,14 +337,98 @@ QScriptValue HsfScriptingInterface::makepoint()
 		 if (context()->argument(1).toString().toLower() == "infinity") {y = 0;} else { y = context()->argument(1).toNumber();}
 		 if (context()->argument(2).toString().toLower() == "infinity") {z = 0;} else { z = context()->argument(2).toNumber();}
 
-    	 gp_Pnt mypt = gp_Pnt(x,y,z);
+    	 mypt = gp_Pnt(x,y,z);
 		 myptshape = hsf::AddNewPoint(mypt);
 		 
 	 }
-	      
+	     
+	 QScriptValue myptval = engine()->toScriptValue(myptshape);
+	 myptval.setProperty(QString("x"),engine()->toScriptValue(mypt.X() ));
+	 myptval.setProperty(QString("y"),engine()->toScriptValue(mypt.Y()));
+	 myptval.setProperty(QString("z"),engine()->toScriptValue(mypt.Z()));
+
+
      return engine()->toScriptValue(myptshape);
  }
 
+QScriptValue HsfScriptingInterface::panelize()
+{
+
+	
+if(context()->argumentCount() == 4)
+	 {
+	 TopoDS_Shape surface1 = context()->argument(0).toVariant().value<TopoDS_Shape>();
+	 int x = context()->argument(1).toNumber();
+	 int y = context()->argument(2).toNumber();
+	 QScriptValue panelfunc = context()->argument(3);
+	 
+	 if (panelfunc.isFunction())
+	 {
+	
+	TopoDS_Compound folder;
+	BRep_Builder B;
+	B.MakeCompound(folder);
+	int viscount =0;
+
+	 QMap<QString,gp_Ax1> plist = HSF::BuildPointGridonSrf(surface1,x,y);
+		QMapIterator<QString,gp_Ax1> i(plist);
+		while (i.hasNext()){
+		i.next();
+			QString currentname = i.key();
+			QString epn = HSF::GetNextUvName(currentname,1,0);
+			QString sepn = HSF::GetNextUvName(currentname,1,1);
+			QString swpn = HSF::GetNextUvName(currentname,0,1);
+			if(plist.contains(epn) && plist.contains(sepn) && plist.contains(swpn)){
+				gp_Pnt p1 = i.value().Location();
+				gp_Pnt p2 = plist.value(epn).Location();
+				gp_Pnt p3 = plist.value(sepn).Location();
+				gp_Pnt p4 = plist.value(swpn).Location();
+				gp_Vec v1 = i.value().Direction();
+				gp_Vec v2 = plist.value(epn).Direction();
+				gp_Vec v3 = plist.value(sepn).Direction();
+				gp_Vec v4 = plist.value(swpn).Direction();
+
+
+				QScriptValue pp1 = engine()->toScriptValue( hsf::AddNewPoint(p1));
+				QScriptValue pp2 = engine()->toScriptValue( hsf::AddNewPoint(p2));
+				QScriptValue pp3 = engine()->toScriptValue( hsf::AddNewPoint(p3));
+				QScriptValue pp4 = engine()->toScriptValue( hsf::AddNewPoint(p4));
+
+
+
+				QScriptValueList args;
+				args << pp1 << pp2 << pp3 << pp4;
+
+				QScriptValue result;
+				QScriptValue thepanel = panelfunc.call(thisObject(),args);
+				QString type = thepanel.toVariant().typeName();
+				QList<TopoDS_Shape> panelshape = thepanel.toVariant().value<QList<TopoDS_Shape>>();
+
+				if (!panelshape.isEmpty() ){
+					for(int j=0;j<panelshape.count();j++)
+					{
+						B.Add(folder,panelshape.at(j));
+						viscount++;
+					}
+				    }
+
+
+			}} // end panelize
+				if (viscount>0){
+					TopoDS_Shape resultshape = folder;
+					return engine()->toScriptValue(resultshape);
+				;}
+		
+	 } // end if its function
+		return engine()->toScriptValue(true);
+} else { return engine()->toScriptValue(false);}
+	 
+	
+     
+
+
+
+}
 QScriptValue HsfScriptingInterface::vis()
  {
      if(folder.IsNull())
@@ -427,8 +515,15 @@ QScriptValue HsfScriptingInterface::makevector()
 		 }
 		
 	 }
-	      
-     return engine()->toScriptValue(myvec);
+	 
+	 QScriptValue myvecval = engine()->toScriptValue(myvec);
+	myvecval.setProperty(QString("x"),engine()->toScriptValue(myvec.X()));
+	myvecval.setProperty(QString("y"),engine()->toScriptValue(myvec.Y()));
+	myvecval.setProperty(QString("z"),engine()->toScriptValue(myvec.Z()));
+
+
+
+     return myvecval;
  }
 
 QScriptValue HsfScriptingInterface::makecircle()
@@ -452,6 +547,12 @@ QScriptValue HsfScriptingInterface::makeshapelist()
 	return engine()->toScriptValue(shapelist);
  }
 
+QScriptValue HsfScriptingInterface::makepointlist()
+ {
+    QList<gp_Pnt> pointlist;
+	return engine()->toScriptValue(pointlist);
+ }
+
 QScriptValue HsfScriptingInterface::addshapetolist()
  {
     QList<TopoDS_Shape> shapelist;
@@ -464,13 +565,25 @@ QScriptValue HsfScriptingInterface::addshapetolist()
 	return engine()->toScriptValue(shapelist);
  }
 
+QScriptValue HsfScriptingInterface::addpointtolist()
+ {
+    QList<gp_Pnt> pointlist;
+	if (context()->argumentCount() == 2)
+	{
+		pointlist = context()->argument(0).toVariant().value<QList<gp_Pnt>>();
+		gp_Pnt valuetoadd = hsf::getpointfromshape(context()->argument(1).toVariant().value<TopoDS_Shape>());
+		pointlist << valuetoadd; 
+	}
+	return engine()->toScriptValue(pointlist);
+ }
+
 QScriptValue HsfScriptingInterface::makeloft()
  {
 	 TopoDS_Shape myshape;
     if (context()->argumentCount() == 1)
 	{
 		QList<TopoDS_Shape> myshapelist = context()->argument(0).toVariant().value<QList<TopoDS_Shape>>();
-		if (myshapelist.count() > 0)
+		if (myshapelist.count() > 1)
 		{
 		myshape = hsf::AddNewLoftSurface(myshapelist);
 		}
@@ -478,7 +591,21 @@ QScriptValue HsfScriptingInterface::makeloft()
 	return engine()->toScriptValue(myshape);
  }
 
-QScriptValue HsfScriptingInterface::makeline()
+QScriptValue HsfScriptingInterface::makebspline()
+ {
+	 TopoDS_Shape myshape;
+    if (context()->argumentCount() == 1)
+	{
+		QList<gp_Pnt> mypointlist = context()->argument(0).toVariant().value<QList<gp_Pnt>>();
+		if (mypointlist.count() > 1)
+		{
+			myshape = hsf::AddNewSplineInterpSShape(mypointlist);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+ }
+
+QScriptValue HsfScriptingInterface::makelineptpt()
  {
      TopoDS_Shape myshape;
 	 if (context()->argumentCount() == 2)
@@ -525,6 +652,228 @@ QScriptValue HsfScriptingInterface::makeline()
 
      
  }
+
+
+
+
+QScriptValue HsfScriptingInterface::makelineptdir()
+ {
+     TopoDS_Shape myshape;
+	 if (context()->argumentCount() > 2)
+	 {
+			QScriptValue arg1 = context()->argument(0);
+			QScriptValue arg2 = context()->argument(1);
+			QScriptValue arg3 = context()->argument(2);
+			QScriptValue arg4 = context()->argument(3);
+
+			
+		 if(context()->argument(0).isVariant() && context()->argument(1).isVariant() && context()->argument(2).isNumber() && context()->argument(3).isNumber())
+		 {
+			 QVariant arg1variant = arg1.toVariant();
+		     QVariant arg2variant = arg2.toVariant();
+			 double distance1 = arg3.toNumber();
+			 double distance2 = arg4.toNumber();
+
+			 QString type1(arg1variant.typeName());
+			 QString type2(arg2variant.typeName());
+			 gp_Pnt p1;
+			 gp_Vec v1;
+			 if( type1 == "gp_Pnt" && type2 == "gp_Vec" )
+			 {
+				p1 = arg1variant.value<gp_Pnt>();
+				v1 = arg2variant.value<gp_Vec>();
+
+				
+			 } else if( type1 == "TopoDS_Shape" && type2 == "gp_Vec" )
+			 {
+				 p1 = hsf::getpointfromshape(arg1variant.value<TopoDS_Shape>());
+				 v1 = arg2variant.value<gp_Vec>();
+				
+			 }
+
+			 if (distance1 > 0 || distance2 > 0)
+			 {
+			 myshape = hsf::AddNewLineptdir(p1,v1,distance1,distance2);
+			 }
+			 
+		 }
+
+	 }
+
+	 if (!myshape.IsNull())
+	 {
+		return engine()->toScriptValue(myshape);
+	 } else
+	 {
+		return engine()->toScriptValue(false);
+	 }
+
+     
+ }
+
+
+
+
+QScriptValue HsfScriptingInterface::makerotate()
+ {
+     TopoDS_Shape myshape;
+	 if (context()->argumentCount() ==4)
+	 {
+			QScriptValue arg1 = context()->argument(0);
+			QScriptValue arg2 = context()->argument(1);
+			QScriptValue arg3 = context()->argument(2);
+			QScriptValue arg4 = context()->argument(3);
+			
+			
+		 if(context()->argument(0).isVariant() && context()->argument(1).isVariant() && context()->argument(2).isVariant() && context()->argument(3).isNumber() )
+		 {
+			 QVariant arg1variant = arg1.toVariant();
+		     QVariant arg2variant = arg2.toVariant();
+			 QVariant arg3variant = arg3.toVariant();
+			 double angle = arg4.toNumber();
+			
+
+			 QString type1(arg1variant.typeName());
+			 QString type2(arg2variant.typeName());
+			 QString type3(arg3variant.typeName());
+			 gp_Pnt p1;
+			 gp_Vec v1;
+			
+			 if( type1 == "TopoDS_Shape" && type2 == "TopoDS_Shape" && type3 == "gp_Vec" )
+			 {
+				 TopoDS_Shape shapetorot = arg1variant.value<TopoDS_Shape>();
+				 p1 = hsf::getpointfromshape(arg2variant.value<TopoDS_Shape>());
+				 v1 = arg3variant.value<gp_Vec>();
+				 myshape = hsf::rotate(shapetorot,p1,v1,angle);
+				
+			 }
+
+			 
+			
+			 
+			 
+		 }
+
+	 }
+
+	 if (!myshape.IsNull())
+	 {
+		return engine()->toScriptValue(myshape);
+	 } else
+	 {
+		return engine()->toScriptValue(false);
+	 }
+
+     
+ }
+
+
+
+
+QScriptValue HsfScriptingInterface::makepointmovebyvector()
+ {
+     TopoDS_Shape myshape;
+	 gp_Pnt resultp;
+	 if (context()->argumentCount() == 3)
+	 {
+			QScriptValue arg1 = context()->argument(0);
+			QScriptValue arg2 = context()->argument(1);
+			QScriptValue arg3 = context()->argument(2);
+		 if(context()->argument(0).isVariant() && context()->argument(1).isVariant() && context()->argument(2).isNumber())
+		 {
+			 QVariant arg1variant = arg1.toVariant();
+		     QVariant arg2variant = arg2.toVariant();
+			 double distance = arg3.toNumber();
+
+			 QString type1(arg1variant.typeName());
+			 QString type2(arg2variant.typeName());
+			 gp_Pnt p1;
+			 gp_Vec vec;
+			 if( type1 == "gp_Pnt" && type2 == "gp_Vec" )
+			 {
+				p1 = arg1variant.value<gp_Pnt>();
+				vec = arg2variant.value<gp_Vec>();
+
+				
+			 } else if( type1 == "TopoDS_Shape" && type2 == "gp_Vec" )
+			 {
+				 p1 = hsf::getpointfromshape(arg1variant.value<TopoDS_Shape>());
+				 vec = arg2variant.value<gp_Vec>();
+				
+			 }
+			 resultp = hsf::MovePointByVector(p1,vec,distance);
+			 myshape = hsf::AddNewPoint(resultp);
+				
+
+		 }
+
+	 }
+
+	 if (!myshape.IsNull())
+	 {
+		QScriptValue myptval = engine()->toScriptValue(myshape);
+	    myptval.setProperty(QString("x"),engine()->toScriptValue(resultp.X()));
+		myptval.setProperty(QString("y"),engine()->toScriptValue(resultp.Y()));
+		myptval.setProperty(QString("z"),engine()->toScriptValue(resultp.Z()));
+
+		return myptval;
+	 } else
+	 {
+		return engine()->toScriptValue(false);
+	 }
+
+     
+ }
+
+
+
+
+QScriptValue HsfScriptingInterface::makevectortangenttocurve() 
+ {
+     gp_Vec myvec;
+	 if (context()->argumentCount() == 2)
+	 {
+			QScriptValue arg1 = context()->argument(0);
+			QScriptValue arg2 = context()->argument(1);
+			
+			
+		 if(context()->argument(0).isVariant() &&  context()->argument(1).isNumber())
+		 {
+			 QVariant arg1variant = arg1.toVariant();
+		     double ratio = arg2.toNumber();
+
+			 QString type1(arg1variant.typeName());
+			
+			if( type1 == "TopoDS_Shape" )
+			 {
+				 
+				TopoDS_Shape crv1 = arg1variant.value<TopoDS_Shape>();
+				if (crv1.IsNull()) return engine()->toScriptValue(false);
+				myvec = hsf::getVectorTangentToCurveAtPoint(crv1,ratio);
+				//QScriptValue myval = engine()->toScriptValue(myvec);
+
+				QScriptValue myvecval = engine()->toScriptValue(myvec);
+				myvecval.setProperty(QString("x"),engine()->toScriptValue(myvec.X()));
+				myvecval.setProperty(QString("y"),engine()->toScriptValue(myvec.Y()));
+				myvecval.setProperty(QString("z"),engine()->toScriptValue(myvec.Z()));
+
+				return myvecval;
+
+			} else { return engine()->toScriptValue(false);}
+
+		 } else { return engine()->toScriptValue(false);}
+
+	 } else { return engine()->toScriptValue(false);}
+ 
+
+     
+ }
+
+
+
+
+
+
 
 QScriptValue HsfScriptingInterface::initpart()
  {
@@ -606,7 +955,7 @@ QScriptValue HsfScriptingInterface::endpart()
 	 if ( needstofitall)
 	 {		
 	needstofitall = false;
-	qGeomApp->myview->viewAxo();
+	//qGeomApp->myview->viewAxo();
 	qGeomApp->myview->fitAll();
 	 }
 	 

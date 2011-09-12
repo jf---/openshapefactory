@@ -21,6 +21,7 @@
  Q_DECLARE_METATYPE(gp_Vec)
  Q_DECLARE_METATYPE(TopoDS_Shape)
  Q_DECLARE_METATYPE(QList<TopoDS_Shape>)
+ Q_DECLARE_METATYPE(QList<gp_Pnt>)
 
 class scriptwidget;
 class QoccInputOutput;
@@ -85,16 +86,21 @@ class QoccInputOutput;
 	  QScriptValue viscurvature();
 	  QScriptValue initpart();
 	  QScriptValue endpart();
+	  QScriptValue panelize();
  //    
 	  //listopertation
 	  QScriptValue makeshapelist();
+	  QScriptValue makepointlist();
 	  QScriptValue addshapetolist();
+	  QScriptValue addpointtolist();
 
  //     //object factory
 
 	//  //points
 		QScriptValue makepoint();
 	    QScriptValue makepointoncurve();
+		QScriptValue makepointmovebyvector();
+
 	//  QScriptValue makeprojectpointonsurface();
 	//  QScriptValue makeprojectpointoncurve();
 	//  QScriptValue makecenterofgravitypoint();
@@ -104,9 +110,10 @@ class QoccInputOutput;
 	//  QScriptValue makeintersectionpointmulti();
 	//  
 	//  //curves
-	    QScriptValue makeline();
+	    QScriptValue makelineptpt();
+		QScriptValue makelineptdir();
 	//  QScriptValue makelinenormal();
-	//  QScriptValue makebspline();
+		QScriptValue makebspline();
 	//  QScriptValue makeinterpolatespline();
 	//  QScriptValue makebeziercurve();
 	//  QScriptValue makecorner();
@@ -129,11 +136,11 @@ class QoccInputOutput;
 
 	//  // vectors	
 		QScriptValue makevector();
-	//  QScriptValue makevectortangenttocurve()
+	    QScriptValue makevectortangenttocurve();
 	// 
 	//  // operations
 	//  QScriptValue movepointtopoint();
-	//  QScriptValue rotate();
+	    QScriptValue makerotate();
 	//  QScriptValue mirror();
 	//  QScriptValue movebyvector();
 	//  QScriptValue axistoaxis();
@@ -172,3 +179,8 @@ class QoccInputOutput;
  };
 
 #endif
+
+
+
+
+ 

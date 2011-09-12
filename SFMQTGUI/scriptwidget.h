@@ -13,6 +13,7 @@
 
 //using namespace TextEditor;
 class QsciScintilla;
+class QAbstractItemModel;
 
 class scriptwidget : public QWidget
 {
@@ -26,10 +27,17 @@ public:
 	
 	Ui::scriptwidget ui;
 	QsciScintilla *textEdit;
+	QString gettext();
+	QString gettextbyline(int linenumber);
+	void settext(QString textval);
+	QAbstractItemModel* modelFromFile(const QString& fileName,QCompleter* completer);
+
+
 private:
 	
 	QScriptEngine myengine;
 	QScriptEdit *myeditor;
+
 	
 	//QScriptEngineDebugger *debugger;
 	
