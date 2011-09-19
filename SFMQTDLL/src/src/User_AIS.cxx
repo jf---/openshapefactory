@@ -43,6 +43,7 @@ IMPLEMENT_STANDARD_TYPE_END(User_AIS)
 #include <TopAbs.hxx>
 #include <GeomLProp.hxx>
 #include <GeomLProp_SLProps.hxx>
+#include <shapefactory.h>
 // Constructors implementation
 //
 
@@ -83,7 +84,16 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 	double colcount = 0.01;
 	
 	TopExp_Explorer Ex;
-		
+
+	TopoDS_Shape isoface = hsf::getfacefromshape(myShape);
+	
+	TopoDS_Shape uiso,viso;
+	if (!isoface.IsNull())
+	{
+		uiso= hsf::AddNewIsoCurve(isoface,false,0.5);
+	    viso = hsf::AddNewIsoCurve(isoface,true,0.5);
+	}
+
 						
 	switch (aMode) {
 	case 0:
@@ -124,7 +134,13 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 					//TopoDS_Shape current = Ex.Current();
 
 					//TopoDS_Shape current = myShape;
+
+					myDrawer->WireAspect()->SetColor(Quantity_NameOfColor::Quantity_NOC_GREEN);
+					myDrawer->WireAspect()->SetWidth(1.0);	
 					StdPrs_ShadedShape::Add(aPresentation,myShape, myDrawer);
+
+
+					
 					
 				for (Ex.Init(myShape,TopAbs_WIRE); Ex.More(); Ex.Next())
 					{
@@ -132,13 +148,23 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 								
 						//myDrawer->WireAspect()->SetColor(Quantity_NOC_BLACK);
 						myDrawer->WireAspect()->SetColor(myOwnColor);
-						myDrawer->WireAspect()->SetWidth(2);	
+						myDrawer->WireAspect()->SetWidth(1.0);	
 						StdPrs_WFDeflectionShape::Add(aPresentation,Ex.Current(), myDrawer );
 						//StdPrs_WFDeflectionShape::Add(aPresentation,myShape, myDrawer );
 
 
 					}
-				
+
+				// draw isocurves
+				if ( !uiso.IsNull())
+				{
+				myDrawer->WireAspect()->SetColor(Quantity_NameOfColor::Quantity_NOC_BLACK);
+				myDrawer->WireAspect()->SetWidth(1.0);	
+				myDrawer->SetLineArrowDraw(true);
+				myDrawer->SetIsoOnPlane(true);
+				StdPrs_WFDeflectionShape::Add(aPresentation,uiso, myDrawer );
+				StdPrs_WFDeflectionShape::Add(aPresentation,viso, myDrawer );
+				}
 
 	  break;
 

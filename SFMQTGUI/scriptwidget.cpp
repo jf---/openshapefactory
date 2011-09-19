@@ -31,6 +31,18 @@ scriptwidget::scriptwidget(QWidget *parent)
 
 	
 	connect(ui.evalbutton, SIGNAL(pressed()), this, SLOT(evaluatetext()));
+
+	// connect widget events to the context wrapper
+	connect( ui::getInstance()->getWindowController(),       SIGNAL(mouseMoved(occviewport*, QMouseEvent*)), 
+		     this,   SLOT  (moveEvent(occviewport*,  QMouseEvent*)) );
+	// connect widget events to the context wrapper
+	connect( ui::getInstance()->getWindowController(),       SIGNAL(mouseClicked(occviewport*, QMouseEvent*)), 
+		     this,   SLOT  (clickEvent(occviewport*,   QMouseEvent*)) );
+	// connect widget events to the context wrapper
+	connect( ui::getInstance()->getWindowController(),       SIGNAL(selectionChanged()) , 
+		     this,   SLOT  (onSelectionChanged()) );
+
+
 //connect(ui.text, SIGNAL(pressed()), this, SLOT(seteditor()));
 	
 	myeditor = new QScriptEdit(0); // addtexteditor found it in QT debugger
@@ -60,7 +72,7 @@ scriptwidget::scriptwidget(QWidget *parent)
 
 	readcodefile();
 
-	HsfScriptingInterface* hsfapi = new HsfScriptingInterface() ;
+	hsfapi = new HsfScriptingInterface() ;
 	hsfapi->setparentwidget(this);
 	//myengine.globalObject().setProperty("hsf",myengine.newQObject(hsfapi));
 
@@ -97,6 +109,24 @@ scriptwidget::scriptwidget(QWidget *parent)
 
 }
 
+
+
+void scriptwidget::on3dSelectionChanged()
+{
+evaluatetext();
+}
+
+void scriptwidget::moveEvent( occviewport* widget, QMouseEvent* e  )
+{
+	hsfapi->setmousepos(widget->getPoint());
+	evaluatetext();
+}
+
+void scriptwidget::clickEvent( occviewport* widget, QMouseEvent* e )
+{
+	hsfapi->setmousepos(widget->getPoint());
+	evaluatetext();
+}
 
 
 QAbstractItemModel* scriptwidget::modelFromFile(const QString& fileName,QCompleter* completer)

@@ -1587,9 +1587,9 @@ TopoDS_Shape HSF::AddNewBlendSurface(TopoDS_Shape crv1, TopoDS_Shape crv2)
 
 TopoDS_Shape HSF::getfacefromshape(TopoDS_Shape shape1)
 	{
-	TopoDS_Shape myshape=shape1 ;
+	TopoDS_Shape myshape;//=shape1 ;
 	TopExp_Explorer Ex;
-	for (Ex.Init(myshape,TopAbs_FACE); Ex.More(); Ex.Next())
+	for (Ex.Init(shape1,TopAbs_FACE); Ex.More(); Ex.Next())
 		{
 			myshape = Ex.Current();
 		}
@@ -1598,9 +1598,9 @@ TopoDS_Shape HSF::getfacefromshape(TopoDS_Shape shape1)
 
 TopoDS_Shape HSF::getedgefromshape(TopoDS_Shape shape1)
 	{
-	TopoDS_Shape myshape=shape1 ;
+	TopoDS_Shape myshape;//=shape1 ;
 	TopExp_Explorer Ex;
-	for (Ex.Init(myshape,TopAbs_EDGE); Ex.More(); Ex.Next())
+	for (Ex.Init(shape1,TopAbs_EDGE); Ex.More(); Ex.Next())
 		{
 			myshape = Ex.Current();
 		}
@@ -3276,6 +3276,8 @@ void HSF::updateUserAIS(TopoDS_Shape aShape, Handle_User_AIS &anAIS, Handle_AIS_
 	ic->SetColor(anAIS, Quantity_NOC_BLACK);
 	//ic->SetDeviationCoefficient(anAIS,10.0);
 	//ic->SetHLRDeviationCoefficient(anAIS,10);
+	ic->SetIsoNumber(2);
+	
 	
 
 	//ic->SetDeviationAngle(45);
@@ -3395,6 +3397,27 @@ gp_Pnt HSF::AddNewUVPt(TopoDS_Shape srf,double u,double v)
 	theSurface->D0(u,v,isopoint);
 
 	return (isopoint);
+}
+
+TopoDS_Shape HSF::AddNewIsoCurve(TopoDS_Shape srf,bool orientation, double uv)
+{
+
+	Handle_Geom_Surface theSurface;
+	TopoDS_Shape aFace = HSF::getfacefromshape(srf);
+	theSurface = BRep_Tool::Surface(TopoDS::Face(aFace));
+	Standard_Real u1, u2, v1, v2;
+	BRepTools::UVBounds(TopoDS::Face(aFace),u1,u2,v1,v2);
+	
+	double ratio;
+	Handle_Geom_Curve isocrv;
+
+	orientation ? ratio = uv * (v2 - v1) : ratio = uv * (u2 - u1);
+	orientation ? isocrv = theSurface->VIso(ratio)  : isocrv = theSurface->UIso(ratio);
+	
+	TopoDS_Edge Result = BRepBuilderAPI_MakeEdge(isocrv);
+	
+
+	return Result;
 }
 gp_Pnt HSF::getpointfromshape(TopoDS_Shape point)
 {

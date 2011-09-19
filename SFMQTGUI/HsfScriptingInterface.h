@@ -65,15 +65,24 @@ class QoccInputOutput;
 	//slider system
 	QMap<QString,QSlider*> slidermap;
 	QMap<QString,QSlider*> currentslidermap;
+
+	//mouse enviroment
+	gp_Pnt CurrentMousePoint;
 	
 
 
 
  public slots:
 
+
+	 void setmousepos(gp_Pnt pos);
+	 QScriptValue getmousepos();
+
      void setparentwidget(scriptwidget* thewidget);
 	 void setuprunonce();
 	 void finishrunonce();
+	 QScriptValue getdistance();
+
 
 	 //gui
 	 QScriptValue getval();

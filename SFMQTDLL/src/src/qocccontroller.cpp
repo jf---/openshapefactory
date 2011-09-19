@@ -286,7 +286,9 @@ bool QoccController::hasLocalContext( void )
 void QoccController::moveEvent( occviewport* widget, QMouseEvent* e  )
 {
 	
+	emit mouseMoved   ( widget, e );
 	myViewer->Update();
+	
 	
 }
 
@@ -296,7 +298,9 @@ void QoccController::clickEvent( occviewport* widget, QMouseEvent* e )
 		if ( e->button() & Qt::RightButton )
 		{
 			clearCommand();
+			emit mouseClicked ( widget, e );
 			myViewer->Update();
+
 		}
 		else
 		{

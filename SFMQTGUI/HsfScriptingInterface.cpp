@@ -32,6 +32,52 @@ HsfScriptingInterface::~HsfScriptingInterface()
  {
  }
 
+
+void HsfScriptingInterface::setmousepos(gp_Pnt pos)
+{
+CurrentMousePoint = pos;
+}
+
+QScriptValue HsfScriptingInterface::getdistance()
+{
+     double distanceval = 0;
+	 if (context()->argumentCount() == 2)
+	 {
+		QScriptValue arg1 = context()->argument(0);
+		QScriptValue arg2 = context()->argument(1);
+	
+
+		QVariant var1,var2;
+
+		if (arg1.isVariant() && arg2.isVariant())
+		{
+
+		 var1 = arg1.toVariant(); 
+		 var2 = arg2.toVariant(); 
+		 
+		 QString var1typename = var1.typeName();
+		 QString var2typename = var2.typeName();
+		
+		 if (var1typename == "TopoDS_Shape" && var2typename == "TopoDS_Shape")
+		 {
+		 TopoDS_Shape obj1 = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		 TopoDS_Shape obj2  = context()->argument(1).toVariant().value<TopoDS_Shape>();
+		 
+		 distanceval = hsf::GetMaxDis(obj1,obj2);
+
+
+		 }
+
+		}
+	 
+	 } 
+
+
+	      
+     return engine()->toScriptValue(distanceval);
+}
+
+
 void HsfScriptingInterface::setuprunonce()
 {
 	runoncecounter =0;
@@ -65,7 +111,10 @@ void HsfScriptingInterface::setparentwidget(scriptwidget* thewidget)
 parentwidget = thewidget;
 
 }
-
+QScriptValue HsfScriptingInterface::getmousepos()
+{	
+	return engine()->toScriptValue(hsf::AddNewPoint(CurrentMousePoint));
+}
 QScriptValue HsfScriptingInterface::getfileonce()
 {	runoncecounter++;
 
@@ -509,7 +558,7 @@ QScriptValue HsfScriptingInterface::makevector()
 			 {
 				 gp_Pnt p1 = hsf::getpointfromshape(arg1variant.value<TopoDS_Shape>());
 				 gp_Pnt p2 = hsf::getpointfromshape(arg2variant.value<TopoDS_Shape>());
-				 myvec = gp_Vec(p1,p2);
+				 if (p1.Distance(p2) >0) { myvec = gp_Vec(p1,p2); }else {myvec = gp_Vec(1,0,0);}
 			 }
 
 		 }
@@ -531,13 +580,50 @@ QScriptValue HsfScriptingInterface::makecircle()
      TopoDS_Shape myshape;
 	 if (context()->argumentCount() == 3)
 	 {
+		QScriptValue arg1 = context()->argument(0);
+		QScriptValue arg2 = context()->argument(1);
+		QScriptValue arg3 = context()->argument(2);
+
+		QVariant var1,var2,var3;
+
+		if (arg1.isVariant() && arg2.isVariant() && arg3.isNumber())
+		{
+
 		 gp_Pnt origin = hsf::getpointfromshape(context()->argument(0).toVariant().value<TopoDS_Shape>());
 		 gp_Vec upvec  = context()->argument(1).toVariant().value<gp_Vec>();
 		 double radius = context()->argument(2).toNumber();
 		 if (radius == 0) radius = 0.1;
 		 myshape = hsf::AddNewCircle(origin,upvec,radius);
+		} else if ( arg1.isVariant() && arg2.isVariant() && arg3.isVariant())
+		{
+		 var1 = arg1.toVariant(); 
+		 var2 = arg2.toVariant(); 
+		 var3 = arg3.toVariant();
+		 QString var1typename = var1.typeName();
+		 QString var2typename = var2.typeName();
+		 QString var3typename = var3.typeName();
+
+
+		 if (var1typename == "TopoDS_Shape" && var2typename == "TopoDS_Shape" && var3typename == "TopoDS_Shape")
+		 {
+		 gp_Pnt p1 = hsf::getpointfromshape(context()->argument(0).toVariant().value<TopoDS_Shape>());
+		 gp_Pnt p2  = hsf::getpointfromshape(context()->argument(1).toVariant().value<TopoDS_Shape>());
+		 gp_Pnt p3 = hsf::getpointfromshape(context()->argument(2).toVariant().value<TopoDS_Shape>());
+
+		 double dis1 = p1.Distance(p2);
+		 double dis2 = p2.Distance(p3);
+		 double dis3 = p3.Distance(p1);
+
+		 if ((dis1>0) && (dis2>0) && (dis3>0) ) 
+		 {
+			 myshape = hsf::AddNewCircle(p1,p2,p3);
+		 }
+		 
+		 }
+
+		}
 	 
-	 }
+	 } 
 	      
      return engine()->toScriptValue(myshape);
  }
@@ -691,8 +777,9 @@ QScriptValue HsfScriptingInterface::makelineptdir()
 				
 			 }
 
-			 if (distance1 > 0 || distance2 > 0)
+			 if (std::max(abs(distance1),abs(distance2))>0)
 			 {
+			 qDebug() << distance1 << "," << distance2;
 			 myshape = hsf::AddNewLineptdir(p1,v1,distance1,distance2);
 			 }
 			 

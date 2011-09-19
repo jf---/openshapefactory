@@ -38,6 +38,8 @@ private:
 	QScriptEngine myengine;
 	QScriptEdit *myeditor;
 
+	HsfScriptingInterface* hsfapi;
+
 	
 	//QScriptEngineDebugger *debugger;
 	
@@ -52,6 +54,14 @@ public slots:
 	void savecode();
 	void readcodefile();
 	void seteditor();
+	void on3dSelectionChanged();
+
+	void moveEvent( occviewport* widget, QMouseEvent* e  );
+	void clickEvent( occviewport* widget, QMouseEvent* e );
+	
+
+	
+
 	
 
 };

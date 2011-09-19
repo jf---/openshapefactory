@@ -334,6 +334,7 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 
 	static __declspec(dllexport) gp_Pnt AddNewUVPt(TopoDS_Shape srf,double u,double v);
 	static __declspec(dllexport) gp_Vec AddNewUVVec(TopoDS_Shape srf,double u,double v);
+	static __declspec(dllexport) TopoDS_Shape AddNewIsoCurve(TopoDS_Shape srf,bool orientation, double uv);
 	static __declspec(dllexport) gp_Pnt getpointfromshape(TopoDS_Shape point);
 
 

@@ -88,6 +88,8 @@ signals:
 	void selectionChanged();
 	void error (int errorCode, QString& errorDescription);
 	void completed();
+	void mouseMoved   ( occviewport* widget, QMouseEvent* e );
+	void mouseClicked ( occviewport* widget, QMouseEvent* e );
 
 private:
 
