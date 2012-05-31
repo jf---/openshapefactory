@@ -21,7 +21,7 @@
 // add the includes to your widgets here:
 // follow this general form: #include widgetname.h
 
-//#include "mus.h"
+#include "mus.h"
 ////#include "apdl_mex_design_001.h"
 //#include "beamtest.h"
 //#include "algae.h"
@@ -30,29 +30,67 @@
 #include "kilianroof.h"
 #include "scriptwidget.h"
 
+#include "PythonQt.h"
+#include "PythonQtScriptingConsole.h"
+#include "PythonQtGui.h"
+
+#include "qoccframe.h"
+
+#include "HsfScriptingInterface.h"
+
+#include <QFile>
+
+
+
 
 int main(int argc, char **argv) //Boot Loader Function
 {
 	
 qRegisterMetaType<TopoDS_Shape>("TopoDS_Shape");
 
-	//HMODULE dll = LoadLibrary("myserver.dll");
- //typedef HRESULT(__stdcall *DllRegisterServerProc)();
- //DllRegisterServerProc DllRegisterServer =
- //    (DllRegisterServerProc)GetProcAddress(dll, "DllRegisterServer");
-
- //HRESULT res = E_FAIL;
- //if (DllRegisterServer)
- //    res = DllRegisterServer();
- //if (res != S_OK)
-     
-
-
-
 	QoccApplication app( argc, argv );
 
 	ui::init(); // initializes the 2d gui canvas
+	
+	
+	scriptwidget* scriptw = new scriptwidget();
+//	QsciScintilla* textEdit = new QsciScintilla();
+//	scriptw->seteditor(textEdit);
+
+
+
+	QStringList arguments = app.arguments();
+	
+	if (arguments.count() > 1 )
+	{
+	
+	QString scriptfilename = arguments.at(1);
+	QFile data(scriptfilename);
+
+	if (data.open(QFile::ReadOnly)) {
+     QTextStream out(&data);
+	 QString code = out.readAll();
+	 data.close();
+
+	 scriptw->evaluatetext(code);
+	 qDebug() << scriptw->resultstream;
+	}
+		
+	app.quit();
+	return app.exit();
+
+
+	}
+
 	ui::getInstance()->ShowMaximized(); // shows the app window maximized
+
+	qGeomApp->symboltree->addnewwidget(scriptw);
+
+	
+	qGeomApp->myview->getView()->SetAnimationModeOn();
+	//qGeomApp->myview->getView()->EnableGLLight();
+	qGeomApp->myview->getView()->SetAntialiasingOff();
+	qGeomApp->myview->getView()->SetLightOff();
 	
 	//Standard::SetReentrant(true);
 	
@@ -78,22 +116,31 @@ qRegisterMetaType<TopoDS_Shape>("TopoDS_Shape");
 	//kilianroof* kr = new kilianroof();
 	//qGeomApp->symboltree->addnewwidget(kr);
 
-	scriptwidget* scriptw = new scriptwidget();
-//	QsciScintilla* textEdit = new QsciScintilla();
-//	scriptw->seteditor(textEdit);
 
-
-	qGeomApp->symboltree->addnewwidget(scriptw);
-
-	
-	qGeomApp->myview->getView()->SetAnimationModeOn();
-	//qGeomApp->myview->getView()->EnableGLLight();
-	qGeomApp->myview->getView()->SetAntialiasingOff();
-	qGeomApp->myview->getView()->SetLightOff();
 	
 
 	
+	PythonQt::init(PythonQt::IgnoreSiteModule | PythonQt::RedirectStdOut);
+    PythonQtGui::init();
+
+
+
 	
+	PythonQtObjectPtr pycontext = PythonQt::self()->getMainModule();
+
+	
+
+	 // register the type with QMetaType
+  qRegisterMetaType<QoccFrame>("qoccframe");
+  // add a wrapper object for the new variant type
+  //PythonQt::self()->addVariantWrapper("qoccframe", new QoccFrame());
+
+
+	HsfScriptingInterface* hsf = scriptw->hsfapi;
+
+	pycontext.addObject("hsf", scriptw); 
+	PythonQtScriptingConsole console(NULL, pycontext);
+	console.show();
 
 	
 

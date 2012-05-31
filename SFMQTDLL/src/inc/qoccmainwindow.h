@@ -47,6 +47,8 @@
 #include "qoccinputoutput.h"
 #include "occviewport.h"
 
+
+
 class QAction;
 class QLabel;
 class QMenu;
@@ -60,6 +62,11 @@ public:
     QoccMainWindow();
 	~QoccMainWindow() {};
 	QoccController* myController;
+
+	QoccFrame*      mySketchFrame;
+	QoccFrame*      myGeometryFrame;
+	QoccFrame*      myAssemblyFrame;
+	QoccFrame*      myMeshFrame;
 
 protected:
 	virtual void closeEvent( QCloseEvent* event );
@@ -212,10 +219,7 @@ private:
     QTabWidget*		myTabWidget;
     QWidget*		myTab;
 
-    QoccFrame*      mySketchFrame;
-	QoccFrame*      myGeometryFrame;
-	QoccFrame*      myAssemblyFrame;
-	QoccFrame*      myMeshFrame;
+
 	
 
 	QToolBar*		drawToolBar;
@@ -223,6 +227,7 @@ private:
 	QString myLastFolder;
 	/*QoccTreeWidget* myTree;
 	QDockWidget *myDockTree;*/
+
 };
 
 #endif

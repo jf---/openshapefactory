@@ -5,15 +5,19 @@
 TEMPLATE = app
 TARGET = SFMQTGUI
 DESTDIR = ../Debug
-QT += core gui qaxserver qaxcontainer
+QT += core gui
 CONFIG += debug
 DEFINES += QT_LARGEFILE_SUPPORT QAXSERVER
 INCLUDEPATH += ./GeneratedFiles \
-    ./../SFMQTDLL/src \
     . \
-    ./../SFMQTDLL/src/inc/datakit \
-    ../../../libraries/kmlocal-1.7.2/src
-LIBS += -L"."
+    ./GeneratedFiles/Debug \
+    ../../../libraries/pythonqt11/PythonQt-1.1/src \
+    $(PYTHON_PATH)/include \
+    ../../../libraries/pythonqt11/PythonQt-1.1/extensions/PythonQtGui \
+    ../../../libraries/pythonqt11/PythonQt-1.1/src/gui
+LIBS += -L"../../../libraries/pythonqt11/PythonQt-1.1/lib" \
+    -lPythonQt \
+    -lPythonQtGui
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/debug
 OBJECTS_DIR += debug

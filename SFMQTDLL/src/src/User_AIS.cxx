@@ -87,12 +87,12 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 
 	TopoDS_Shape isoface = hsf::getfacefromshape(myShape);
 	
-	TopoDS_Shape uiso,viso;
-	if (!isoface.IsNull())
-	{
-		uiso= hsf::AddNewIsoCurve(isoface,false,0.5);
-	    viso = hsf::AddNewIsoCurve(isoface,true,0.5);
-	}
+	//TopoDS_Shape uiso,viso;
+	//if (!isoface.IsNull())
+	//{
+	//	uiso= hsf::AddNewIsoCurve(isoface,false,0.5);
+	//    viso = hsf::AddNewIsoCurve(isoface,true,0.5);
+	//}
 
 						
 	switch (aMode) {
@@ -156,15 +156,15 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 					}
 
 				// draw isocurves
-				if ( !uiso.IsNull())
-				{
-				myDrawer->WireAspect()->SetColor(Quantity_NameOfColor::Quantity_NOC_BLACK);
-				myDrawer->WireAspect()->SetWidth(1.0);	
-				myDrawer->SetLineArrowDraw(true);
-				myDrawer->SetIsoOnPlane(true);
-				StdPrs_WFDeflectionShape::Add(aPresentation,uiso, myDrawer );
-				StdPrs_WFDeflectionShape::Add(aPresentation,viso, myDrawer );
-				}
+				//if ( !uiso.IsNull())
+				//{
+				//myDrawer->WireAspect()->SetColor(Quantity_NameOfColor::Quantity_NOC_BLACK);
+				//myDrawer->WireAspect()->SetWidth(1.0);	
+				//myDrawer->SetLineArrowDraw(true);
+				//myDrawer->SetIsoOnPlane(true);
+				////StdPrs_WFDeflectionShape::Add(aPresentation,uiso, myDrawer );
+				////StdPrs_WFDeflectionShape::Add(aPresentation,viso, myDrawer );
+				//}
 
 	  break;
 

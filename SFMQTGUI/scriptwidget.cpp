@@ -24,6 +24,7 @@
 #include <QStringListModel>
  
 
+
 scriptwidget::scriptwidget(QWidget *parent)
 	: QWidget(parent)
 {
@@ -33,14 +34,16 @@ scriptwidget::scriptwidget(QWidget *parent)
 	connect(ui.evalbutton, SIGNAL(pressed()), this, SLOT(evaluatetext()));
 
 	// connect widget events to the context wrapper
-	connect( ui::getInstance()->getWindowController(),       SIGNAL(mouseMoved(occviewport*, QMouseEvent*)), 
-		     this,   SLOT  (moveEvent(occviewport*,  QMouseEvent*)) );
+	/*connect( ui::getInstance()->getWindowController(),       SIGNAL(mouseMoved(occviewport*, QMouseEvent*)), 
+		     this,   SLOT  (moveEvent(occviewport*,  QMouseEvent*)) );*/
 	// connect widget events to the context wrapper
-	connect( ui::getInstance()->getWindowController(),       SIGNAL(mouseClicked(occviewport*, QMouseEvent*)), 
+	connect( ui::getInstance()->getWindowController(),       SIGNAL(clickEvent(occviewport*, QMouseEvent*)), 
 		     this,   SLOT  (clickEvent(occviewport*,   QMouseEvent*)) );
 	// connect widget events to the context wrapper
 	connect( ui::getInstance()->getWindowController(),       SIGNAL(selectionChanged()) , 
 		     this,   SLOT  (onSelectionChanged()) );
+
+
 
 
 //connect(ui.text, SIGNAL(pressed()), this, SLOT(seteditor()));
@@ -48,8 +51,11 @@ scriptwidget::scriptwidget(QWidget *parent)
 	myeditor = new QScriptEdit(0); // addtexteditor found it in QT debugger
 	myeditor->show();
 
-	connect(myeditor, SIGNAL(textChanged()), this, SLOT(evaluatetext())); //make code interactive
-	
+	connect( this->ui.interactivecheck,   SIGNAL(stateChanged ( int ) ) , 
+		     this,   SLOT  (makeinteractive_text( bool )) );
+
+
+
     ui.vertlayout->addWidget(myeditor);
 
 
@@ -75,8 +81,10 @@ scriptwidget::scriptwidget(QWidget *parent)
 	hsfapi = new HsfScriptingInterface() ;
 	hsfapi->setparentwidget(this);
 	//myengine.globalObject().setProperty("hsf",myengine.newQObject(hsfapi));
+	QScriptValue myglobal =  myengine.newQObject(hsfapi);
+	myglobal.setPrototype(myengine.globalObject());
+	myengine.setGlobalObject(myglobal);
 
-	myengine.setGlobalObject(myengine.newQObject(hsfapi));
 
 	//myengine.globalObject().setProperty("hsf", myhsfval); // this another way of adding functions using the function signature
 
@@ -109,6 +117,33 @@ scriptwidget::scriptwidget(QWidget *parent)
 
 }
 
+
+
+
+void scriptwidget::toggleinteractivity()
+{
+
+
+}
+
+void scriptwidget::makeinteractive_text(bool value)
+{
+if (value)
+{
+	connect(myeditor, SIGNAL(textChanged()), this, SLOT(evaluatetext())); //make code interactive
+} else {
+
+	disconnect(myeditor, SIGNAL(textChanged()), this, SLOT(evaluatetext()));
+
+}
+
+
+}
+
+void scriptwidget::makeinteractive_mouse(bool value)
+{
+
+}
 
 
 void scriptwidget::on3dSelectionChanged()
@@ -260,6 +295,7 @@ text = newtext;
 
 //debugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
 QScriptValue result;
+
  try
  {
   result = myengine.evaluate(text);
@@ -279,6 +315,56 @@ QScriptValue result;
  } else
  {
 	 ui.listener->addItem(result.toString());
+ }
+
+
+ ui.listener->scrollToBottom();
+
+
+}
+
+
+
+
+
+void scriptwidget::evaluatetext(QString text)
+{
+
+
+savecode();
+
+QString linenumbers;
+
+
+QString newtext = QString("initpart()\n") + text + QString("\n endpart()");
+text = newtext;
+
+//debugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
+QScriptValue result;
+
+ try
+ {
+  result = myengine.evaluate(text);
+ }
+ catch(...)
+ {
+	 ui.listener->addItem(QString("Oops!"));
+	 resultstream = QString("Oops!");
+ }
+
+
+ if (myengine.hasUncaughtException()) {
+     int line = myengine.uncaughtExceptionLineNumber();
+	 resultstream = QString("Oops!:")+ QString::number(line) + QString(" ") + result.toString();
+
+	 ui.listener->addItem(resultstream);
+	 myengine.clearExceptions();
+	 myengine.collectGarbage();
+	 
+ } else
+ {
+	resultstream = result.toString();
+	 ui.listener->addItem(resultstream);
  }
 
 

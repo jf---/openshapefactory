@@ -365,6 +365,7 @@ Handle(TopTools_HSequenceOfShape) QoccInputOutput::importIGES( const QString& fi
   {
     aSequence = new TopTools_HSequenceOfShape();
     Reader.TransferRoots();
+	
     TopoDS_Shape aShape = Reader.OneShape();
     aSequence->Append( aShape );
   }
@@ -376,6 +377,7 @@ Handle(TopTools_HSequenceOfShape) QoccInputOutput::importSTEP( const QString& fi
 	Handle(TopTools_HSequenceOfShape) aSequence;
 
 	STEPControl_Reader aReader;
+	
 	IFSelect_ReturnStatus status = aReader.ReadFile( file.toAscii().data() );
 	if ( status == IFSelect_RetDone )
   {
@@ -384,6 +386,7 @@ Handle(TopTools_HSequenceOfShape) QoccInputOutput::importSTEP( const QString& fi
 	  aReader.PrintCheckLoad( failsonly, IFSelect_ItemsByEntity );
 
 	  int nbr = aReader.NbRootsForTransfer();
+	  
 	  aReader.PrintCheckTransfer( failsonly, IFSelect_ItemsByEntity );
 	  for ( Standard_Integer n = 1; n <= nbr; n++ )
 	  {

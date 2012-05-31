@@ -27,6 +27,9 @@
 #include <ShapeFix.hxx>
 
 #include "AIS_Gauss.hxx"
+#include <GeomLProp_SurfaceTool.hxx>
+#include <GeomLProp_SLProps.hxx>
+#include <Poly_Triangulation.hxx>
 
 
 // this is for the use of the KMlocal library for kmeans clustering 
@@ -152,7 +155,7 @@ update(0);
 
 void kilianroof::updatereleased()
 {
-//updatemesh(1);
+updatemesh(1);
 //loadsoumaya(1);
 	//breakshape();
 }
@@ -200,14 +203,14 @@ if (!mastersurface.IsEqual(newsurf))
 	BRepMesh::Mesh(mastersurface, res);
 
 }
-//vis(mastersurface)
+vis(mastersurface)
 
 
 
 if(!agauss.IsNull()) ic->Remove(agauss,true);	
 agauss = new AIS_Gauss(mastersurface,true);
 
-ic->Display(agauss);
+//ic->Display(agauss);
 
 
 } else {
@@ -953,5 +956,178 @@ ic->Display(mygauss);
 
 
 //ENDPART
+
+}
+
+struct gaussianval
+{
+gp_Pnt2d uv;
+double Gaussian;
+};
+
+
+void  kilianroof::buildgaussiantopo()
+{
+QTime timer;
+timer.start();
+
+INITPART
+
+QoccInputOutput* io_man = new QoccInputOutput();
+QString filename = QFileDialog::getOpenFileName ( this,
+							 tr("Import File"),"");
+
+
+if (!(filename.length() > 0)) return; 
+
+
+Handle(TopTools_HSequenceOfShape) famshape1 = io_man->importIGES(filename);
+TopoDS_Shape Srf = famshape1->Value(1);
+
+int numsteps = 200;
+
+BRepTools::Clean(Srf);
+BRepMesh::Mesh(Srf, 100);
+
+TopoDS_Face myFace = TopoDS::Face(Srf);
+Handle(Geom_Surface) mysurf = BRep_Tool::Surface(myFace);
+
+TopLoc_Location L;
+Handle(Poly_Triangulation) myT = BRep_Tool::Triangulation(myFace, L);
+
+//int nbnodes = myT->NbNodes();
+//int nbtriangles = myT->NbTriangles();
+
+//Poly_Connect pc(myT);     
+//const TColgp_Array1OfPnt& Nodes = myT->Nodes();
+const TColgp_Array1OfPnt2d& UVNodes = myT->UVNodes();
+//const Poly_Array1OfTriangle& triangles = myT->Triangles();
+//
+//Handle(Graphic3d_ArrayOfTriangles) trianglearr = new Graphic3d_ArrayOfTriangles(triangles.Length()* 3,0,false,true);
+//Graphic3d_Array1OfVertexNC Points(1,triangles.Length()* 3);
+//
+//Handle(Graphic3d_ArrayOfPolylines) polylines = new Graphic3d_ArrayOfPolylines ( triangles.Length()* 6,triangles.Length()* 6 );
+
+
+Standard_Real fUMin, fUMax, fVMin, fVMax;
+BRepTools::UVBounds(TopoDS::Face(myFace), fUMin, fUMax, fVMin, fVMax);
+
+Standard_Real fU = (fUMax-fUMin)/2.0;
+Standard_Real fV = (fVMax-fVMin)/2.0;
+
+GeomLProp_SLProps prop(mysurf, fU, fV, 1, Precision::Confusion());
+
+
+
+double maxVisualizedCurvature = 0;
+double minVisualizedCurvature = 0;
+QList<gaussianval> gmap;
+
+for (int i = 1; i < UVNodes.Length()+1; i++)
+{
+gp_Pnt2d uvval = UVNodes.Value(i);
+prop.SetParameters(uvval.X(),uvval.Y());
+double g = prop.GaussianCurvature();
+
+gaussianval curval;
+curval.Gaussian = g;
+curval.uv = uvval;
+gmap << curval;
+
+if (g < minVisualizedCurvature)minVisualizedCurvature = g;
+if (g > maxVisualizedCurvature)maxVisualizedCurvature = g;
+}
+
+
+// draw in 3d space
+
+double pzmin = 0;
+double pzmax = 0;
+
+QList<TopoDS_Shape> srfplist;
+for (int i = 0; i < gmap.count(); i++)
+{
+gaussianval curval = gmap.at(i);
+gp_Pnt2d uvp = curval.uv;
+gp_Pnt p1(uvp.X(),uvp.Y(), curval.Gaussian * 3000000);
+
+if (p1.Z() > pzmax) pzmax = p1.Z();
+if (p1.Z() < pzmin) pzmin = p1.Z();
+
+TopoDS_Shape thepoint = hsf::AddNewPoint(p1);
+vis(thepoint)
+srfplist << thepoint;
+}
+
+int numfree = Standard::Purge();
+
+TopoDS_Shape thesrfmap = hsf::AddNewConstrainedSurface(srfplist);
+BRepTools::Clean(thesrfmap);
+BRepMesh::Mesh(thesrfmap, 500);
+
+
+double Xmin, Ymin, Zmin, Xmax, Ymax, Zmax;
+Bnd_Box Bnd;
+BRepBndLib::Add(thesrfmap, Bnd);
+Bnd.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
+double width = abs(Xmax -Xmin);
+double height = abs(Ymax -Ymin);
+gp_Pnt centerp((Xmin+Xmax)/2,(Ymin+Ymax)/2,(Zmin+Zmax)/2);
+gp_Vec up = gp::DZ();
+
+double stepheight = (pzmax-pzmin)/ numsteps;
+
+gp_Ax2 xoy = gp::XOY();
+gp_Ax3 xoy3(xoy);
+gp_Pln xypln(xoy3);
+
+QList<TopoDS_Shape> topolines;
+for (int i=0;i<numsteps;i++)
+{
+	gp_Pnt plpoint = centerp; 
+	plpoint.SetZ(pzmin + (i*stepheight));
+
+	gp_Pln curplane(plpoint,up);
+	TopoDS_Shape rect = hsf::AddNewRectangle(plpoint,gp::DZ(),width*2,height*2);
+	TopoDS_Shape rectfill = hsf::AddNewFillSurface(rect);
+	TopoDS_Shape Intcrv = hsf::AddNewIntersectSrf(rectfill,thesrfmap);
+	if (!Intcrv.IsNull())
+	{
+		topolines << Intcrv;
+		vis(Intcrv)
+
+			TopExp_Explorer Ex;
+			for (Ex.Init(Intcrv,TopAbs_EDGE); Ex.More(); Ex.Next())
+			{
+			TopoDS_Shape curshape = Ex.Current();
+
+//			Handle(Geom2d_TrimmedCurve) aSegment = new Geom2d_Curve
+			double aFP, aLP;
+			TopoDS_Edge intedge = TopoDS::Edge(Intcrv);
+			
+			BRepLib::BuildCurves3d(intedge);
+			Handle(Geom_Curve) aCurve;
+			Handle_Geom2d_Curve the2dcurve;
+			aCurve = BRep_Tool::Curve(intedge, aFP, aLP);
+			the2dcurve = GeomAPI::To2d(aCurve,xypln);
+			
+			TopoDS_Edge aEdge1OnSurf1 = BRepBuilderAPI_MakeEdge(the2dcurve , mysurf);
+			BRepLib::BuildCurves3d(aEdge1OnSurf1);
+			TopoDS_Edge &edge3d = TopoDS::Edge(aEdge1OnSurf1);
+			TopoDS_Shape theShape = edge3d;
+			vis(theShape)
+			}
+
+	}
+
+}
+
+vis(thesrfmap);
+
+ENDPART
+
+qDebug() << timer.elapsed();
+
+
 
 }

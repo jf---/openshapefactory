@@ -29,7 +29,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -79,9 +79,9 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>30</y>
+       <y>40</y>
        <width>541</width>
-       <height>521</height>
+       <height>511</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="vertlayout"/>
@@ -103,13 +103,52 @@ color: rgb(85, 255, 127);</string>
     <widget class="QWidget" name="horizontalLayoutWidget_2">
      <property name="geometry">
       <rect>
-       <x>89</x>
+       <x>299</x>
        <y>0</y>
-       <width>451</width>
+       <width>241</width>
        <height>31</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="runonceset"/>
+    </widget>
+    <widget class="QCheckBox" name="interactivecheck">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>0</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>interactive</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="debuggercheck">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>20</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Debugger</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="mousecheck">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>0</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Mouse</string>
+     </property>
     </widget>
    </widget>
   </widget>

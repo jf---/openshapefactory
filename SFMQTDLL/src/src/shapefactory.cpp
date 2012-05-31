@@ -360,10 +360,6 @@ GeomAPI_IntCS Intersector;
 
 
 
-
-
-	
-
 TopoDS_Shape startedge = HSF::getedgefromshape(startcrv);
 
 double crvlen = HSF::GetLength(startedge);
@@ -615,6 +611,36 @@ prevspheres = nextspheres;
 	return pointmap;
 
 	}
+
+
+TopoDS_Shape HSF::AddNewArcofEllipse(gp_Pnt origin, gp_Vec dir, double major, double minor, double alpha1,double alpha2,bool sense)
+		{
+
+		gp_Ax2 theaxis(origin,dir);
+		gp_Elips Elips(theaxis,major,minor);
+		Handle_Geom_TrimmedCurve mycircle = GC_MakeArcOfEllipse(Elips,alpha1,alpha2,sense);
+
+
+	TopoDS_Edge Result;
+	if (mycircle.IsNull()) {return Result;}
+	try
+		{
+		Result= BRepBuilderAPI_MakeEdge(mycircle);
+		}
+	catch(...)
+		{
+	
+	return Result;
+		}
+	return Result;
+
+
+
+
+		}
+
+
+
 
 
 
@@ -996,9 +1022,10 @@ TopoDS_Shape HSF::AddNewConicalSurface(gp_Pnt p1,gp_Pnt p2,gp_Pnt p3,gp_Pnt p4)
 	* @param heightUnder
 	* @param angle
 	*/
-	TopoDS_Shape HSF::AddNewHyperboloidbyFormula(double innerRadius, double height, double heightUnder, double angle,gp_Pnt Origin, gp_Vec Dir)
+	TopoDS_Shape HSF::AddNewHyperboloidbyFormula(double innerRadius, double height, double heightUnder, double angle,gp_Pnt Origin, gp_Vec Dir, int detail)
 	{
-		int detail = 40;
+		//int detail = 40;
+		if (detail == 0 ) detail = 40;
 
 		int uCount = detail;
 		double a = innerRadius;
@@ -1606,6 +1633,39 @@ TopoDS_Shape HSF::getedgefromshape(TopoDS_Shape shape1)
 		}
 	 return myshape;
 	}
+TopoDS_Shape HSF::AddNewOffsetSurface(TopoDS_Shape surface, double offset)
+{
+if (surface.ShapeType() != TopAbs_ShapeEnum::TopAbs_FACE)
+	{
+	surface = HSF::getfacefromshape(surface);
+	}
+
+Handle(Geom_Surface) S1 = BRep_Tool::Surface(TopoDS::Face(surface));
+
+Standard_Real offset_d = offset;                                                        
+Handle(Geom_OffsetSurface) GOS = new Geom_OffsetSurface(S1, offset_d); 
+
+
+
+Handle(GeomAdaptor_HSurface) anAdaptorHSurface = new GeomAdaptor_HSurface(GOS);
+
+Standard_Real u1, u2, v1, v2;
+  GOS->Bounds(u1,u2,v1,v2);
+  fixParam(u1);
+  fixParam(u2);
+  fixParam(v1);
+  fixParam(v2);
+
+  TopoDS_Shape Result = BRepBuilderAPI_MakeFace (GOS, u1, u2, v1, v2);
+  return Result;
+
+
+
+
+
+}
+
+
 
 TopoDS_Shape HSF::AddNewFillSurface(QList<TopoDS_Shape> shapelist)
 	{
@@ -1727,11 +1787,41 @@ gp_Pnt HSF::GetCenterCircle(TopoDS_Shape circle)
 TopoDS_Shape HSF::AddNewSweep(TopoDS_Shape path, TopoDS_Shape crossection)
 	{
 
-	TopoDS_Edge Ec = TopoDS::Edge(crossection);
-	TopoDS_Wire Wc = BRepBuilderAPI_MakeWire(TopoDS::Edge(path));
-	//TopoDS_Face F = BRepBuilderAPI_MakeFaceAPI_MakePipe(W,F);
-	BRepFill_Pipe mypipe =  BRepFill_Pipe(Wc,Ec);
-	return mypipe.Shape();
+	
+	TopoDS_Wire crosswire = BRepBuilderAPI_MakeWire(TopoDS::Edge(crossection));
+	
+	TopoDS_Wire pathwire = BRepBuilderAPI_MakeWire(TopoDS::Edge(path));
+	////TopoDS_Face F = BRepBuilderAPI_MakeFaceAPI_MakePipe(W,F);
+	//BRepFill_Pipe mypipe =  BRepFill_Pipe(pathwire,crosswire);
+	//return mypipe.Shape();
+
+//	TopoDS_Wire aProfile = crosswire;
+//BRepOffsetAPI_MakePipeShell aSweep(pathwire);
+//aSweep.SetMode(pathwire, Standard_True);
+//aSweep.Add (aProfile);
+////define transition mode to manage discontinuities on the sweep
+//BRepBuilderAPI_TransitionMode aTransition = BRepBuilderAPI_RoundCorner;
+//aSweep.SetTransitionMode (aTransition);
+////perform sweeping and get a result
+//aSweep.Build();
+////aSweep.MakeSolid();
+//TopoDS_Shape aResult;
+//if (aSweep.IsDone()) aResult = aSweep.Shape();
+	
+GeomFill_Pipe Pipe;
+GeomFill_Pipe aPipe (hsf::convertshapetocurve(path), hsf::convertshapetocurve(crossection), GeomFill_IsFrenet);
+aPipe.GenerateParticularCase(Standard_True);
+aPipe.Perform(0.1, Standard_False, GeomAbs_C1, BSplCLib::MaxDegree(), 1000);
+const Handle(Geom_Surface)& aSurface = aPipe.Surface();
+
+Standard_Real Umin, Umax, Vmin, Vmax;
+aSurface->Bounds( Umin, Umax, Vmin, Vmax);
+TopoDS_Face Result = BRepBuilderAPI_MakeFace(aSurface,Umin, Umax, Vmin, Vmax);
+
+return Result;
+
+
+
 
 
 	}
@@ -1883,8 +1973,9 @@ TopoDS_Edge HSF::AddNewHyberbolicCrv(gp_Pnt origin, gp_Vec dir,double maxradius,
   //Handle(Geom_Curve) hbtrim = new Geom_TrimmedCurve (hb, 1000, 1000);
 
   
-			
-  TopoDS_Edge Result = BRepBuilderAPI_MakeEdge(hb,aFP,aLP);
+	double firstval = 0.5 * aFP;
+	double secondval = 0.5 * aLP;
+  TopoDS_Edge Result = BRepBuilderAPI_MakeEdge(hb,firstval, secondval);
 
   return Result;
 
@@ -1963,13 +2054,10 @@ return Result;
 TopoDS_Shape HSF::AddNewSymmetry(TopoDS_Shape shape, gp_Pln pln1)
 	{
 
-		
 		gp_Trsf symmetry; 
 		symmetry.SetMirror(gp_Ax2(pln1.Location(),pln1.Axis().Direction(),pln1.XAxis().Direction()));
-
 		BRepBuilderAPI_Transform aBRepTrsf(shape , symmetry,true);
 		
-
 		return aBRepTrsf.Shape() ;
 
 	}
@@ -2909,12 +2997,56 @@ TopoDS_Shape nullshape;
 		asect.ComputePCurveOn1(Standard_True);
 		asect.Approximation(Standard_True);
 		asect.Build();
+		
 		TopoDS_Shape R = asect.Shape();
 		if(R.IsNull() ) return nullshape;
 
 		return R;
 
 	}
+TopoDS_Shape HSF::AddNewIntersectSrfMulti(TopoDS_Shape srf1,TopoDS_Shape srf2) 
+{
+
+ TopoDS_Compound multiobject;
+  BRep_Builder B;
+  B.MakeCompound(multiobject);
+
+
+if (srf1.ShapeType() != TopAbs_ShapeEnum::TopAbs_FACE)
+	{
+	srf1 = HSF::getfacefromshape(srf1);
+	}
+if (srf2.ShapeType() != TopAbs_ShapeEnum::TopAbs_FACE)
+	{
+	srf2 = HSF::getfacefromshape(srf2);
+	}
+
+Handle(Geom_Surface) S1 = BRep_Tool::Surface(TopoDS::Face(srf1));
+Handle(Geom_Surface) S2 = BRep_Tool::Surface(TopoDS::Face(srf2));
+
+//This class is instantiated as follows:
+GeomAPI_IntSS* Intersector = new GeomAPI_IntSS(S1, S2, Precision::Intersection());
+
+//Once the GeomAPI_IntSS object has been created, it can be interpreted.
+//Calling the number of intersection curves
+Standard_Integer nb = Intersector-> NbLines();
+
+//Calling the intersection curves
+if (nb > 0) {
+	for(int i=1; i <= nb;i++)
+	{
+	Handle(Geom_Curve) C = Intersector->Line(1);
+	//where Index is an integer between 1 and Nb.
+    BRepBuilderAPI_MakeEdge edgebuilder(C,C->FirstParameter(),C->LastParameter());
+	B.Add(multiobject,edgebuilder.Shape());
+	}
+} else
+{
+TopoDS_Shape nullshape;
+return nullshape;
+}
+}
+
 
 TopoDS_Shape HSF::AddNewIntersectSrf(TopoDS_Shape srf1,TopoDS_Shape srf2) 
 {
@@ -3241,7 +3373,7 @@ TopoDS_Shape HSF::AddNewIntersectionPointMulti(TopoDS_Shape crv1,TopoDS_Shape cr
 TopoDS_Shape HSF::AddNewExtrude(TopoDS_Shape crv1 , gp_Vec dir , double length)
 {
 
-TopoDS_Shape aShape = BRepPrimAPI_MakePrism(crv1, dir * length, true).Shape();
+TopoDS_Shape aShape = BRepPrimAPI_MakePrism(crv1, dir.Normalized() * length, true).Shape();
 	
 	/*double fp,lp;
 	TopAbs_ShapeEnum thetype = crv1.ShapeType();
@@ -3419,6 +3551,7 @@ TopoDS_Shape HSF::AddNewIsoCurve(TopoDS_Shape srf,bool orientation, double uv)
 
 	return Result;
 }
+
 gp_Pnt HSF::getpointfromshape(TopoDS_Shape point)
 {
 	gp_Pnt p1;

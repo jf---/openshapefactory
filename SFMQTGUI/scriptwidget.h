@@ -8,6 +8,8 @@
 #include <QScriptEngineDebugger.h>
 
 #include "HsfScriptingInterface.h"
+
+
 //#include <Qsci/qsciscintilla.h>
 
 
@@ -32,13 +34,18 @@ public:
 	void settext(QString textval);
 	QAbstractItemModel* modelFromFile(const QString& fileName,QCompleter* completer);
 
+	HsfScriptingInterface* hsfapi;
+
+	QSstring resultstream;
 
 private:
 	
 	QScriptEngine myengine;
 	QScriptEdit *myeditor;
+	
 
-	HsfScriptingInterface* hsfapi;
+	
+	
 
 	
 	//QScriptEngineDebugger *debugger;
@@ -50,11 +57,15 @@ private:
 
 public slots:
 
+	void makeinteractive_text(bool value);
+	void makeinteractive_mouse(bool value);
 	void evaluatetext();
+	void evaluatetext(QString text);
 	void savecode();
 	void readcodefile();
 	void seteditor();
 	void on3dSelectionChanged();
+	void toggleinteractivity();
 
 	void moveEvent( occviewport* widget, QMouseEvent* e  );
 	void clickEvent( occviewport* widget, QMouseEvent* e );

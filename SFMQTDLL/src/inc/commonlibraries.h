@@ -45,6 +45,9 @@
 #include <BRepBuilderAPI_MakeShell.hxx> 
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepOffsetAPI_MakePipeShell.hxx>
+#include <BRepBuilderAPI_TransitionMode.hxx>
+//#include <BRepBuilderAPI_RoundCorner.hxx>
 #include <BRepFill_Filling.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepExtrema_ExtPF.hxx>
@@ -71,6 +74,7 @@
 #include <BRepTools.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
 #include <BRepAlgoAPI_Common.hxx>
+#include <BSplCLib.hxx>
 #include <csv.h>
 #include <DsgPrs_LengthPresentation.hxx>
 #include <FSD_File.hxx>
@@ -84,6 +88,7 @@
 #include <Handle_GeomPlate_Surface.hxx>
 #include <GeomPlate_Surface.hxx>
 #include <GeomPlate_MakeApprox.hxx>
+#include <GeomFill_Pipe.hxx>
 #include <BRepFill_Pipe.hxx> 
 #include <Geom_BezierCurve.hxx>
 #include <AIS_Text.h>
@@ -95,6 +100,7 @@
 #include <Handle_Geom_Circle.hxx>
 #include <GC_MakeCircle.hxx>
 #include <GC_MakeArcOfCircle.hxx>
+#include <GC_MakeArcOfEllipse.hxx>
 #include <GCE2d_MakeSegment.hxx>
 #include <GCPnts_TangentialDeflection.hxx>
 #include <Geom_Axis2Placement.hxx>

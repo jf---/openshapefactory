@@ -102,6 +102,9 @@ QoccMainWindow::QoccMainWindow()
 	//pawel stop 2008-03-07
 	setWindowTitle(tr("FLEX-IN/FLEX-OUT"));
 	setMinimumSize(160, 160);
+
+	
+
 	
 }
 

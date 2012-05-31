@@ -48,7 +48,7 @@ $Author: pdolbey $
 #include "genericframe.h"
 #include <QTreeWidget>
 #include <QSplitter>
-
+#include <QPushButton>
 //#include "scriptwidget.h"
 
 
@@ -109,12 +109,49 @@ QoccFrame::QoccFrame(	QoccController* aController,
 	//qGeomApp->symboltree->addnewwidget(scriptw);
 
 	//myTabWidget->addTab(new GenericFrame(aController,myParent,scriptw), tr( "symbolic tree" ) );
-	myTabWidget->addTab(new GenericFrame(aController,myParent,symboltree), tr( "symbolic tree" ) );
+	
 	//myTabWidget->setMinimumWidth(300);
+
+	QWidget* toolbarflowwidget = new QWidget(myTabWidget);
+	toolbarflowwidget->setObjectName(QString("toolbarflowwidget"));
+	QHBoxLayout* toolbarflow = new QHBoxLayout( toolbarflowwidget );
+	toolbarflow->setObjectName(QString::fromUtf8("HboxLayout"));
+	toolbarflow->setMargin(0);
+	toolbarflow->setSpacing(0);
+
+	QPushButton *pointbutton1 = new QPushButton(QIcon("C:\\Program Files\\Gehry Technologies\\Digital Project V1,R4\\DSB19\\win_b64\\resources\\graphic\\icons\\small\\I_PointSurface.bmp"),"&Point1", this);
+	pointbutton1->acceptDrops();
+	
+	
+	for (int i =0;i<6;i++)
+	{
+	QPushButton *pointbutton2 = new QPushButton(QIcon("C:\\Program Files\\Gehry Technologies\\Digital Project V1,R4\\DSB19\\win_b64\\resources\\graphic\\icons\\small\\I_PointSurface.bmp"),"&Point2", this);
+	pointbutton2->acceptDrops();
+	toolbarflow->addWidget(pointbutton2);
+	}
+
+	
+	
+	
+	
+	QWidget* vflowwidget = new QWidget(myTabWidget);
+	vflowwidget->setObjectName(QString("flowwidget"));
+	QVBoxLayout* vflow = new QVBoxLayout( vflowwidget );
+	vflow->setObjectName(QString::fromUtf8("VboxLayout"));
+	vflow->setMargin(0);
+	vflow->setSpacing(0);
+	vflow->addWidget(toolbarflowwidget);
+	vflow->addWidget(new GenericFrame(aController,myParent,symboltree));
+
+	myTabWidget->addTab(vflowwidget, tr( "symbolic tree" ) );
+	
+
 
 	QSplitter *splitter = new QSplitter(parent);
     splitter->addWidget(myTabWidget);
     splitter->addWidget(myWidget);
+
+	
 
 
 	mySubLayout->addWidget( splitter);

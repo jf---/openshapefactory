@@ -31,8 +31,7 @@ HEADERS += ./src/inc/AIS_Gauss.hxx \
     ./src/inc/qoccinputoutput.h \
     ./src/inc/qoccmainwindow.h \
     ./src/inc/ui.h
-SOURCES += ./src/src/AIS_Gauss.cxx \
-    ./src/src/AIS_PointCloud.cxx \
+SOURCES += ./src/src/AIS_PointCloud.cxx \
     ./src/src/AIS_Text.cpp \
     ./src/src/cowbellprogress.cpp \
     ./src/src/csv.cpp \

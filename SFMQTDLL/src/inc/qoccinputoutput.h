@@ -78,6 +78,13 @@ public:
 	bool                               exportModel( const FileFormat format, 
 												    const QString&,
                                                     const Handle_TopTools_HSequenceOfShape& );
+	bool exportBREP ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
+	bool exportIGES ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
+	bool exportSTEP ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
+	bool exportCSFDB( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
+	bool exportSTL  ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
+	bool exportVRML ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
+
 
 signals:
 
@@ -95,12 +102,7 @@ private:
 
 	
 
-	bool exportBREP ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
-	bool exportIGES ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
-	bool exportSTEP ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
-	bool exportCSFDB( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
-	bool exportSTL  ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
-	bool exportVRML ( const QString& fileName, const Handle(TopTools_HSequenceOfShape)& shapes );
+	
 
     bool checkFacetedBrep( const Handle(TopTools_HSequenceOfShape)& );
 

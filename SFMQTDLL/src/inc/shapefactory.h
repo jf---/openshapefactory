@@ -122,6 +122,8 @@ public:
 	static __declspec(dllexport) TopoDS_Edge AddNewCircle(gp_Pnt p1,gp_Pnt p2,gp_Pnt p3);
 	// add new arc of circle passing thorugh 3 points
 	static __declspec(dllexport) TopoDS_Shape AddNewArcofCircle(gp_Pnt p1,gp_Pnt p2,gp_Pnt p3);
+
+	static __declspec(dllexport) TopoDS_Shape AddNewArcofEllipse(gp_Pnt origin, gp_Vec dir, double major, double minor, double alpha1,double alpha2,bool sense);
 	
 	// add new circle passing through 3 points
 	static __declspec(dllexport) TopoDS_Edge AddNewCircle(const gp_Pnt& Center,const gp_Dir& Norm,const double Radius);
@@ -177,6 +179,11 @@ static __declspec(dllexport) TopoDS_Shape AddNewSphereSurface(gp_Pnt center, dou
 //add new conical surface from 4 points
 	static __declspec(dllexport) TopoDS_Shape AddNewConicalSurface(gp_Pnt p1,gp_Pnt p2,gp_Pnt p3,gp_Pnt p4);
 	
+
+//add new offset surface
+static __declspec(dllexport) TopoDS_Shape AddNewOffsetSurface(TopoDS_Shape surface, double offset);
+
+
 	//add new fill surface
 static __declspec(dllexport) TopoDS_Shape AddNewFillSurface(QList<TopoDS_Shape> shapelist);
 static __declspec(dllexport) TopoDS_Shape AddNewFillSurface(TopoDS_Shape edge);
@@ -189,7 +196,7 @@ static __declspec(dllexport) TopoDS_Shape getfacefromshape(TopoDS_Shape shape1);
 static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 
 	//by Daniel
-	static __declspec(dllexport) TopoDS_Shape AddNewHyperboloidbyFormula(double innerRadius, double height, double heightUnder, double angle,gp_Pnt Origin, gp_Vec Dir);
+	static __declspec(dllexport) TopoDS_Shape AddNewHyperboloidbyFormula(double innerRadius, double height, double heightUnder, double angle,gp_Pnt Origin, gp_Vec Dir,int detail);
 
 	static __declspec(dllexport) TopoDS_Shape AddNewConicalSurface(gp_Pnt origin,gp_Dir dir,double angle,double radius);
 	static __declspec(dllexport) TopoDS_Face AddNewHyberbolicShell(gp_Pnt origin,gp_Vec dir,double angle,double radius , double length );
@@ -311,6 +318,8 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 		static __declspec(dllexport) Handle_Geom_Curve intersectsrf(const Handle(Geom_Surface)& S1,const Handle(Geom_Surface)& S2);
 		static __declspec(dllexport) bool isintersecting(TopoDS_Shape srf1,TopoDS_Shape srf2);
 		static __declspec(dllexport) TopoDS_Shape AddNewIntersectSrf(TopoDS_Shape srf1,TopoDS_Shape srf2);
+		static __declspec(dllexport) TopoDS_Shape AddNewIntersectSrfMulti(TopoDS_Shape srf1,TopoDS_Shape srf2);
+		
 		static __declspec(dllexport) TopoDS_Shape AddNewIntersectSrf(gp_Pln plane1,TopoDS_Shape srf);
 		static __declspec(dllexport) TopoDS_Shape AddNewIntersectSrf(gp_Pln pln1,gp_Pln pln2);
 		static __declspec(dllexport) gp_Pnt AddNewIntersectCrvPln(TopoDS_Shape crv1,gp_Pln pln1);

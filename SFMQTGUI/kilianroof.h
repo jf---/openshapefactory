@@ -50,6 +50,7 @@ public slots:
 	void updatemove();
 	void updatereleased();
 	void breakshape();
+	void buildgaussiantopo();
 	
 
 	TopoDS_Shape makesplinesection(TopoDS_Shape edge, double percent, double width, double height);

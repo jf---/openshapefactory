@@ -14,14 +14,20 @@
 #include "ui.h"  // user interface singleton 
 #include "User_AIS.hxx" //ais object for displaying TopoDS_Shape
 #include "AIS_Gauss.hxx" // ais object for displaying TopoDS_Shape with curvature analysis
+#include "Handle_MeshVS_Mesh.hxx"
 
+#include <QFileSystemWatcher>
 
  Q_DECLARE_METATYPE(shapefactory)
  Q_DECLARE_METATYPE(gp_Pnt)
  Q_DECLARE_METATYPE(gp_Vec)
  Q_DECLARE_METATYPE(TopoDS_Shape)
+ Q_DECLARE_METATYPE(TopoDS_Compound)
  Q_DECLARE_METATYPE(QList<TopoDS_Shape>)
  Q_DECLARE_METATYPE(QList<gp_Pnt>)
+ Q_DECLARE_METATYPE(QList<QStringList>)
+ Q_DECLARE_METATYPE(QStringList)
+ Q_DECLARE_METATYPE(gp_Pln)
 
 class scriptwidget;
 class QoccInputOutput;
@@ -41,14 +47,20 @@ class QoccInputOutput;
 	TopoDS_Compound folder;
 	TopoDS_Compound gaussfolder;
 	BRep_Builder B;
+
 	Handle_User_AIS aisp;
 	Handle(AIS_Gauss) mygauss;
+
+	//Handle(MeshVS_Mesh) aMeshVS;
+
 	bool showgaussedges;
 
 	scriptwidget* parentwidget;
 
 	// view system
 	bool needstofitall;
+
+	
 
 	//do once system
 	int runoncecounter;
@@ -68,6 +80,9 @@ class QoccInputOutput;
 
 	//mouse enviroment
 	gp_Pnt CurrentMousePoint;
+
+	//file system watcher
+	QFileSystemWatcher* filewatch;
 	
 
 
@@ -83,7 +98,21 @@ class QoccInputOutput;
 	 void finishrunonce();
 	 QScriptValue getdistance();
 
+	 void print(QScriptValue msg);
+	 void printlist(QScriptValue list);
+	 QScriptValue makepointfromlist(QScriptValue list);
 
+	 QScriptValue readcsv(QScriptValue filename);
+	 QScriptValue getcsvrow(QScriptValue csv,QScriptValue row , QScriptValue column);
+	 QScriptValue getcsvrowcount(QScriptValue csv);
+	 QScriptValue getcsvcolumncount(QScriptValue csv,QScriptValue row);
+	
+	
+	 QScriptValue crossproduct();
+	 QScriptValue makeuvvec();
+	 QScriptValue makeuvpt();
+	 QScriptValue watchfile();
+	 QScriptValue makenormal();
 	 //gui
 	 QScriptValue getval();
 	 void checksliders();
@@ -92,10 +121,13 @@ class QoccInputOutput;
 
 	//// utility functions
       QScriptValue vis();
+	  QScriptValue vis(QScriptValue obj);
 	  QScriptValue viscurvature();
 	  QScriptValue initpart();
 	  QScriptValue endpart();
 	  QScriptValue panelize();
+	  QScriptValue shapeready();
+	  QScriptValue shapelistready();
  //    
 	  //listopertation
 	  QScriptValue makeshapelist();
@@ -107,6 +139,8 @@ class QoccInputOutput;
 
 	//  //points
 		QScriptValue makepoint();
+		QScriptValue makepoint(double x, double y, double z);
+		QScriptValue makeplane();
 	    QScriptValue makepointoncurve();
 		QScriptValue makepointmovebyvector();
 
@@ -127,6 +161,7 @@ class QoccInputOutput;
 	//  QScriptValue makebeziercurve();
 	//  QScriptValue makecorner();
 	    QScriptValue makecircle();
+		QScriptValue makehyberbolabyradius();
 	//  QScriptValue makeellipse();
 	//  QScriptValue makearc();
 	//  QScriptValue makearcofellipse();
@@ -141,6 +176,13 @@ class QoccInputOutput;
 
 	// surfaces
 		QScriptValue makeloft();
+		QScriptValue makeextrude();
+		QScriptValue makeintsrfsrf();
+		QScriptValue makesweep();
+		QScriptValue makefillsrf();
+		QScriptValue volmesh();
+		QScriptValue makeoffsetsurface();
+		QScriptValue makecontrainedsrf();
 		
 
 	//  // vectors	
@@ -150,6 +192,8 @@ class QoccInputOutput;
 	//  // operations
 	//  QScriptValue movepointtopoint();
 	    QScriptValue makerotate();
+        QScriptValue makesymmetry();
+		QScriptValue maketranslatebylength();
 	//  QScriptValue mirror();
 	//  QScriptValue movebyvector();
 	//  QScriptValue axistoaxis();
@@ -180,10 +224,21 @@ class QoccInputOutput;
 	//  QScriptValue loadtextfile();
 	//  QScriptValue loadbinaryfile();
 	    QScriptValue importigs();
-	//  QScriptValue importstp();
+	    QScriptValue importstp();
 	//  QScriptValue importstl();
-	//  QScriptValue exportigs();
-	//  QScriptValue exportstp();
+	    QScriptValue exportigs();
+	    QScriptValue exportstp();
+		QScriptValue exportbrep();
+
+		QScriptValue mcosh(QScriptValue parameter);
+		QScriptValue msinh(QScriptValue parameter);
+
+		QScriptValue getcoord();
+		
+
+
+		
+		
 
  };
 

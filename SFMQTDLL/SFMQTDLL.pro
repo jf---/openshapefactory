@@ -5,10 +5,9 @@
 TEMPLATE = lib
 TARGET = SFMQTDLL
 DESTDIR = ../Debug
-QT += core gui script opengl qaxserver qaxcontainer
 CONFIG += staticlib
 DEFINES += QT_LARGEFILE_SUPPORT QT_OPENGL_LIB SFMQTDLL_LIB QAXSERVER QT_SCRIPT_LIB
-INCLUDEPATH += ../src/inc/datakit
+INCLUDEPATH += .
 LIBS += -L"."
 PRECOMPILED_HEADER = StdAfx.h
 DEPENDPATH += .
