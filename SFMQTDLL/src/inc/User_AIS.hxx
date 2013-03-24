@@ -25,6 +25,7 @@ DEFINE_STANDARD_HANDLE(User_AIS,AIS_InteractiveObject)
 
 class User_AIS: public AIS_InteractiveObject {
 public:
+	Standard_EXPORT User_AIS();
 	Standard_EXPORT User_AIS(TopoDS_Shape theshape, Handle_AIS_InteractiveContext thectx);
 	//Standard_EXPORT User_AIS(const gp_Ax2 CylAx2, const Standard_Real R, const Standard_Real H);
 
@@ -34,8 +35,9 @@ public:
 	void Standard_EXPORT SetCylindricalFaceColor(const Quantity_Color acolor);
 	void Standard_EXPORT SetPlanarFaceColor(const Quantity_Color);
 	Standard_Integer NbPossibleSelection() const;
-	void SetColor(const Quantity_Color &aColor);
+	//void SetColor(const Quantity_Color &aColor);
 	void Set(const TopoDS_Shape theshape) {myShape = theshape;};
+	TopoDS_Shape Shape() { return myShape;}
 
 private:
 	void Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationManager,
@@ -45,7 +47,7 @@ private:
 						  const Standard_Integer aMode) ;
 	void Compute(const Handle_Prs3d_Projector& aProjector,const Handle_Prs3d_Presentation& aPresentation);
 	Standard_Boolean TriangleIsValid(const gp_Pnt& P1,const gp_Pnt& P2,const gp_Pnt& P3) const;
-	Quantity_Color Color(gp_Pnt& thePoint,Standard_Real AltMin,Standard_Real AltMax, const Standard_Integer ColorizationMode) ;
+	/*Quantity_Color Color() ;*/
 						
 // some methods like DynamicType() or IsKind()
 

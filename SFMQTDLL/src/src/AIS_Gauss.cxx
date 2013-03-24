@@ -146,7 +146,7 @@ int greensteps = gradationsteps -(redsteps + bluesteps);
 
 
 
-float * curvatureColors = new float[(gradationsteps-1)*3]; //blue to red or whatever
+float *curvatureColors = new float[(gradationsteps-1)*3]; //blue to red or whatever
 
 int redcounter = 0;
 int greencounter =0;
@@ -440,7 +440,8 @@ mygroup->AddPrimitiveArray ( polylines );
 mygroup->EndPrimitives ();
 }
 
-
+//delete mygroup;
+//delete curvatureColors;
 
 
 

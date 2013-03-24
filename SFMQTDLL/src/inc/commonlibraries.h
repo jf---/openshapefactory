@@ -50,6 +50,7 @@
 //#include <BRepBuilderAPI_RoundCorner.hxx>
 #include <BRepFill_Filling.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
+#include <BRepBuilderAPI_GTransform.hxx>
 #include <BRepExtrema_ExtPF.hxx>
 #include <BRepExtrema_ExtCC.hxx>
 #include <BRepFeat_SplitShape.hxx>
@@ -91,6 +92,7 @@
 #include <GeomFill_Pipe.hxx>
 #include <BRepFill_Pipe.hxx> 
 #include <Geom_BezierCurve.hxx>
+#include <Geom2dAPI_PointsToBSpline.hxx>
 #include <AIS_Text.h>
 #include <BRepExtrema_DistShapeShape.hxx>
 #include <GeomAPI_IntCS.hxx>
@@ -147,6 +149,7 @@
 #include <GccEnt_QualifiedLin.hxx>
 #include <GccEnt.hxx>
 #include <GccAna_Circ2d2TanRad.hxx>
+#include <gp_GTrsf.hxx>
 
 #include <Geom_SphericalSurface.hxx>
 #include <gp_Ax2d.hxx>
@@ -309,6 +312,8 @@
 #include <VrmlAPI_Writer.hxx>
 #include <XSControl_WorkSession.hxx>
 #include <WNT_Window.hxx>
+#include "windows.h"
+
 
 #include <qocccontroller.h>
 

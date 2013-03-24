@@ -17,30 +17,31 @@ HEADERS += ../../libraries/kmlocal-1.7.2/src/KCtree.h \
     ../../libraries/kmlocal-1.7.2/src/KMlocal.h \
     ../../libraries/kmlocal-1.7.2/src/KMrand.h \
     ../../libraries/kmlocal-1.7.2/src/KMterm.h \
+    ../Libs/voronoi/source/VEdge.h \
+    ../Libs/voronoi/source/VEvent.h \
+    ../Libs/voronoi/source/vmath.h \
+    ../Libs/voronoi/source/Voronoi.h \
+    ../Libs/voronoi/source/VParabola.h \
+    ../Libs/voronoi/source/VPoint.h \
+    ../../../../Research/PHD/Projects/AUSTRALIA/2012_DTD/software/qtkinect/Qkinect/QtKinectWrapper/QKinectWrapper.h \
     ./bash.h \
-    ./biarc.h \
     ./booleanthread.h \
     ./HsfScriptingInterface.h \
-    ./kilianroof.h \
-    ./mus.h \
     ./parametricsfordummies.h \
     ../../libraries/QScintilla-gpl-2.5.1/Qt4/Qsci/qsciscintilla.h \
     ../../libraries/QScintilla-gpl-2.5.1/Qt4/Qsci/qsciscintillabase.h \
     C:/Qt/4.7.3/src/scripttools/debugging/qscriptedit_p.h \
     C:/Qt/4.7.3/src/scripttools/debugging/qscriptsyntaxhighlighter_p.h \
     ./scriptwidget.h \
-    ./slicer.h \
+    ./uploader.h \
     ./volumemeshsettings.h
-SOURCES += ./biarc.cpp \
-    ./booleanthread.cpp \
+SOURCES += ./booleanthread.cpp \
     ./HsfScriptingInterface.cpp \
-    ./kilianroof.cpp \
     ./main.cpp \
-    ./mus.cpp \
     C:/Qt/4.7.3/src/scripttools/debugging/qscriptedit.cpp \
     C:/Qt/4.7.3/src/scripttools/debugging/qscriptsyntaxhighlighter.cpp \
     ./scriptwidget.cpp \
-    ./slicer.cpp \
+    ./uploader.cpp \
     ../../libraries/kmlocal-1.7.2/src/KCtree.cpp \
     ../../libraries/kmlocal-1.7.2/src/KCutil.cpp \
     ../../libraries/kmlocal-1.7.2/src/KM_ANN.cpp \
@@ -50,9 +51,11 @@ SOURCES += ./biarc.cpp \
     ../../libraries/kmlocal-1.7.2/src/KMfilterCenters.cpp \
     ../../libraries/kmlocal-1.7.2/src/KMlocal.cpp \
     ../../libraries/kmlocal-1.7.2/src/KMrand.cpp \
-    ../../libraries/kmlocal-1.7.2/src/KMterm.cpp
-FORMS += ./biarc.ui \
-    ./kilianroof.ui \
-    ./mus.ui \
+    ../../libraries/kmlocal-1.7.2/src/KMterm.cpp \
+    ../Libs/voronoi/source/vmath.c \
+    ../Libs/voronoi/source/Voronoi.cpp \
+    ../Libs/voronoi/source/VParabola.cpp \
+    ../../../../Research/PHD/Projects/AUSTRALIA/2012_DTD/software/qtkinect/Qkinect/QtKinectWrapper/QKinectWrapper.cpp
+FORMS += ./kilianroof.ui \
     ./scriptwidget.ui \
-    ./slicer.ui
+    ./uploader.ui

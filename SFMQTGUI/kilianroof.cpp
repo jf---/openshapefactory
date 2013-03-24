@@ -124,6 +124,9 @@ void kmeanscluster(int familycount,QList<panelinstance> &mypanels)
 
 
 
+
+
+
 kilianroof::kilianroof(QWidget *parent)
 	: QWidget(parent)
 {

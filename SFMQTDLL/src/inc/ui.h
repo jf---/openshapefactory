@@ -1,13 +1,19 @@
 #pragma once
 #include <QoccMainWindow.h>
 
-class ui;
+class appui;
+class QoccMainWindow;
 
-class ui {
+
+
+class appui {
   public:
-    
-    static ui* getInstance();
-    ~ui();
+	  
+
+    static appui* getInstance();
+
+    ~appui();
+
 	QoccMainWindow *getWindow();
 	void showFullScreen();
 	QoccController* getWindowController();
@@ -17,11 +23,11 @@ class ui {
 	static void init();
 
   protected:
-	ui(); // constructor
+	appui(); // constructor
 	
 
   private:
 	static bool HasInstantiated;
-	static ui* self;
+	static appui* self;
 	QoccMainWindow *window;
 };

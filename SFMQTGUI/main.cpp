@@ -21,18 +21,20 @@
 // add the includes to your widgets here:
 // follow this general form: #include widgetname.h
 
-#include "mus.h"
+//#include "mus.h"
 ////#include "apdl_mex_design_001.h"
 //#include "beamtest.h"
 //#include "algae.h"
-#include "biarc.h"
-#include "slicer.h"
-#include "kilianroof.h"
+//#include "biarc.h"
+//#include "slicer.h"
+//#include "kilianroof.h"
 #include "scriptwidget.h"
 
-#include "PythonQt.h"
-#include "PythonQtScriptingConsole.h"
-#include "PythonQtGui.h"
+//#include "PythonQt.h"
+//#include "PythonQtScriptingConsole.h"
+//#include "PythonQtGui.h"
+
+// //PythonQt.lib //PythonQtGui.lib
 
 #include "qoccframe.h"
 
@@ -40,17 +42,21 @@
 
 #include <QFile>
 
-
+#include <QSplitter>
+#include <QCleanlooksStyle>
 
 
 int main(int argc, char **argv) //Boot Loader Function
 {
 	
 qRegisterMetaType<TopoDS_Shape>("TopoDS_Shape");
+qRegisterMetaType<QMap<QString,QVariant>>("QMap<QString,QVariant>");
+
 
 	QoccApplication app( argc, argv );
+	QApplication::setStyle(new QCleanlooksStyle);
 
-	ui::init(); // initializes the 2d gui canvas
+	appui::init(); // initializes the 2d gui canvas
 	
 	
 	scriptwidget* scriptw = new scriptwidget();
@@ -72,7 +78,7 @@ qRegisterMetaType<TopoDS_Shape>("TopoDS_Shape");
 	 QString code = out.readAll();
 	 data.close();
 
-	 scriptw->evaluatetext(code);
+	 scriptw->evaluatetextonly(code);
 	 qDebug() << scriptw->resultstream;
 	}
 		
@@ -82,16 +88,20 @@ qRegisterMetaType<TopoDS_Shape>("TopoDS_Shape");
 
 	}
 
-	ui::getInstance()->ShowMaximized(); // shows the app window maximized
+	appui::getInstance()->ShowMaximized(); // shows the app window maximized
 
-	qGeomApp->symboltree->addnewwidget(scriptw);
-
+	//qGeomApp->symboltree->addnewwidget(scriptw);
+	qGeomApp->splitter->insertWidget(0,scriptw);
+	
 	
 	qGeomApp->myview->getView()->SetAnimationModeOn();
 	//qGeomApp->myview->getView()->EnableGLLight();
 	qGeomApp->myview->getView()->SetAntialiasingOff();
 	qGeomApp->myview->getView()->SetLightOff();
+
 	
+
+
 	//Standard::SetReentrant(true);
 	
 
@@ -119,28 +129,28 @@ qRegisterMetaType<TopoDS_Shape>("TopoDS_Shape");
 
 	
 
-	
-	PythonQt::init(PythonQt::IgnoreSiteModule | PythonQt::RedirectStdOut);
-    PythonQtGui::init();
+	//
+	//PythonQt::init(PythonQt::IgnoreSiteModule | PythonQt::RedirectStdOut);
+ //   PythonQtGui::init();
 
 
 
-	
-	PythonQtObjectPtr pycontext = PythonQt::self()->getMainModule();
+	//
+	//PythonQtObjectPtr pycontext = PythonQt::self()->getMainModule();
 
-	
+	//
 
-	 // register the type with QMetaType
-  qRegisterMetaType<QoccFrame>("qoccframe");
-  // add a wrapper object for the new variant type
-  //PythonQt::self()->addVariantWrapper("qoccframe", new QoccFrame());
+	// // register the type with QMetaType
+ // qRegisterMetaType<QoccFrame>("qoccframe");
+ // // add a wrapper object for the new variant type
+ // //PythonQt::self()->addVariantWrapper("qoccframe", new QoccFrame());
 
 
-	HsfScriptingInterface* hsf = scriptw->hsfapi;
+	//HsfScriptingInterface* hsf = scriptw->hsfapi;
 
-	pycontext.addObject("hsf", scriptw); 
-	PythonQtScriptingConsole console(NULL, pycontext);
-	console.show();
+	//pycontext.addObject("hsf", scriptw); 
+	//PythonQtScriptingConsole console(NULL, pycontext);
+	//console.show();
 
 	
 

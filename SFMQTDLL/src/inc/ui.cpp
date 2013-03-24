@@ -1,65 +1,65 @@
 #include "ui.h"
-class ui;
+class appui;
 
-bool ui::HasInstantiated = false;
-ui* ui::self = 0;
+bool appui::HasInstantiated = false;
+appui* appui::self = 0;
 
 
-ui* ui::getInstance(){
-  if(ui::HasInstantiated == false){
-	  ui::self = new ui();
-	  ui::HasInstantiated = true;
+appui* appui::getInstance(){
+  if(appui::HasInstantiated == false){
+	  appui::self = new appui();
+	  appui::HasInstantiated = true;
   }
-  return ui::self;
+  return appui::self;
 }
 
 
 
 
-ui::ui(){ // constructor
+appui::appui(){ // constructor
 	window = new QoccMainWindow();
 }
 
-ui::~ui(){ // constructor
+appui::~appui(){ // constructor
   
 }
 
-void ui::init()
+void appui::init()
 	{
-	ui::self = ui::getInstance();
+	appui::self = appui::getInstance();
 	}
-QoccMainWindow *ui::getWindow()
+QoccMainWindow *appui::getWindow()
 {
 	//window = new QoccMainWindow();
 	return window; //new QoccMainWindow();
 }
 
-QoccController* ui::getWindowController()
+QoccController* appui::getWindowController()
 {
 	return window->myController;
 }
 
-Handle_AIS_InteractiveContext ui::getWindowContext()
+Handle_AIS_InteractiveContext appui::getWindowContext()
 {
 	return window->myController->getContext();
 }
 
 
-void ui::Statusbar(QString message)
+void appui::Statusbar(QString message)
 {
 	window->statusBar()->showMessage(message);
 }
 
-void ui::showFullScreen()
+void appui::showFullScreen()
 {
 	window->showFullScreen();
 	window->myController->update();
 }
 
 
-void ui::ShowMaximized()
+void appui::ShowMaximized()
 {
-	window->showMaximized();
+	window->show();
 	window->myController->update();
 }
 

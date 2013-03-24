@@ -6,7 +6,7 @@ TEMPLATE = app
 TARGET = SFMQTGUI
 DESTDIR = ../Debug
 QT += core gui
-CONFIG += debug
+CONFIG += release
 DEFINES += QT_LARGEFILE_SUPPORT QAXSERVER
 INCLUDEPATH += ./GeneratedFiles \
     . \
@@ -14,10 +14,11 @@ INCLUDEPATH += ./GeneratedFiles \
     ../../../libraries/pythonqt11/PythonQt-1.1/src \
     $(PYTHON_PATH)/include \
     ../../../libraries/pythonqt11/PythonQt-1.1/extensions/PythonQtGui \
-    ../../../libraries/pythonqt11/PythonQt-1.1/src/gui
-LIBS += -L"../../../libraries/pythonqt11/PythonQt-1.1/lib" \
-    -lPythonQt \
-    -lPythonQtGui
+    ../../../libraries/pythonqt11/PythonQt-1.1/src/gui \
+    ../../Libs/voronoi/source \
+    ../../../../../Research/PHD/Projects/AUSTRALIA/2012_DTD/software/qtkinect/Qkinect/QtKinectWrapper \
+    ../../../../../Research/PHD/Projects/AUSTRALIA/2012_DTD/software/qtkinect/Qkinect/QtKinectWrapper/OpenNI/Include
+LIBS += -lopenNI
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/debug
 OBJECTS_DIR += debug

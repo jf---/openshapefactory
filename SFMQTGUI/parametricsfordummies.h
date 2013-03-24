@@ -46,7 +46,7 @@
 /* initialize part with context and folder */
 #define INITPART\
 	UnitsAPI::SetLocalSystem(UnitsAPI_MDTV);\
-	Handle_AIS_InteractiveContext ic = ui::getInstance()->getWindowContext();\
+	Handle_AIS_InteractiveContext ic = appui::getInstance()->getWindowContext();\
 	int viscount=0;\
 	TopoDS_Compound folder;\
 	BRep_Builder B;\

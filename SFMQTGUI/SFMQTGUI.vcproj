@@ -40,8 +40,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.\GeneratedFiles&quot;;&quot;.\&quot;;C:\OpenCASCADE6.3.0\ros\drv\BRep;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;.\&quot;;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src;&quot;$(PYTHON_PATH)\include&quot;;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui"
-				PreprocessorDefinitions=",UNICODE,WIN32,QT_LARGEFILE_SUPPORT;QT_NO_DEBUG,NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QAXSERVER"
+				AdditionalIncludeDirectories="&quot;.\GeneratedFiles&quot;;&quot;.\&quot;;C:\OpenCASCADE6.3.0\ros\drv\BRep;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;.\&quot;;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src;&quot;$(PYTHON_PATH)\include&quot;;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui;&quot;$(QTDIR)\include\QtSql&quot;"
+				PreprocessorDefinitions=",UNICODE,WIN32,QT_LARGEFILE_SUPPORT;QT_NO_DEBUG,NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QAXSERVER;QT_SQL_LIB"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				DebugInformationFormat="0"
@@ -57,7 +57,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib PythonQt.lib PythonQtGui.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib PythonQt.lib PythonQtGui.lib QtSql4.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;C:\Python26\libs;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\lib"
 				GenerateDebugInformation="false"
@@ -110,8 +110,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\GeneratedFiles;.\;C:\OpenCASCADE6.3.0\ros\drv\BRep;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot;;&quot;$(PYTHON_PATH)\include&quot;;&quot;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot;;&quot;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot;;C:\Python26\include"
-				PreprocessorDefinitions=",UNICODE,WIN32,QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;QAXSERVER"
+				AdditionalIncludeDirectories=".\GeneratedFiles;.\;H:\OpenCASCADE6.3.0\ros\drv\BRep;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot;;&quot;$(PYTHON_PATH)\include&quot;;&quot;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot;;&quot;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot;;C:\Python26\include;H:\DEV\FDM\FDM_GEOM\Libs\voronoi\source;C:\Qt\4.7.3\src\gui\styles;C:\Qt\4.7.3\demos\gradients;C:\Qt\4.7.3\demos\shared;H:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper;H:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\OpenNI\Include;&quot;C:\Program Files (x86)\OpenNI&quot;;&quot;$(QTDIR)\include\QtSql&quot;"
+				PreprocessorDefinitions=",UNICODE,WIN32,QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;QAXSERVER;QT_SQL_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
 				ObjectFile="$(TargetDir)\"
@@ -128,14 +128,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib PythonQt.lib PythonQtGui.lib"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;C:\Python26\libs;H:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\lib"
-				GenerateDebugInformation="true"
-				GenerateMapFile="true"
-				MapExports="true"
-				SubSystem="2"
+				AdditionalDependencies="openNI.lib QtSqld4.lib"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\OpenNI\Lib&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -173,10 +167,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\biarc.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\booleanthread.cpp"
 				>
 			</File>
@@ -185,15 +175,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\kilianroof.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mus.cpp"
 				>
 			</File>
 			<File
@@ -209,7 +191,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\slicer.cpp"
+				RelativePath=".\uploader.cpp"
 				>
 			</File>
 			<Filter
@@ -531,6 +513,84 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="voronoi"
+				>
+				<File
+					RelativePath="..\Libs\voronoi\source\VEdge.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Libs\voronoi\source\VEvent.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Libs\voronoi\source\vmath.c"
+					>
+				</File>
+				<File
+					RelativePath="..\Libs\voronoi\source\vmath.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Libs\voronoi\source\Voronoi.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Libs\voronoi\source\Voronoi.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Libs\voronoi\source\VParabola.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Libs\voronoi\source\VParabola.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Libs\voronoi\source\VPoint.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="style"
+				>
+			</Filter>
+			<Filter
+				Name="kinect"
+				>
+				<File
+					RelativePath="..\..\..\..\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\QKinectWrapper.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\QKinectWrapper.h"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing $(InputFileName)..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;..\..\..\..\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\QKinectWrapper.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Moc&apos;ing $(InputFileName)..."
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_GDI32_ -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IH:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\voronoi\source&quot; &quot;-IC:\Qt\4.7.3\src\gui\styles&quot; &quot;-IC:\Qt\4.7.3\demos\gradients&quot; &quot;-IC:\Qt\4.7.3\demos\shared&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\OpenNI\Include&quot; &quot;-IC:\Program Files (x86)\OpenNI&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\LibGizmo\inc&quot; &quot;..\..\..\..\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\QKinectWrapper.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+							AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+							Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+						/>
+					</FileConfiguration>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -564,32 +624,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\biarc.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\biarc.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\biarc.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\booleanthread.h"
 				>
 				<FileConfiguration
@@ -598,7 +632,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\booleanthread.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\booleanthread.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -609,7 +643,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\booleanthread.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_GDI32_ -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IH:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\voronoi\source&quot; &quot;-IC:\Qt\4.7.3\src\gui\styles&quot; &quot;-IC:\Qt\4.7.3\demos\gradients&quot; &quot;-IC:\Qt\4.7.3\demos\shared&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\OpenNI\Include&quot; &quot;-IC:\Program Files (x86)\OpenNI&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\LibGizmo\inc&quot; &quot;.\booleanthread.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -624,7 +658,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\HsfScriptingInterface.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -635,59 +669,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\kilianroof.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\kilianroof.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\kilianroof.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\mus.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\mus.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\mus.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_GDI32_ -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IH:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\voronoi\source&quot; &quot;-IC:\Qt\4.7.3\src\gui\styles&quot; &quot;-IC:\Qt\4.7.3\demos\gradients&quot; &quot;-IC:\Qt\4.7.3\demos\shared&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\OpenNI\Include&quot; &quot;-IC:\Program Files (x86)\OpenNI&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\LibGizmo\inc&quot; &quot;.\HsfScriptingInterface.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -728,7 +710,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-I.\..\SFMQTDLL\src&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -739,7 +721,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\voronoi\source&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -780,7 +762,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-I.\..\SFMQTDLL\src&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -791,7 +773,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -D_DEBUG -DWNT -DSALOME_GEOM -DQT_DLL -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.\..\SFMQTDLL\src&quot; &quot;-I.&quot; &quot;-I.\..\SFMQTDLL\src\inc\datakit&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-IH:\DEV\FDM\libraries\kmlocal-1.7.2\src&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScriptTools&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\include\QtScriptTools\private&quot; &quot;-I$(QTDIR)\src\scripttools\tmp\moc\debug_shared&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -832,7 +814,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\scriptwidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\scriptwidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -843,14 +825,14 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\scriptwidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_GDI32_ -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IH:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\voronoi\source&quot; &quot;-IC:\Qt\4.7.3\src\gui\styles&quot; &quot;-IC:\Qt\4.7.3\demos\gradients&quot; &quot;-IC:\Qt\4.7.3\demos\shared&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\OpenNI\Include&quot; &quot;-IC:\Program Files (x86)\OpenNI&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\LibGizmo\inc&quot; &quot;.\scriptwidget.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\slicer.h"
+				RelativePath=".\uploader.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -858,7 +840,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\slicer.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_WINDOWS -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNo_Exception  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\uploader.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -869,7 +851,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IC:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;.\slicer.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQAXSERVER -DQT_SQL_LIB -D_GDI32_ -D_WINDOWS -D_DEBUG -DCSFDB -DQOCC_STATIC -DWNT -DSALOME_GEOM -DQT_DLL -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG -DNo_Exception -DQT_NO_DEBUG  &quot;-I.\GeneratedFiles&quot; &quot;-I.&quot; &quot;-IH:\OpenCASCADE6.3.0\ros\drv\BRep&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src&quot; &quot;-I$(PYTHON_PATH)\include&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\extensions\PythonQtGui&quot; &quot;-IH:\DEV\FDM\libraries\pythonqt11\PythonQt-1.1\src\gui&quot; &quot;-IC:\Python26\include&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\voronoi\source&quot; &quot;-IC:\Qt\4.7.3\src\gui\styles&quot; &quot;-IC:\Qt\4.7.3\demos\gradients&quot; &quot;-IC:\Qt\4.7.3\demos\shared&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper&quot; &quot;-IH:\Research\PHD\Projects\AUSTRALIA\2012_DTD\software\qtkinect\Qkinect\QtKinectWrapper\OpenNI\Include&quot; &quot;-IC:\Program Files (x86)\OpenNI&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I$(QTDIR)\mkspecs\win32-msvc2008&quot; &quot;-I$(CASROOT)\inc&quot; &quot;-I.\GeneratedFiles\Release&quot; &quot;-I.\GeneratedFiles\Debug&quot; &quot;-I.\..\SFMQTDLL\src\inc&quot; &quot;-I$(QTDIR)\include\QtScript&quot; &quot;-I$(QTDIR)\src\scripttools\debugging&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\include&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\lexers&quot; &quot;-I.\..\Libs\QScintilla-gpl-2.5.1\Qt4\Qsci&quot; &quot;-I.\..\Libs\kmlocal-1.7.2\src&quot; &quot;-I.\..\Libs\SMESH\inc&quot; &quot;-I.\..\Libs&quot; &quot;-IH:\DEV\FDM\FDM_GEOM\Libs\LibGizmo\inc&quot; &quot;.\uploader.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -908,59 +890,7 @@
 			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
 			>
 			<File
-				RelativePath=".\biarc.ui"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\kilianroof.ui"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\mus.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1012,7 +942,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\slicer.ui"
+				RelativePath=".\uploader.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1045,59 +975,7 @@
 			SourceControlFiles="false"
 			>
 			<File
-				RelativePath=".\GeneratedFiles\ui_biarc.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\ui_kilianroof.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\GeneratedFiles\ui_mus.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1149,48 +1027,14 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_slicer.h"
+				RelativePath=".\GeneratedFiles\ui_uploader.h"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Performing Custom Build Step"
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
-					/>
-				</FileConfiguration>
 			</File>
 			<Filter
 				Name="Release"
 				Filter="cpp;moc"
 				SourceControlFiles="false"
 				>
-				<File
-					RelativePath=".\GeneratedFiles\Release\moc_biarc.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Release\moc_booleanthread.cpp"
 					>
@@ -1216,31 +1060,19 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Release\moc_kilianroof.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\GeneratedFiles\Release\moc_mus.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath=".\GeneratedFiles\Release\moc_parametricsfordummies.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\GeneratedFiles\Release\moc_QKinectWrapper.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1300,7 +1132,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Release\moc_slicer.cpp"
+					RelativePath=".\GeneratedFiles\Release\moc_uploader.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1317,18 +1149,6 @@
 				Filter="cpp;moc"
 				SourceControlFiles="false"
 				>
-				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_biarc.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_booleanthread.cpp"
 					>
@@ -1354,31 +1174,19 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_kilianroof.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_mus.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_parametricsfordummies.cpp"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\GeneratedFiles\Debug\moc_QKinectWrapper.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -1416,6 +1224,14 @@
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_qscriptedit_p.cpp"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_scriptwidget.cpp"
@@ -1430,7 +1246,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_slicer.cpp"
+					RelativePath=".\GeneratedFiles\Debug\moc_uploader.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"

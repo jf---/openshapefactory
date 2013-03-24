@@ -22,6 +22,11 @@
 #include <QTextBlock>
 #include <QAbstractItemModel>
 #include <QStringListModel>
+
+#include <QSettings>
+#include <QShortcut>
+
+//#include "gradients.h"
  
 
 
@@ -29,18 +34,27 @@ scriptwidget::scriptwidget(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-
 	
+
+	/*QVBoxLayout* myLayout = new QVBoxLayout( this );
+	myLayout->setMargin(0);
+	myLayout->setSpacing(0);
+	myLayout->addWidget(ui.tabWidget);*/
+
+	ui.tab_2->setLayout(ui.thetextlayout);
+	ui.tab->setLayout(ui.slider_tab_layout);
+	this->setLayout(ui.verticalLayout);
+
 	connect(ui.evalbutton, SIGNAL(pressed()), this, SLOT(evaluatetext()));
 
 	// connect widget events to the context wrapper
 	/*connect( ui::getInstance()->getWindowController(),       SIGNAL(mouseMoved(occviewport*, QMouseEvent*)), 
 		     this,   SLOT  (moveEvent(occviewport*,  QMouseEvent*)) );*/
 	// connect widget events to the context wrapper
-	connect( ui::getInstance()->getWindowController(),       SIGNAL(clickEvent(occviewport*, QMouseEvent*)), 
+	connect( appui::getInstance()->getWindowController(),       SIGNAL(clickEvent(occviewport*, QMouseEvent*)), 
 		     this,   SLOT  (clickEvent(occviewport*,   QMouseEvent*)) );
 	// connect widget events to the context wrapper
-	connect( ui::getInstance()->getWindowController(),       SIGNAL(selectionChanged()) , 
+	connect( appui::getInstance()->getWindowController(),       SIGNAL(selectionChanged()) , 
 		     this,   SLOT  (onSelectionChanged()) );
 
 
@@ -49,27 +63,30 @@ scriptwidget::scriptwidget(QWidget *parent)
 //connect(ui.text, SIGNAL(pressed()), this, SLOT(seteditor()));
 	
 	myeditor = new QScriptEdit(0); // addtexteditor found it in QT debugger
-	myeditor->show();
+	////myeditor->show();
+	////myeditor->setFont(QFont("Arial",14));
 
-	connect( this->ui.interactivecheck,   SIGNAL(stateChanged ( int ) ) , 
-		     this,   SLOT  (makeinteractive_text( bool )) );
+	//connect( this->ui.interactivecheck,   SIGNAL(stateChanged ( int ) ) , 
+	//	     this,   SLOT  (makeinteractive_text( bool )) );
 
 
 
-    ui.vertlayout->addWidget(myeditor);
-
+    //ui.thetextlayout->addWidget(myeditor);
+	this->seteditor();
 
 	 QString folder = QCoreApplication::applicationDirPath();
-	 QString codefilename = folder + QString("/openshapefactory_syntax.osf");
+	/* QString codefilename = folder + QString("/openshapefactory_syntax.osf");
 
 	
 
 	 QCompleter* completer = new QCompleter(myeditor);
      completer->setModel(modelFromFile(codefilename,completer));
 	 completer->setModelSorting(QCompleter::UnsortedModel);
-     completer->setCaseSensitivity(Qt::CaseInsensitive);
+	 completer->setCaseSensitivity(Qt::CaseInsensitive);
      completer->setWrapAround(false);
 	 myeditor->setCompleter(completer);
+	 */
+
 
 
 	
@@ -109,8 +126,11 @@ scriptwidget::scriptwidget(QWidget *parent)
 		}
 	}
 
-	
+	//ShadeWidget* myshade = new ShadeWidget(ShadeWidget::RedShade, this);
 
+	
+	myuploader = new uploader(appui::getInstance()->getWindow(),this);
+	myuploader->setscriptwidget(this);
 	
 
 	
@@ -157,10 +177,15 @@ void scriptwidget::moveEvent( occviewport* widget, QMouseEvent* e  )
 	evaluatetext();
 }
 
+
+
 void scriptwidget::clickEvent( occviewport* widget, QMouseEvent* e )
 {
 	hsfapi->setmousepos(widget->getPoint());
 	evaluatetext();
+	QString posmsg("widgetpos:" + e->pos().x() + tr(",") + e->pos().y());
+	hsfapi->print(QScriptValue(posmsg));
+
 }
 
 
@@ -190,7 +215,13 @@ QAbstractItemModel* scriptwidget::modelFromFile(const QString& fileName,QComplet
 void scriptwidget::seteditor()
 {
 	textEdit = new QsciScintilla();
+
 	
+	
+
+	QShortcut* shortcut_ctrl_space = new QShortcut(QKeySequence("Ctrl+Space"),textEdit);
+    connect(shortcut_ctrl_space, SIGNAL(activated()), textEdit,SLOT(autoCompleteFromAll()));
+
 
 	//textEdit->autoCompleteFromAll();
 
@@ -203,12 +234,13 @@ void scriptwidget::seteditor()
     api->prepare();*/
  
 	//textEdit->setAutoCompletionThreshold(1);
-
+	
 
 	QFont font;
     font.setFamily("arial");
     font.setFixedPitch(true);
     font.setPointSize(12);
+	
 	//font.setStretch(20);
 	//font.setBold(true);
 	
@@ -220,32 +252,121 @@ void scriptwidget::seteditor()
 
 	jscript->setFont(font);
 	
+	
+	jscript->setColor(QColor("#BDAF9D"),QsciLexerCPP::Default);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::Default);
+
+	jscript->setDefaultColor(QColor("#BDAF9D"));
+	jscript->setDefaultPaper(QColor("#2A211C"));
+
+	jscript->setColor(QColor("#FF3A83"),QsciLexerCPP::Number);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::Number);
+
+	jscript->setColor(QColor("#37A3ED"),QsciLexerCPP::Keyword);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::Keyword);
+
+	jscript->setColor(QColor("#BDAE9D"),QsciLexerCPP::Identifier);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::Identifier);
+
+	jscript->setColor(QColor("#00FF40"),QsciLexerCPP::DoubleQuotedString);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::DoubleQuotedString);
+
+	jscript->setColor(QColor("#80FF00"),QsciLexerCPP::SingleQuotedString);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::SingleQuotedString);
+
+	jscript->setColor(QColor("#666666"),QsciLexerCPP::Comment);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::Comment);
+
+	jscript->setColor(QColor("#666666"),QsciLexerCPP::CommentLine);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::CommentLine);
+
+	jscript->setColor(QColor("#FFFF80"),QsciLexerCPP::CommentDoc);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::CommentDoc);
+
+	jscript->setColor(QColor("#E5C138"),QsciLexerCPP::Operator);
+	jscript->setPaper(QColor("#2A211C"),QsciLexerCPP::Operator);
+
+	textEdit->setMarginsForegroundColor(QColor("#E5C138"));
+	textEdit->setMarginsBackgroundColor(QColor("#2A211C"));
+
+	textEdit->setAutoFillBackground(true);
+	textEdit->setCaretLineVisible(true);
+	textEdit->setCaretWidth(5);
+	textEdit->setCaretForegroundColor(QColor("#E5C138"));
+	textEdit->setCaretLineBackgroundColor(QColor("#2A211C"));
+
+	textEdit->setFoldMarginColors(QColor("#E5C138"),QColor("#2A211C"));
+
+
+	
+
+
+	
+	
+	//jscript->setfon
+
+	//jscript->setColor(QColor("FFAA00"));
+	//jscript->setPaper(QColor("0B161D"));
+	
 	textEdit->setMarginWidth(0, fm.width( "0000" ));
     textEdit->setMarginLineNumbers(0, true);
+
+	
+
+
 
 	textEdit->setEdgeMode(QsciScintilla::EdgeLine);
     textEdit->setEdgeColumn(0);
 	textEdit->setEdgeColor(QColor("green"));
 	
-
 	
+
+	//QSettings mysets("H:\\mysettings","openshapefactory");
+	//jscript->writeSettings(mysets);
+	
+	
+	
+
+	//QString folder = QCoreApplication::applicationDirPath();
+	//QString themefile = folder + QString("//themes//Bespin.xml");
+
 	
 	
 	textEdit->setLexer(jscript);
-	textEdit->setFolding(QsciScintilla::FoldStyle::BoxedTreeFoldStyle);
+	textEdit->setFolding(QsciScintilla::FoldStyle::BoxedTreeFoldStyle,2);
+	textEdit->setIndentationGuides(true);
 
-	//textEdit->setAutoCompletionSource(QsciScintilla::AutoCompletionSource::AcsAll);
+	textEdit->setAutoCompletionSource(QsciScintilla::AutoCompletionSource::AcsAll);
+	textEdit->autoCompleteFromDocument();
+	
 	textEdit->setAutoIndent(true);
 	textEdit->setBraceMatching(QsciScintilla::BraceMatch::SloppyBraceMatch);
 	
 	textEdit->setCallTipsStyle(QsciScintilla::CallTipsStyle::CallTipsContext);
 	
 	textEdit->show();
+	textEdit->setAutoCompletionShowSingle(false);
+
+	textEdit->autoCompleteFromAll();
+	textEdit->autoCompletionFillupsEnabled();
+	textEdit->autoCompletionReplaceWord();
+	textEdit->annotationDisplay();
+	
+
 	textEdit->zoomIn(2);
-	ui.vertlayout->addWidget(textEdit);
+	ui.thetextlayout->addWidget(textEdit);
+
+	
+    
+	textEdit->setCallTipsStyle(QsciScintilla::CallTipsContext);
+    //connect(textEdit, SIGNAL(cursorPositionChanged(int,int)), textEdit, SLOT(autoCompleteFromDocument())); //make code interactive
 
 
-	connect(textEdit, SIGNAL(textChanged()), this, SLOT(evaluatetext())); //make code interactive
+
+	
+
+
+	//connect(textEdit, SIGNAL(textChanged()), this, SLOT(evaluatetext())); //make code interactive
 
 	
 	
@@ -258,20 +379,21 @@ scriptwidget::~scriptwidget()
 
 QString scriptwidget::gettextbyline (int linenumber)
 {
-	if (myeditor)
+	if (myeditor->isVisible())
 	{
 	QString lineat = myeditor->document()->findBlockByLineNumber(linenumber).text();
 	return lineat;
-	} else if (textEdit)
+	} else if (textEdit->isVisible())
 	{
-	QString lineat  = textEdit->text(linenumber);
+	QString lineat  = textEdit->text(linenumber-1);
+	//qDebug() << "gettextline:" << lineat;
 	return lineat;
 	}
 
 }
 QString scriptwidget::gettext()
 {
-if (myeditor)
+if (myeditor->isVisible())
 {
 	return myeditor->toPlainText();
 } else if (textEdit)
@@ -284,6 +406,8 @@ if (myeditor)
 void scriptwidget::evaluatetext()
 {
 
+QTime time;
+time.start();
 
 savecode();
 
@@ -315,6 +439,22 @@ QScriptValue result;
  } else
  {
 	 ui.listener->addItem(result.toString());
+	 
+	 double milliseconds = time.elapsed();
+     double seconds = (milliseconds/1000);
+     double minutes = seconds/60;
+     double hours = minutes/60;
+
+	 QString timetxt;
+     QTextStream linestream(&timetxt);
+     linestream << "h" << hours << ":m " << minutes << ":s " << seconds << ".ms" << milliseconds; 
+		
+	 appui::getInstance()->getWindow()->statusBar()->showMessage(timetxt);
+
+	 //ui.listener->addItem(result.toString() + timetxt);
+
+	 
+
  }
 
 
@@ -327,7 +467,7 @@ QScriptValue result;
 
 
 
-void scriptwidget::evaluatetext(QString text)
+void scriptwidget::evaluatetextonly(QString text)
 {
 
 
@@ -360,11 +500,14 @@ QScriptValue result;
 	 ui.listener->addItem(resultstream);
 	 myengine.clearExceptions();
 	 myengine.collectGarbage();
+
+	 qDebug() << resultstream << "\n";
 	 
  } else
  {
 	resultstream = result.toString();
 	 ui.listener->addItem(resultstream);
+	 qDebug() << resultstream << "\n";
  }
 
 
@@ -394,7 +537,7 @@ void scriptwidget::savecode()
 
 void scriptwidget::settext(QString textval)
 {
-	if (myeditor)
+	if (myeditor->isVisible())
 {
 	myeditor->setPlainText(textval);
 } else if (textEdit)

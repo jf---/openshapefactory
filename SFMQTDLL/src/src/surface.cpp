@@ -42,6 +42,6 @@ This sends the object to AIS to be drawn, but it does not actually tell AIS to u
 */
 void surface::draw()
 {
-	Handle_AIS_InteractiveContext ic = ui::getInstance()->getWindowContext();
+Handle_AIS_InteractiveContext ic = appui::getInstance()->getWindowContext();
 	HSF::updateAIS(myShape,aisp2,ic);
 }

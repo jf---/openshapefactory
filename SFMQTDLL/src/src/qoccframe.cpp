@@ -49,6 +49,7 @@ $Author: pdolbey $
 #include <QTreeWidget>
 #include <QSplitter>
 #include <QPushButton>
+#include <QLabel>
 //#include "scriptwidget.h"
 
 
@@ -97,6 +98,22 @@ QoccFrame::QoccFrame(	QoccController* aController,
 	myWidget->getView()->EnableDepthTest();
 	myWidget->getView()->EnableGLLight();
 
+	curlabel = new QLabel("Active_View",myWidget);
+	curlabel->move(10,10);
+	curlabel->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);color: rgb(255, 255, 255);padding: 2px;"));
+
+
+	//connect(myWidget,SIGNAL(sendStatus(QString)),curlabel,SLOT(setText(QString)));
+	//curlabel->setAttribute(Qt::WA_TranslucentBackground);
+	
+
+	curlabel->setContextMenuPolicy ( Qt::ContextMenuPolicy::CustomContextMenu );
+	connect(curlabel,SIGNAL(customContextMenuRequested ( const QPoint &) ),this,SLOT(handlelabelcontextmenu( const QPoint & )));
+    //curlabel->setWindowFlags(Qt::FramelessWindowHint);
+
+
+
+
 	GraphWidget* symboltree = new GraphWidget(parent);
 
 
@@ -119,16 +136,16 @@ QoccFrame::QoccFrame(	QoccController* aController,
 	toolbarflow->setMargin(0);
 	toolbarflow->setSpacing(0);
 
-	QPushButton *pointbutton1 = new QPushButton(QIcon("C:\\Program Files\\Gehry Technologies\\Digital Project V1,R4\\DSB19\\win_b64\\resources\\graphic\\icons\\small\\I_PointSurface.bmp"),"&Point1", this);
-	pointbutton1->acceptDrops();
+	/*QPushButton *pointbutton1 = new QPushButton(QIcon("C:\\Program Files\\Gehry Technologies\\Digital Project V1,R4\\DSB19\\win_b64\\resources\\graphic\\icons\\small\\I_PointSurface.bmp"),"&Point1", this);
+	pointbutton1->acceptDrops();*/
 	
 	
-	for (int i =0;i<6;i++)
+	/*for (int i =0;i<6;i++)
 	{
 	QPushButton *pointbutton2 = new QPushButton(QIcon("C:\\Program Files\\Gehry Technologies\\Digital Project V1,R4\\DSB19\\win_b64\\resources\\graphic\\icons\\small\\I_PointSurface.bmp"),"&Point2", this);
 	pointbutton2->acceptDrops();
 	toolbarflow->addWidget(pointbutton2);
-	}
+	}*/
 
 	
 	
@@ -148,8 +165,10 @@ QoccFrame::QoccFrame(	QoccController* aController,
 
 
 	QSplitter *splitter = new QSplitter(parent);
-    splitter->addWidget(myTabWidget);
+    //splitter->addWidget(myTabWidget); // this where the left widget is added to the split 
     splitter->addWidget(myWidget);
+
+	qGeomApp->splitter = splitter;
 
 	
 
@@ -164,6 +183,8 @@ QoccFrame::QoccFrame(	QoccController* aController,
 	qGeomApp->myview = myWidget;
 	qGeomApp->symboltree = symboltree;
 
+	  this->setStyleSheet(QString::fromUtf8("background-color: rgb(104, 104, 104);\n" "color: rgb(255, 255, 255);"));
+
 
 
 
@@ -175,6 +196,16 @@ QoccFrame::QoccFrame(	QoccController* aController,
 /*! 
 \brief	The class destructor
 */
+
+void QoccFrame::handlelabelcontextmenu( const QPoint & pos )
+	{
+     QMenu menu(curlabel);
+     menu.addAction(actionViewGroup);
+	 menu.addAction( actionZoomGroup);
+     menu.exec( myWidget->pos() + pos);
+	 
+
+	}
 QoccFrame::~QoccFrame()
 {
 	disconnectActions();

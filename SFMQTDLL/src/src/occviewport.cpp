@@ -14,6 +14,7 @@
 #include <QtGui/QColorDialog>
 #include <QtGui/QPlastiqueStyle>
 #include <QtCore/QTextStream>
+#include <Wingdi.h>
 
 #include "occviewport.h"
 #include "commonlibraries.h"
@@ -21,6 +22,15 @@
 #include <QDebug>
 #include "shapefactory.h"
 #include "cowbellprogress.h"
+#include "QGLwidget"
+
+//#include <windows.h>		// Header File For Windows
+//#include <stdio.h>			// Header File For Standard Input/Output
+//#include <gl\gl.h>			// Header File For The OpenGL32 Library
+//#include <gl\glu.h>			// Header File For The GLu32 Library
+//#include <GL\glut.h>
+
+
 
 QString	occviewport::myStatusMessage = QObject::tr("");
 
@@ -63,8 +73,8 @@ occviewport::occviewport( const QoccController* aController,
 
 	// Avoid Qt background clears to improve resizing speed,
 	// along with a couple of other attributes
-	setAutoFillBackground( false );
-	setAttribute( Qt::WA_NoSystemBackground );
+	//setAutoFillBackground( false );
+	//setAttribute( Qt::WA_NoSystemBackground );
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
 	setAttribute( Qt::WA_NativeWindow );
 #endif
@@ -109,8 +119,11 @@ occviewport::occviewport( const QoccController* aController,
 	getContext()->SetDeviationCoefficient( 0.0006);
 	//getContext()->SetDeviationAngle(4);
 	//myView->SetBackgroundColor(Quantity_NameOfColor::Quantity_NOC_GRAY);
-	myView->SetBackgroundColor(Quantity_NameOfColor::Quantity_NOC_GRAY30);
-
+	myView->SetBackgroundColor(Quantity_NameOfColor::Quantity_NOC_LIGHTGRAY);
+	
+	myView->EnableGLLight(true);
+	myView->SetAntialiasingOff();
+	myView->SetUp(V3d_TypeOfOrientation::V3d_Zpos);
 	//TheTime = new QTime();
 	//TheTime->start();
 
@@ -122,6 +135,44 @@ occviewport::occviewport( const QoccController* aController,
 	//myController->setNISContext(Contextest);
 	//myController->getNISContext()->AttachView(myView);
 	
+
+
+	/// initialize the gizmo stuff
+
+	gizmoMove = CreateMoveGizmo();
+    gizmoRotate = CreateRotateGizmo();
+    gizmoScale = CreateScaleGizmo();
+
+    //gizmo = gizmoMove;
+	gizmo = gizmoRotate;
+	gizmo->SetLocation( IGizmo::LOCATE_LOCAL );
+
+	objectMatrix[0] =-0.3210;
+	objectMatrix[1] = 0.0000;
+	objectMatrix[2] = 0.9471;
+	objectMatrix[3] = 0.0000;
+	objectMatrix[4] = 0.0000;
+	objectMatrix[5] = 1.0000;
+	objectMatrix[6] = 0.0000;
+	objectMatrix[7] = 0.0000;
+	objectMatrix[8] = -0.9471;
+	objectMatrix[9] = 0.0000;
+	objectMatrix[10] = -0.3210;
+	objectMatrix[11] = 0.0000;
+	objectMatrix[12] = -137.1790;
+	objectMatrix[13] = 16.4949;
+	objectMatrix[14] = 375.4003;
+	objectMatrix[15] = 1.0000;
+		
+
+    gizmo->SetEditMatrix( objectMatrix );
+
+    gizmo->SetScreenDimension( this->width(), this->height() );
+    gizmoMove->SetDisplayScale( 1000.f );
+    gizmoRotate->SetDisplayScale( 1000.f );
+    gizmoScale->SetDisplayScale( 1000.f );
+
+	gizmo->SetLocation( IGizmo::LOCATE_WORLD );
 	
 
 
@@ -163,7 +214,8 @@ void occviewport::initializeOCC()
     short hi = (short) ( windowHandle >> 16 );
 
 #ifdef WNT
-	// rc = (Aspect_RenderingContext) wglGetCurrentContext();
+	
+	
     myWindow = new WNT_Window( Handle(Graphic3d_WNTGraphicDevice)
 							   ::DownCast( myController->getViewer()->Device() ) ,
 							   (int) hi, (int) lo );
@@ -180,9 +232,10 @@ void occviewport::initializeOCC()
 	{
 		myVisual = myView->View();
 
+		//rc = (Aspect_RenderingContext) wglGetCurrentContext();
 		// Set my window (Hwnd) into the OCC view
-	    //myView->SetWindow( myWindow, rc , paintCallBack, this  );
-		myView->SetWindow( myWindow);
+	    myView->SetWindow( myWindow, rc , paintCallBack, this  );
+		//myView->SetWindow( myWindow);
 		V3d_TypeOfVisualization aMode;
         		
 #ifdef OCC_PATCHED
@@ -196,7 +249,7 @@ void occviewport::initializeOCC()
 		myView->TriedronDisplay( Aspect_TypeOfTriedronPosition::Aspect_TOTP_LEFT_LOWER, Quantity_NOC_BLACK, 0.1, aMode );
 
 		// For testing OCC patches
-		// myView->ColorScaleDisplay();
+		//myView->ColorScaleDisplay();
 
 		// Map the window
 		if (!myWindow->IsMapped())
@@ -204,10 +257,23 @@ void occviewport::initializeOCC()
 			myWindow->Map();
 		}
 		
+		myView->EnableDepthTest(true);
+		//myView->SetShadingModel(V3d_TypeOfShadingModel::V3d_GOURAUD);
+
 		myViewResized = Standard_True;		// Force a redraw to the new window on next paint event
 		myViewInitialized = Standard_True;	// This is to signal any connected slots that the view is ready.
 		setMode( CurAction3d_Nothing );		// Set default cursor as a cross
 		emit initialized();
+		
+		glClearDepth(1.0f);									// Depth Buffer Setup
+	    glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
+	    glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
+	    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
+        glDepthMask(1);
+
+
+
+
 	}
 }
 
@@ -291,6 +357,8 @@ void occviewport::mousePressEvent( QMouseEvent* e )
 	myMouseFlags = e->button();
 	myMouseState = e->buttons();
 
+	
+
 	// Cache the keyboard flags for the whole gesture
 	myKeyboardFlags = e->modifiers();
 
@@ -308,6 +376,12 @@ void occviewport::mousePressEvent( QMouseEvent* e )
 	{
 		onMiddleButtonDown( myKeyboardFlags, e->pos() );
 	}
+
+	gizmo->OnMouseDown(width() - e->globalX(),e->globalY());
+	//SetCapture( hWnd );
+	redraw();
+
+
 }
 
 /*!
@@ -318,6 +392,7 @@ void occviewport::mouseReleaseEvent(QMouseEvent* e)
 {
 	myMouseFlags = e->button();
 	myMouseState = e->buttons();
+	
 	redraw();							// Clears up screen when menu selected but not used.
 	hideRubberBand();
 	if ( e->button() & Qt::LeftButton )
@@ -337,6 +412,11 @@ void occviewport::mouseReleaseEvent(QMouseEvent* e)
 	{
 		emit mouseClicked( this, e );
 	}
+
+	gizmo->OnMouseUp(width() - e->globalX(),e->globalY());
+	redraw();
+
+
 }
 
 /*!
@@ -346,6 +426,9 @@ void occviewport::mouseReleaseEvent(QMouseEvent* e)
 void occviewport::mouseMoveEvent( QMouseEvent* e )
 {
 	Standard_Real X, Y, Z;
+
+	
+
 
 	myMouseFlags = e->button();
 	myMouseState = e->buttons();
@@ -379,6 +462,11 @@ void occviewport::mouseMoveEvent( QMouseEvent* e )
 	{
 		onMouseMove( e->buttons(), myKeyboardFlags, e->pos() );
 	}
+
+	gizmo->OnMouseMove(width() - e->globalX(),e->globalY());
+	redraw();
+
+
 	//drawlayer();
 }
 
@@ -894,6 +982,8 @@ void occviewport::onMouseMove( Qt::MouseButtons buttons,
 				drawRubberBand ( myStartPoint, myCurrentPoint );
 				}
 				dragEvent( myStartPoint, myCurrentPoint, nFlags & MULTISELECTIONKEY );
+				
+
 				break;
 
 			case CurAction3d_DynamicZooming:
@@ -1069,8 +1159,8 @@ AIS_StatusOfPick occviewport::dragEvent( const QPoint startPoint, const QPoint e
 				}
 			if (!curais.IsNull())
 				{
-					cowbellprogress *cob = new cowbellprogress(this,endPoint.x(),endPoint.y());
-					cob->show();
+					//cowbellprogress *cob = new cowbellprogress(this,endPoint.x(),endPoint.y());
+					//cob->show();
 					Handle_User_AIS curuserais = Handle_User_AIS::DownCast(curais);
 					TopoDS_Shape curshape = curuserais->myShape;
 					gp_Pnt loc1 = hsf::GetCOG(curshape);
@@ -1283,6 +1373,7 @@ int occviewport::paintCallBack (Aspect_Drawable /* drawable */,
 			if ( aWidget->getController()->isDrawingBackground() )
 			{
 				aWidget->paintOCC();
+				
 			}
 		}
 	}
@@ -1294,78 +1385,101 @@ int occviewport::paintCallBack (Aspect_Drawable /* drawable */,
 */
 void occviewport::paintOCC( void )
 {
-	//GLboolean isPlaneActive[GL_MAX_CLIP_PLANES];
-	//int i;
 
-	//glDisable( GL_LIGHTING );
-	//glMatrixMode( GL_MODELVIEW );
-	//glPushMatrix();
-	//glLoadIdentity();
- //   glMatrixMode( GL_PROJECTION );
-	//glPushMatrix();
- //   glLoadIdentity();
 
-	//GLfloat left   = -1.0f;
-	//GLfloat right  =  1.0f;
-	//GLfloat bottom = -1.0f;
-	//GLfloat top    =  1.0f;
-	//GLfloat depth  =  1.0f;
+	 if (gizmo)
+    {
+	    //glEnable( GL_BLEND );
+	    //glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
+		
+		//glPushMatrix();
 
-	//for (i = 0; i < GL_MAX_CLIP_PLANES; i++)
-	//{
-	//	isPlaneActive[i] = glIsEnabled(GL_CLIP_PLANE0 + i);
-	//	glDisable(GL_CLIP_PLANE0 + i);
-	//}
+		float modelview[16];
+		float modelproj[16];
+		glGetFloatv( GL_MODELVIEW_MATRIX, modelview );
+		glGetFloatv( GL_PROJECTION_MATRIX, modelproj);
 
- //   glOrtho( left, right, bottom, top, 1.0, -1.0 );
-	//glEnable( GL_BLEND );
-	//glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
-	//	
+		gizmo->SetCameraMatrix( modelview, modelproj );
+        gizmo->Draw();
 
-	//GLfloat redval = 24.0/255.0;
-	//GLfloat greenval = 62.0/255.0;
-	//GLfloat blueval = 101/255.0;
+		//glDisable(GL_BLEND);
+	    //glPopMatrix();
+    }
+
+
+	GLboolean isPlaneActive[GL_MAX_CLIP_PLANES];
+	int i;
+
+	glDisable( GL_LIGHTING );
+	glMatrixMode( GL_MODELVIEW );
+	glPushMatrix();
+	glLoadIdentity();
+    glMatrixMode( GL_PROJECTION );
+	glPushMatrix();
+    glLoadIdentity();
+
+	GLfloat left   = -1.0f;
+	GLfloat right  =  1.0f;
+	GLfloat bottom = -1.0f;
+	GLfloat top    =  1.0f;
+	GLfloat depth  =  1.0f;
+
+	for (i = 0; i < GL_MAX_CLIP_PLANES; i++)
+	{
+		isPlaneActive[i] = glIsEnabled(GL_CLIP_PLANE0 + i);
+		glDisable(GL_CLIP_PLANE0 + i);
+	}
+
+    glOrtho( left, right, bottom, top, 1.0, -1.0 );
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
+	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		
+
+	GLfloat redval = 24.0/255.0;
+	GLfloat greenval = 62.0/255.0;
+	GLfloat blueval = 101/255.0;
 
 	/*GLfloat redval = 1.0;
 	GLfloat greenval = 1.0;
 	GLfloat blueval = 1.0;*/
 
-  //  glBegin( GL_QUADS);
-  //  {
-		//glColor4f  (  0.4f, 0.4f, 0.4f, 0.4f );
-	 // //glColor4f  (  redval, greenval, blueval, 1.0f );
-  //    glVertex3d (  left, bottom, depth );
-  //    glVertex3d ( right, bottom, depth );
-  //    glColor4f  (  redval, greenval, blueval, 1.0f );
-  //    glVertex3d ( right,    top, depth );
-  //    glVertex3d (  left,    top, depth );
-  //  }
-  //  glEnd();
+    glBegin( GL_QUADS);
+    {
+		glColor4f  (  0.4f, 0.4f, 0.4f, 0.4f );
+	  //glColor4f  (  redval, greenval, blueval, 1.0f );
+      glVertex3d (  left, bottom, depth );
+      glVertex3d ( right, bottom, depth );
+      glColor4f  (  redval, greenval, blueval, 1.0f );
+      glVertex3d ( right,    top, depth );
+      glVertex3d (  left,    top, depth );
+    }
+    glEnd();
 
 	
 
 	//lets make our circles look a little nicer!
 	//ofSetCircleResolution(40);
-	//int elapsedtime = TheTime->restart();
-	//
-	//if (elapsedtime > 200)
-	//{
-	// drawlayer();
-	// TheTime->start();
-	//}
+//	int elapsedtime = TheTime->restart();
+	
+	/*if (elapsedtime > 200)
+	{
+	 drawlayer();
+	 TheTime->start();
+	}*/
 
-	//glDisable(GL_BLEND);
-	//glPopMatrix();
-	//glMatrixMode( GL_MODELVIEW );
-	//glPopMatrix();
+	glDisable(GL_BLEND);
+	glPopMatrix();
+	glMatrixMode( GL_MODELVIEW );
+	glPopMatrix();
 
-	//for (i = 0; i < GL_MAX_CLIP_PLANES; i++)
-	//{
-	//	if (isPlaneActive[i])
-	//	{ 
-	//		glEnable(GL_CLIP_PLANE0 + i);
-	//	}
-	//}
+	for (i = 0; i < GL_MAX_CLIP_PLANES; i++)
+	{
+		if (isPlaneActive[i])
+		{ 
+			glEnable(GL_CLIP_PLANE0 + i);
+		}
+	}
 }
 
 
@@ -1375,6 +1489,10 @@ void occviewport::definewindowsize()
 	w=width();
 	h=height();
 
+	//gizmo stuff
+	if (gizmo)
+        gizmo->SetScreenDimension( w, h );
+	
 	
 	//hWin->Size(w,h);
 }
@@ -1496,6 +1614,8 @@ void occviewport::sendStatusLocation ()
 	QTextStream ts(&aString);
 	ts << myStatusMessage << "(" << x() << "," << y() << "," << z() << ")";
 	emit sendStatus(aString);
+
+	
 }
 
 void occviewport::setProjection( V3d_TypeOfOrientation orientation )

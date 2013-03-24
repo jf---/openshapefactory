@@ -17,6 +17,9 @@
 #include <qocccontroller.h>
 #include <QString>
 
+#include "iGizmo.h" // gizmo include
+
+
 
 
 /** the key for multi selection */
@@ -112,6 +115,7 @@ signals:
 	void mouseMoved   ( occviewport* widget, QMouseEvent* e );
 	void mouseClicked ( occviewport* widget, QMouseEvent* e );
 	void sendStatus   ( const QString aMessage );
+	void vertexStatus   ( const QString aMessage );
 
 	//! Just a placeholder for now
 	void popupMenu ( const occviewport* aView, const QPoint aPoint ); 
@@ -198,6 +202,14 @@ private: // members
 	void drawlayer();
 	QTime* TheTime;
 	
+	//the gizmos stuff
+	float objectMatrix[16];
+	IGizmo *gizmo ;
+	IGizmo *gizmoMove;
+	IGizmo *gizmoRotate;
+	IGizmo *gizmoScale;
+
+
 	// Shared message
 	static QString		  myStatusMessage;
 

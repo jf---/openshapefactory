@@ -52,4 +52,6 @@ SOURCES += ./src/src/AIS_PointCloud.cxx \
     ./src/src/qoccframe.cpp \
     ./src/src/qoccinputoutput.cpp \
     ./src/src/qoccmainwindow.cpp \
-    ./src/inc/ui.cpp
+    ./src/inc/ui.cpp \
+    ../Libs/LibGizmo/src/libgizmo/GizmoTransformMove.cpp \
+    ../Libs/LibGizmo/src/libgizmo/GizmoTransformRender.cpp

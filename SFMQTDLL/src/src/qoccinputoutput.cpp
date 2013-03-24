@@ -42,51 +42,53 @@ bool QoccInputOutput::importMesh( const QString& fileName,
 	
 	
 	Handle( MeshVS_Mesh  ) aMesh = new MeshVS_Mesh();
+	
 	Handle( XSDRAWSTLVRML_DataSource ) aDS = new XSDRAWSTLVRML_DataSource( aSTLMesh );
 
 	
 	aMesh->SetDataSource(aDS);
-	//aMesh->AddBuilder( new MeshVS_MeshPrsBuilder( aMesh), Standard_True );//False -> No selection 
-	MeshVS_ElementalColorPrsBuilder* meshbuilder = new MeshVS_ElementalColorPrsBuilder( aMesh ,MeshVS_DMF_ElementalColorDataPrs | MeshVS_DMF_OCCMask );
+	aMesh->AddBuilder( new MeshVS_MeshPrsBuilder( aMesh), Standard_True );//False -> No selection 
+	//MeshVS_ElementalColorPrsBuilder* meshbuilder = new MeshVS_ElementalColorPrsBuilder( aMesh ,MeshVS_DMF_ElementalColorDataPrs | MeshVS_DMF_OCCMask );
 
-	meshbuilder->SetDataSource(aDS);
-
-	
+	//meshbuilder->SetDataSource(aDS);
 
 	
-	TColStd_MapIteratorOfPackedMapOfInteger it (aDS->GetAllElements());
+
+	
+	/*TColStd_MapIteratorOfPackedMapOfInteger it (aDS->GetAllElements());
 	Handle( MeshVS_HArray1OfSequenceOfInteger ) aTopo;
-	Standard_Integer NbNodes;
+	Standard_Integer NbNodes;*/
 
-  for( ; it.More(); it.Next() )
-  {
-    Standard_Integer aKey = it.Key();
+ // for( ; it.More(); it.Next() )
+ // {
+ //   Standard_Integer aKey = it.Key();
 
-    aDS->Get3DGeom( aKey, NbNodes, aTopo ) ;
-	
-		MeshVS_EntityType elemtype;
-		aDS->GetGeomType(aKey,true,elemtype);
+ //   aDS->Get3DGeom( aKey, NbNodes, aTopo ) ;
+	//
+	//	MeshVS_EntityType elemtype;
+	//	aDS->GetGeomType(aKey,true,elemtype);
 
-		if (elemtype == MeshVS_ET_Face)
-		{
-			double r = double(rand()) / double(RAND_MAX);
-			double g = double(rand()) / double(RAND_MAX);
-			double b = double(rand()) / double(RAND_MAX);
-			meshbuilder->SetColor1(aKey,Quantity_Color(r,g,b,Quantity_TypeOfColor::Quantity_TOC_RGB));
-			//meshbuilder->SetColor2(aKey,Quantity_Color(r,g,b,Quantity_TypeOfColor::Quantity_TOC_RGB));
-		}
+	//	if (elemtype == MeshVS_ET_Face)
+	//	{
+	//		double r = double(rand()) / double(RAND_MAX);
+	//		double g = double(rand()) / double(RAND_MAX);
+	//		double b = double(rand()) / double(RAND_MAX);
+	//		meshbuilder->SetColor1(aKey,Quantity_Color(r,g,b,Quantity_TypeOfColor::Quantity_TOC_RGB));
+	//		//meshbuilder->SetColor2(aKey,Quantity_Color(r,g,b,Quantity_TypeOfColor::Quantity_TOC_RGB));
+	//	}
 
-	}
+	//}
   
 
 
 
-	aMesh->AddBuilder( meshbuilder, Standard_True );//False -> No selection 
+	//aMesh->AddBuilder( meshbuilder, Standard_True );//False -> No selection 
 
 	
 
 //aMesh->AddBuilder( aBuilder, Standard_True );
-//MeshVS_DA_FrontMaterial,Graphic3d_NOM_SHINY_PLASTIC);// Graphic3d_NOM_DEFAULT );
+
+aMesh->GetDrawer()->SetBoolean(MeshVS_DA_FrontMaterial,Graphic3d_NOM_SHINY_PLASTIC);// Graphic3d_NOM_DEFAULT );
 aMesh->GetDrawer()->SetBoolean(MeshVS_DA_DisplayNodes,Standard_False);
 aMesh->GetDrawer()->SetBoolean(MeshVS_DA_ColorReflection,Standard_True);
 

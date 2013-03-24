@@ -43,12 +43,21 @@ IMPLEMENT_STANDARD_TYPE_END(User_AIS)
 #include <TopAbs.hxx>
 #include <GeomLProp.hxx>
 #include <GeomLProp_SLProps.hxx>
-#include <shapefactory.h>
+//#include <shapefactory.h>
+#include <Prs3d_PointAspect.hxx>
 // Constructors implementation
 //
 
+User_AIS::User_AIS():
+AIS_InteractiveObject(PrsMgr_TOP_ProjectorDependant)
+	{
+	int inside=34;
+	int afterinside=0;
+	}
+
 User_AIS::User_AIS(TopoDS_Shape theshape, Handle_AIS_InteractiveContext thectx) :
 AIS_InteractiveObject(PrsMgr_TOP_ProjectorDependant)
+
 {
 	
 	myShape = theshape;
@@ -61,7 +70,11 @@ AIS_InteractiveObject(PrsMgr_TOP_ProjectorDependant)
 	myCylindricalFaceColor = Quantity_NOC_GRAY;
 	mycontext = thectx;
 	myDrawer->WireAspect()->SetColor(Quantity_NOC_BLACK);
+	
 
+//	thectx->SetHilightColor(Quantity_NOC_YELLOW);
+	
+	
 	
 
 
@@ -85,7 +98,7 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 	
 	TopExp_Explorer Ex;
 
-	TopoDS_Shape isoface = hsf::getfacefromshape(myShape);
+	//TopoDS_Shape isoface = hsf::getfacefromshape(myShape);
 	
 	//TopoDS_Shape uiso,viso;
 	//if (!isoface.IsNull())
@@ -135,11 +148,15 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 
 					//TopoDS_Shape current = myShape;
 
-					myDrawer->WireAspect()->SetColor(Quantity_NameOfColor::Quantity_NOC_GREEN);
-					myDrawer->WireAspect()->SetWidth(1.0);	
+					myDrawer->PointAspect()->SetColor(Quantity_NameOfColor::Quantity_NOC_BLACK);
+					myDrawer->PointAspect()->SetScale(1);
+					myDrawer->PointAspect()->SetTypeOfMarker(Aspect_TypeOfMarker::Aspect_TOM_O_STAR);
+
+					myDrawer->WireAspect()->SetColor(Quantity_NameOfColor::Quantity_NOC_BLACK);
+					myDrawer->WireAspect()->SetWidth(0.8);	
 					StdPrs_ShadedShape::Add(aPresentation,myShape, myDrawer);
 
-
+					
 					
 					
 				for (Ex.Init(myShape,TopAbs_WIRE); Ex.More(); Ex.Next())
@@ -147,8 +164,8 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 						
 								
 						//myDrawer->WireAspect()->SetColor(Quantity_NOC_BLACK);
-						myDrawer->WireAspect()->SetColor(myOwnColor);
-						myDrawer->WireAspect()->SetWidth(1.0);	
+						//myDrawer->WireAspect()->SetColor(myOwnColor);
+						myDrawer->WireAspect()->SetWidth(2.0);	
 						StdPrs_WFDeflectionShape::Add(aPresentation,Ex.Current(), myDrawer );
 						//StdPrs_WFDeflectionShape::Add(aPresentation,myShape, myDrawer );
 
@@ -196,8 +213,8 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 							{
 								
 										
-								//myDrawer->WireAspect()->SetColor(Quantity_NOC_BLACK);
-							    myDrawer->WireAspect()->SetColor(myOwnColor);
+								myDrawer->WireAspect()->SetColor(Quantity_NOC_BLACK);
+							    //myDrawer->WireAspect()->SetColor(myOwnColor);
 								myDrawer->WireAspect()->SetWidth(2);	
 								StdPrs_WFDeflectionShape::Add(aPresentation,Ex.Current(), myDrawer );
 								//StdPrs_WFDeflectionShape::Add(aPresentation,myShape, myDrawer );
@@ -290,163 +307,163 @@ Standard_Boolean User_AIS::TriangleIsValid(const gp_Pnt& P1, const gp_Pnt& P2, c
   
 }
 
-Quantity_Color User_AIS::Color(gp_Pnt& thePoint,Standard_Real AltMin,Standard_Real AltMax,
-									const Standard_Integer ColorizationMode) 
-{
-	red =1;   //initializing colors parameters
-	green=1;
-	blue =1;
-	switch ( ColorizationMode)
-	{
-		case 0 : //normal, vert/maron
-		{
-			Standard_Real Alt= thePoint.Z();
+///*Quantity_Color User_AIS::Color(gp_Pnt& thePoint,Standard_Real AltMin,Standard_Real AltMax,
+//	*/								const Standard_Integer ColorizationMode) 
+//{
+//	red =1;   //initializing colors parameters
+//	green=1;
+//	blue =1;
+//	switch ( ColorizationMode)
+//	{
+//		case 0 : //normal, vert/maron
+//		{
+//			Standard_Real Alt= thePoint.Z();
+//
+//			Standard_Real AltDelta;
+//
+//			AltDelta = AltMax-AltMin;
+//
+//			red = 0.5- ((0.5*(AltMax-Alt))/(AltDelta));
+//		//	red = 1/(((1000/(AltMax-AltMin))*Alt)+1000*(1-(AltMin/(AltMax-AltMin))));
+//		
+//		//	green = (3*AltMax-AltMin)/(3*AltMax-8*AltMin + 7*Alt);
+//		//	green = 1/(((7/(3*AltMax-AltMin))*Alt) + 1-(7*AltMin/(3*AltMax-AltMin)));
+//			Standard_Real A = 7*Alt-7*AltMin;
+//			green = (3*AltMax-AltMin)/(3*AltMax-AltMin+(7*Alt-7*AltMin));
+////			AfxMessageBox(green);
+//		//	green =(0.30- (((0.3-1)*(AltMax-Alt))/(AltMax-AltMin)));
+//		
+//			blue = 0 ;
+///*
+//			red = 0.5;
+//			green = 0.2222;
+//			blue = 0;
+//*/	
+//			Quantity_Color color;
+//			color.SetValues(red,green,blue, Quantity_TOC_RGB);
+//			return color;
+//			break;
+//		}//end case 0
+//
+//		case 1 :	//mer-neige
+//		{		
+//			Standard_Real Alt= thePoint.Z();
+//
+//			Standard_Real b =AltMax-AltMin;
+//			Standard_Real a= AltMax-thePoint.Z();
+//
+//			red =1;
+//			green=1;
+//			blue =1;
+//			if (0<a && a <= (b/5))
+//			{
+//				red = 1;
+//				green = 1;
+//				blue = 1;
+//			}
+//			else if ((b/5)<a  && a <= (2*b/5))
+//			{
+//				 red = .55;
+//				 green = 0.3;
+//				 blue = 0;
+//			}
+//			else if ((2*b/5)<a  && a <= (18*b/20))
+//			{
+//				 green =1/(((7/(3*AltMax-AltMin))*Alt)+(1-(7*AltMin/(3*AltMax-AltMin))));
+//				 red = 1/(((1000/(AltMax-AltMin))*Alt)+1000*(1-(AltMin/(AltMax-AltMin))));
+//				 blue = 0;
+//			}
+//			else if ((18*b/20)<a  && a <= (18.5*b/20))
+//			{
+//				 red = 0.75;
+//				 green = 0.66;
+//				 blue = 0;
+//			}
+//
+//			else if ((18.5*b/20)<a  && a <= b)
+//			{
+//				red = 0.25;
+//				green = .66;
+//				blue = 1;
+//			}
+//			Quantity_Color color;
+//			color.SetValues(red,green,blue, Quantity_TOC_RGB);
+//			return color;
+//			break;
+//		}//end case 1
+//
+//		case 2 :
+//		{
+//			gp_Pnt P (85.,0.,-105.);
+//			gp_Vec TheVect ( P, thePoint);
+//			Standard_Real CoordX;
+//			Standard_Real CoordY;
+//			Standard_Real CoordZ;
+//
+//			CoordX = TheVect.X();
+//			CoordY = TheVect.Y();
+//			CoordZ = TheVect.Z();
+///*
+//			Standard_Real maxixy = Max(fabs(CoordX),fabs(CoordY));
+//			Standard_Real maxiyz = Max(fabs(CoordY),fabs(CoordZ));
+//			Standard_Real Maxi = Max(maxixy,maxiyz);
+//
+//*/
+//			Standard_Real Distance = BAR.Distance ( P);
+//
+//			//red = (abs(CoordX))/(1*Distance) ;
+//			//green =(abs(CoordY))/(1*Distance)	;
+//			//blue = (abs(CoordZ))/(1*Distance)	;
+//
+//			Standard_Real a =fabs(CoordX);
+//			Standard_Real b =fabs(CoordY);
+//			Standard_Real c =fabs(CoordZ);
+//
+//Standard_Real xx = a / Max(Distance,a); //(Max (Distance, Maxi));
+//Standard_Real yy = b / Max(Distance,b); //(Max (Distance, Maxi));	
+//Standard_Real zz = c / Max(Distance,c); //(Max (Distance, Maxi));			
+//			
+//	
+//			if (myXRedOnOff)
+//			red = xx;
+//			else if (myXGreenOnOff)
+//			green =xx;
+//			else if (myXBlueOnOff)
+//			blue=xx;
+//
+//			if (myYRedOnOff)
+//			red = yy;
+//			else if (myYGreenOnOff)
+//			green = yy;
+//			else if (myYBlueOnOff)
+//			blue = yy;
+//			
+//			if (myZRedOnOff)
+//			red = zz;
+//			else if (myZGreenOnOff)
+//			green = zz;
+//			else if (myZBlueOnOff)
+//			blue = zz;
+//
+//		/*	if (myX1OnOff)
+//			if (myY1OnOff)
+//			if (myZ1OnOff)*/
+//
+//
+//			Quantity_Color color;
+//			color.SetValues(red,green,blue, Quantity_TOC_RGB);
+//			return color;
+//			break;
+//		}//end case 2
+//	}//end switch
+//
+//	Quantity_Color c;
+//	return c;
+//}
 
-			Standard_Real AltDelta;
-
-			AltDelta = AltMax-AltMin;
-
-			red = 0.5- ((0.5*(AltMax-Alt))/(AltDelta));
-		//	red = 1/(((1000/(AltMax-AltMin))*Alt)+1000*(1-(AltMin/(AltMax-AltMin))));
-		
-		//	green = (3*AltMax-AltMin)/(3*AltMax-8*AltMin + 7*Alt);
-		//	green = 1/(((7/(3*AltMax-AltMin))*Alt) + 1-(7*AltMin/(3*AltMax-AltMin)));
-			Standard_Real A = 7*Alt-7*AltMin;
-			green = (3*AltMax-AltMin)/(3*AltMax-AltMin+(7*Alt-7*AltMin));
-//			AfxMessageBox(green);
-		//	green =(0.30- (((0.3-1)*(AltMax-Alt))/(AltMax-AltMin)));
-		
-			blue = 0 ;
-/*
-			red = 0.5;
-			green = 0.2222;
-			blue = 0;
-*/	
-			Quantity_Color color;
-			color.SetValues(red,green,blue, Quantity_TOC_RGB);
-			return color;
-			break;
-		}//end case 0
-
-		case 1 :	//mer-neige
-		{		
-			Standard_Real Alt= thePoint.Z();
-
-			Standard_Real b =AltMax-AltMin;
-			Standard_Real a= AltMax-thePoint.Z();
-
-			red =1;
-			green=1;
-			blue =1;
-			if (0<a && a <= (b/5))
-			{
-				red = 1;
-				green = 1;
-				blue = 1;
-			}
-			else if ((b/5)<a  && a <= (2*b/5))
-			{
-				 red = .55;
-				 green = 0.3;
-				 blue = 0;
-			}
-			else if ((2*b/5)<a  && a <= (18*b/20))
-			{
-				 green =1/(((7/(3*AltMax-AltMin))*Alt)+(1-(7*AltMin/(3*AltMax-AltMin))));
-				 red = 1/(((1000/(AltMax-AltMin))*Alt)+1000*(1-(AltMin/(AltMax-AltMin))));
-				 blue = 0;
-			}
-			else if ((18*b/20)<a  && a <= (18.5*b/20))
-			{
-				 red = 0.75;
-				 green = 0.66;
-				 blue = 0;
-			}
-
-			else if ((18.5*b/20)<a  && a <= b)
-			{
-				red = 0.25;
-				green = .66;
-				blue = 1;
-			}
-			Quantity_Color color;
-			color.SetValues(red,green,blue, Quantity_TOC_RGB);
-			return color;
-			break;
-		}//end case 1
-
-		case 2 :
-		{
-			gp_Pnt P (85.,0.,-105.);
-			gp_Vec TheVect ( P, thePoint);
-			Standard_Real CoordX;
-			Standard_Real CoordY;
-			Standard_Real CoordZ;
-
-			CoordX = TheVect.X();
-			CoordY = TheVect.Y();
-			CoordZ = TheVect.Z();
-/*
-			Standard_Real maxixy = Max(fabs(CoordX),fabs(CoordY));
-			Standard_Real maxiyz = Max(fabs(CoordY),fabs(CoordZ));
-			Standard_Real Maxi = Max(maxixy,maxiyz);
-
-*/
-			Standard_Real Distance = BAR.Distance ( P);
-
-			//red = (abs(CoordX))/(1*Distance) ;
-			//green =(abs(CoordY))/(1*Distance)	;
-			//blue = (abs(CoordZ))/(1*Distance)	;
-
-			Standard_Real a =fabs(CoordX);
-			Standard_Real b =fabs(CoordY);
-			Standard_Real c =fabs(CoordZ);
-
-Standard_Real xx = a / Max(Distance,a); //(Max (Distance, Maxi));
-Standard_Real yy = b / Max(Distance,b); //(Max (Distance, Maxi));	
-Standard_Real zz = c / Max(Distance,c); //(Max (Distance, Maxi));			
-			
-	
-			if (myXRedOnOff)
-			red = xx;
-			else if (myXGreenOnOff)
-			green =xx;
-			else if (myXBlueOnOff)
-			blue=xx;
-
-			if (myYRedOnOff)
-			red = yy;
-			else if (myYGreenOnOff)
-			green = yy;
-			else if (myYBlueOnOff)
-			blue = yy;
-			
-			if (myZRedOnOff)
-			red = zz;
-			else if (myZGreenOnOff)
-			green = zz;
-			else if (myZBlueOnOff)
-			blue = zz;
-
-		/*	if (myX1OnOff)
-			if (myY1OnOff)
-			if (myZ1OnOff)*/
-
-
-			Quantity_Color color;
-			color.SetValues(red,green,blue, Quantity_TOC_RGB);
-			return color;
-			break;
-		}//end case 2
-	}//end switch
-
-	Quantity_Color c;
-	return c;
-}
-
-void User_AIS::SetColor(const Quantity_Color &aColor)
-{
-	AIS_InteractiveObject::SetColor(aColor);
-	SetPlanarFaceColor(aColor);
-	SetCylindricalFaceColor(aColor);
-}
+//void User_AIS::SetColor(const Quantity_Color &aColor)
+//{
+//	AIS_InteractiveObject::SetColor(aColor);
+//	SetPlanarFaceColor(aColor);
+//	SetCylindricalFaceColor(aColor);
+//}

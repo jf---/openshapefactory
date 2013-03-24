@@ -51,6 +51,7 @@ $Author: dirkski $
 #include <BRepLib.hxx>
 //#include <GEOMImpl_ShapeDriver.hxx>
 #include <qDebug.h>
+#include <QStackedWidget>
 //#include "graphwidget.h"
 
 
@@ -82,12 +83,35 @@ QoccMainWindow::QoccMainWindow()
 	myTabWidget->setObjectName( QString::fromUtf8( "myTabWidget" ) );
 	myTabWidget->setTabShape( QTabWidget::Rounded );
 
-	mySketchFrame = new QoccFrame( myController, this );
 	
-	myTabWidget->addTab( mySketchFrame, tr( "View1" ) );
+	
+	//myTabWidget->addTab( mySketchFrame, tr( "View1" ) );
+	
+	
+   
+	QStackedWidget*  stackedWidget = new QStackedWidget(this);
+        stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
+        QWidget* page = new QWidget();
+        page->setObjectName(QString::fromUtf8("page"));
+		mySketchFrame = new QoccFrame( myController, page );
+//		stackedWidget->addWidget(page);
+        
+
+	   QVBoxLayout* vflow = new QVBoxLayout( page );
+	
+	   vflow->setMargin(0);
+	   vflow->setSpacing(0);
+	   vflow->addWidget(mySketchFrame);
+
+	   stackedWidget->addWidget(page);
+
+	
+       //this->setCentralWidget(myTabWidget);
+		
+    this->setCentralWidget(stackedWidget);
 	
 
-	setCentralWidget( myTabWidget );
+	//this->setLayout( vflow );
 	
 		
 	createActions();
@@ -102,6 +126,9 @@ QoccMainWindow::QoccMainWindow()
 	//pawel stop 2008-03-07
 	setWindowTitle(tr("FLEX-IN/FLEX-OUT"));
 	setMinimumSize(160, 160);
+
+
+	this->setStyleSheet(QString::fromUtf8("background-color: rgb(104, 104, 104);\n" "color: rgb(255, 255, 255);"));
 
 	
 
@@ -542,27 +569,27 @@ void QoccMainWindow::createMenus()
 {
 	fileMenu = menuBar()->addMenu( tr("&File") );
 	{
-		fileMenu->addAction( newAction );
-		fileMenu->addAction( openAction );
-		fileMenu->addAction( saveAction );
-		fileMenu->addAction( saveAsAction );
+		//fileMenu->addAction( newAction );
+		//fileMenu->addAction( openAction );
+		//fileMenu->addAction( saveAction );
+		//fileMenu->addAction( saveAsAction );
 		fileMenu->addAction( importAction );
 		fileMenu->addAction( exportAction );
-		fileMenu->addAction( printAction );
+		//fileMenu->addAction( printAction );
 	
 /*
 		Comment out the 2 lines below to hide the
 		Load Bottle menu option - still left in for
 		now as a demo feature.
 */
-		fileMenu->addSeparator();
-		fileMenu->addAction( bottleAction );
+		//fileMenu->addSeparator();
+		//fileMenu->addAction( bottleAction );
 
 		fileMenu->addSeparator();
 		fileMenu->addAction( exitAction );
 	}
 
-	editMenu = menuBar()->addMenu( tr("&Edit") );
+	/*editMenu = menuBar()->addMenu( tr("&Edit") );
 	{
 		editMenu->addAction( undoAction );
 		editMenu->addAction( redoAction );
@@ -570,16 +597,16 @@ void QoccMainWindow::createMenus()
 		editMenu->addAction( cutAction );
 		editMenu->addAction( copyAction );
 		editMenu->addAction( pasteAction );
-	}
+	}*/
 
-		excelmenu = menuBar()->addMenu( tr("&Excel") );
+	/*	excelmenu = menuBar()->addMenu( tr("&Excel") );
 	{
 		excelmenu->addAction( AddXlSheetAction );
-	}
+	}*/
 
 	
 
-	drawMenu = menuBar()->addMenu( tr("&Draw") );
+	/*drawMenu = menuBar()->addMenu( tr("&Draw") );
 	{
 		drawMenu->addAction( pointAction );
 		drawMenu->addAction( PointParameterAction );
@@ -595,7 +622,7 @@ void QoccMainWindow::createMenus()
 		drawMenu->addSeparator();
 		drawMenu->addAction( cancelDrawAction );
 		drawMenu->addAction( EditObjectAction);
-	}
+	}*/
 
 	selectMenu = menuBar()->addMenu( tr("&Select") );
 		selectMenu->addAction( selectVertexAction );

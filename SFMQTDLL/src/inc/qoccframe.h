@@ -54,6 +54,8 @@ public:
 
 	occviewport*   getWidget()  { return myWidget; };
 	QToolBar*       getToolBar() { return myToolBar; };
+
+	QLabel* curlabel;
 	
 
 	
@@ -70,6 +72,7 @@ public slots:
 	void viewLeft     ();
 	void viewFront    ();
 	void viewTopFront ();
+	void handlelabelcontextmenu( const QPoint & pos );
 
 protected: // methods
 

@@ -14,6 +14,10 @@
 ***********************************************************************************/
 
 
+
+
+
+
 #ifndef SHAPEFACTORY_H
 #define SHAPEFACTORY_H
 
@@ -61,6 +65,7 @@ public:
 	static __declspec(dllexport) const gp_Pnt& AddNewPointonCurve(TopoDS_Shape SupportEdge, Standard_Real uRatio);
 	static __declspec(dllexport) TopoDS_Shape AddNewPoint(gp_Pnt point);
 	static __declspec(dllexport) TopoDS_Shape AddNewMake2d(TopoDS_Shape obj, gp_Pnt vieworigin, gp_Pnt viewtarget, gp_Vec viewnormal);
+	static __declspec(dllexport) TopoDS_Shape AddNewMake2dpoly(TopoDS_Shape obj, gp_Pnt vieworigin, gp_Pnt viewtarget, gp_Vec viewnormal,double deflect);
 
 	// vector
 	static __declspec(dllexport) const gp_Vec& getVectorNormaltoSurfaceatPoint(TopoDS_Shape SupportSurface, gp_Pnt point);
@@ -145,12 +150,15 @@ public:
 
 	static __declspec(dllexport) TopoDS_Shape AddNewSplineInterpSShape(QList<gp_Pnt> Points);
 	static __declspec(dllexport) QList<Handle(Geom_Curve)> getCurveByHeight(TopoDS_Shape theface,bool direction);
+	static __declspec(dllexport) TopoDS_Shape AddNewAffinity(TopoDS_Shape theobj,gp_Pnt center,gp_Vec dir, double x);
+
 	
 
 // surface geometry 
 static __declspec(dllexport) TopoDS_Shape AddNewSymmetry(TopoDS_Shape shape, gp_Pln pln1);
 // add new sphere
 static __declspec(dllexport) TopoDS_Shape AddNewSphereSurface(gp_Pnt center, double radius);
+static __declspec(dllexport) TopoDS_Shape AddNewSphereSurfacePatch(gp_Pnt center, double radius);
 
 	// add new torus surface
     static __declspec(dllexport) TopoDS_Shape AddNewToroidalSurface(gp_Pnt center, gp_Vec upvector, double circumference, double radius);
@@ -166,6 +174,7 @@ static __declspec(dllexport) TopoDS_Shape AddNewSphereSurface(gp_Pnt center, dou
 	static __declspec(dllexport) TopoDS_Shape AddNewRevolveSurface(TopoDS_Shape crv1, gp_Pnt origin, gp_Vec dir);
 	//add new sweep
     static __declspec(dllexport) TopoDS_Shape AddNewSweep(TopoDS_Shape path, TopoDS_Shape crossection);
+	static __declspec(dllexport) TopoDS_Shape AddNewSweep2sec(TopoDS_Shape path, TopoDS_Shape crossection1,TopoDS_Shape crossection2);
 
 	//add new blend surface
 	static __declspec(dllexport) TopoDS_Shape AddNewBlendSurface(TopoDS_Shape crv1, TopoDS_Shape crv2);
@@ -187,6 +196,7 @@ static __declspec(dllexport) TopoDS_Shape AddNewOffsetSurface(TopoDS_Shape surfa
 	//add new fill surface
 static __declspec(dllexport) TopoDS_Shape AddNewFillSurface(QList<TopoDS_Shape> shapelist);
 static __declspec(dllexport) TopoDS_Shape AddNewFillSurface(TopoDS_Shape edge);
+static __declspec(dllexport) TopoDS_Shape AddNewTrimmedSrf(TopoDS_Shape srf, double u1, double u2,double v1, double v2);
 
 	//add new fillet edge
 	//add new chamfer edge
@@ -284,7 +294,7 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 		// Utility Functions
 
 		// Build a Map of Points on a Surface  upoints by vpoints and name the point key as  U###v### 
-		static __declspec(dllexport) QMap<QString,gp_Ax1>  BuildPointGridonSrf(TopoDS_Shape aShape,double ucount, double vcount);
+		static __declspec(dllexport) QMap<QString,QVariant>  BuildPointGridonSrf(TopoDS_Shape aShape,double ucount, double vcount);
 
 			static __declspec(dllexport) int getshapecount(TopoDS_Shape aShape,TopAbs_ShapeEnum shapetype);
 			static __declspec(dllexport) QList<TopoDS_Shape> getshapelist(TopoDS_Shape aShape,TopAbs_ShapeEnum shapetype);
@@ -308,6 +318,7 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 
 		static __declspec(dllexport) double GetArea(TopoDS_Shape &shape);
 		static __declspec(dllexport) double GetMaxDis(TopoDS_Shape s1, TopoDS_Shape s2);
+		
 
 		static __declspec(dllexport) gp_Pnt GetCOG(TopoDS_Shape &shape);
 		static __declspec(dllexport) gp_Pnt GetAveragePoint(QList<gp_Pnt> plist);
@@ -346,6 +357,12 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 	static __declspec(dllexport) TopoDS_Shape AddNewIsoCurve(TopoDS_Shape srf,bool orientation, double uv);
 	static __declspec(dllexport) gp_Pnt getpointfromshape(TopoDS_Shape point);
 
+	static __declspec(dllexport) TopoDS_Shape AddNew2dLineOnSurface(TopoDS_Shape face, TopoDS_Shape curve);
+	static __declspec(dllexport) TopoDS_Shape AddNew2dLineOnSurface(TopoDS_Shape face, gp_Pnt2d p1, gp_Pnt2d p2);
+	static __declspec(dllexport) TopoDS_Shape AddNewSplineOnSurface(TopoDS_Shape face, QList<gp_Pnt2d> Points);
+	static __declspec(dllexport) TopoDS_Shape AddNewFace(TopoDS_Shape face,TopoDS_Shape wire,bool orientation);
+	static __declspec(dllexport) TopoDS_Shape AddNewWire(QList<TopoDS_Shape> edgelist);
+
 
 
 static __declspec(dllexport) TopoDS_Shape lineptarc(gp_Pnt p1,gp_Pnt p2,gp_Vec t1,double maxrad);
@@ -363,6 +380,10 @@ static __declspec(dllexport) TopoDS_Shape biarcoptimized(TopoDS_Shape crv, doubl
 	
 	typedef shapefactory HSF;
 	typedef shapefactory hsf;
+
+
+
+	
 	
 #endif   // END OF MANTIS_SHAPEFACTORY_H
 

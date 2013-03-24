@@ -2,12 +2,19 @@
 #define SCRIPTWIDGET_H
 
 #include <QWidget>
+#include "uploader.h"
+
+#include <QCompleter>
+
 #include "ui_scriptwidget.h"
 #include <QScriptEngine>
 #include <qscriptedit_p.h>
 #include <QScriptEngineDebugger.h>
 
 #include "HsfScriptingInterface.h"
+
+
+
 
 
 //#include <Qsci/qsciscintilla.h>
@@ -36,7 +43,9 @@ public:
 
 	HsfScriptingInterface* hsfapi;
 
-	QSstring resultstream;
+	QString resultstream;
+
+	uploader *myuploader;
 
 private:
 	
@@ -60,7 +69,7 @@ public slots:
 	void makeinteractive_text(bool value);
 	void makeinteractive_mouse(bool value);
 	void evaluatetext();
-	void evaluatetext(QString text);
+	void evaluatetextonly(QString text);
 	void savecode();
 	void readcodefile();
 	void seteditor();

@@ -39,6 +39,7 @@
 
 class QoccDocument;
 class GraphWidget;
+class QSplitter;
 
 class Q_DECL_EXPORT QoccApplication : public QApplication
 {
@@ -59,6 +60,8 @@ public:
 	QoccController* Controller;
 	QSplashScreen* mySplash;
 	GraphWidget* symboltree;
+	QSplitter* splitter;
+
 	
 
 };
