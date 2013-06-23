@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <ui.h>
+#include <Poly_Polygon3D.hxx>
 
 
 Q_DECLARE_METATYPE(gp_Ax1)
@@ -1571,6 +1572,23 @@ TopoDS_Shape HSF::AddNewPolyline(QList<gp_Pnt> Points)
 	}
 
 
+TopoDS_Shape HSF::AddNewShell(QList<TopoDS_Shape> edgelist)
+	{
+
+BRepOffsetAPI_Sewing sewedObj;
+
+for (int i=0; i< edgelist.count();i++)
+	{
+	sewedObj.Add(TopoDS::Face(edgelist.at(i)));
+    }
+sewedObj.Perform();
+
+TopoDS_Shape shell = TopoDS::Shell(sewedObj.SewedShape());
+
+return shell;
+
+}
+
 TopoDS_Shape HSF::AddNewWire(QList<TopoDS_Shape> edgelist)
 	{
 
@@ -1586,6 +1604,7 @@ TopoDS_Wire W = MW;
 return W;
 
 	}
+
 TopoDS_Shape HSF::AddNewFace(TopoDS_Shape face,TopoDS_Shape wire, bool orientation)
 	{
 	
@@ -1601,6 +1620,20 @@ TopoDS_Shape HSF::AddNewFace(TopoDS_Shape face,TopoDS_Shape wire, bool orientati
 
 	}
 
+TopoDS_Shape HSF::AddNewFace(TopoDS_Shape wire, bool orientation)
+	{
+	
+	if ( wire.IsNull()) return TopoDS_Shape();
+	TopoDS_Wire W = TopoDS::Wire(wire);
+	
+    BRepBuilderAPI_MakeFace MF(W); 
+   // MF.Add(W); 
+    TopoDS_Face F = MF;
+
+	return F;
+
+
+	}
 
 
 
@@ -1807,6 +1840,22 @@ TopoDS_Shape HSF::AddNewFillSurface(QList<TopoDS_Shape> shapelist)
 
 	}
 
+TopoDS_Shape HSF::AddNewSolid(TopoDS_Shape theshape)
+	{
+
+	TopoDS_Shell shl1 = TopoDS::Shell(theshape);
+    ShapeFix_Shell FixShl = ShapeFix_Shell(shl1);
+    FixShl.Perform();
+
+    TopoDS_Solid sol_tmp1 = BRepBuilderAPI_MakeSolid(FixShl.Shell());
+    ShapeFix_Solid FixSld(sol_tmp1);
+    FixSld.Perform();
+	TopoDS_Solid sol_tmp = TopoDS::Solid(FixSld.Solid());
+
+	return sol_tmp;
+
+	}
+
 TopoDS_Shape HSF::AddNewFillSurface(TopoDS_Shape edge)
 	{
 
@@ -1946,6 +1995,173 @@ return Result;
 
 	}
 
+
+TopoDS_Shape HSF::AddNewSweepBrep(TopoDS_Shape path, TopoDS_Shape crossection)
+	{
+
+	
+	TopoDS_Wire crosswire = TopoDS::Wire(crossection);
+	
+	TopoDS_Wire pathwire =  TopoDS::Wire(path);
+	//TopoDS_Face F = BRepBuilderAPI_MakeFaceAPI_MakePipe(W,F);
+	try
+		{
+			BRepFill_Pipe mypipe =  BRepFill_Pipe(pathwire,crosswire);
+			return mypipe.Shape();
+		}catch(...)
+		{
+			TopoDS_Shape result;
+			return result;
+
+		}
+
+//BRepOffsetAPI_MakePipeShell aSweep(pathwire);
+//aSweep.SetMode(pathwire,Standard_True);
+//aSweep.Add (crosswire);
+//
+//////define transition mode to manage discontinuities on the sweep
+//BRepBuilderAPI_TransitionMode aTransition = BRepBuilderAPI_RoundCorner;
+//aSweep.SetTransitionMode (aTransition);
+//////perform sweeping and get a result
+//TopoDS_Shape aResult;
+//
+//if (aSweep.IsReady())
+//	{
+//aSweep.Build();
+//
+//if (aSweep.Shape().IsNull()) { 
+//		TopoDS_Shape nullshape;
+//		return nullshape; }
+//
+//	
+//aResult = aSweep.Shape();
+//
+//return aResult;
+//
+//	}
+//return aResult;
+
+}
+
+
+TopoDS_Shape HSF::AddNewSweepGeom(TopoDS_Shape aShapePath, TopoDS_Shape crossection,int transition)
+	{
+
+	TopoDS_Wire aWirePath;
+
+	TopoDS_Shape aShape;    
+    TopoDS_Shape aShapeBase;
+
+	// Get path contour
+    bool isOk = false;
+    if (aShapePath.ShapeType() == TopAbs_COMPOUND) {
+      TopTools_SequenceOfShape anEdges;
+      TopExp_Explorer anExp;
+      BRep_Builder B;
+      TopoDS_Wire W;
+      B.MakeWire(W);
+      for (anExp.Init(aShapePath, TopAbs_EDGE); anExp.More(); anExp.Next()) {
+        B.Add(W, anExp.Current());
+        isOk = true;
+      }
+      if (isOk)
+        aWirePath = W;
+    }
+    else if (aShapePath.ShapeType() == TopAbs_WIRE) {
+      aWirePath = TopoDS::Wire(aShapePath);
+      isOk = true;
+    }
+    else {
+      if (aShapePath.ShapeType() == TopAbs_EDGE) {
+        TopoDS_Edge anEdge = TopoDS::Edge(aShapePath);
+        aWirePath = BRepBuilderAPI_MakeWire(anEdge);
+        isOk = true;
+      }
+    }
+    if (!isOk) {
+      qDebug("MakePipe aborted : path shape is neither a wire nor an edge");
+    }
+  
+
+
+	
+
+    // Make copy to prevent modifying of base object 0020766 : EDF 1320
+    BRepBuilderAPI_Copy Copy(crossection);
+    if (Copy.IsDone())
+      aShapeBase = Copy.Shape();
+
+    if (aShapeBase.IsNull()) {
+          qDebug("MakePipe aborted : null base argument");
+    }
+
+    // Make pipe
+    if (aShapeBase.ShapeType() == TopAbs_EDGE ||
+        aShapeBase.ShapeType() == TopAbs_WIRE)
+    {
+      TopoDS_Wire Profile;
+      if (aShapeBase.ShapeType() == TopAbs_WIRE)
+        Profile = TopoDS::Wire(aShapeBase);
+      else
+      {
+        BRep_Builder BB;
+        BB.MakeWire(Profile);
+        BB.Add(Profile, aShapeBase);
+      }
+
+      BRepOffsetAPI_MakePipeShell Sweep (aWirePath);
+      BRepBuilderAPI_MakeFace FaceBuilder (aWirePath, Standard_True); //to find the plane of spine
+      if (FaceBuilder.IsDone())
+        Sweep.SetMode(FaceBuilder.Face());
+
+	  //determine transition mode
+	  BRepBuilderAPI_TransitionMode themode;
+	  switch( transition )
+  {
+    case 0 : themode = BRepBuilderAPI_TransitionMode::BRepBuilderAPI_Transformed ; break;
+	case 1 : themode = BRepBuilderAPI_TransitionMode::BRepBuilderAPI_RightCorner; break;
+	case 2 : themode = BRepBuilderAPI_TransitionMode::BRepBuilderAPI_RoundCorner; break;
+  }
+	
+	  
+	  Sweep.SetTransitionMode(themode);
+	  //Sweep.SetMode(true);
+      Sweep.Add(Profile);
+      Sweep.Build();
+
+	  Sweep.MakeSolid();
+      
+      if (!Sweep.IsDone())
+      {
+        qDebug("MakePipeShell failed");
+      }
+      else
+        aShape = Sweep.Shape(); //result is good
+      
+    }
+    else
+      aShape = BRepOffsetAPI_MakePipe(aWirePath, aShapeBase);
+	 
+	   if (aShape.IsNull()) return aShape;
+
+  BRepCheck_Analyzer ana (aShape, Standard_False);
+  if (!ana.IsValid()) {
+    ShapeFix_ShapeTolerance aSFT;
+    aSFT.LimitTolerance(aShape,Precision::Confusion(),Precision::Confusion());
+    Handle(ShapeFix_Shape) aSfs = new ShapeFix_Shape(aShape);
+    aSfs->SetPrecision(Precision::Confusion());
+    aSfs->Perform();
+    aShape = aSfs->Shape();
+
+    ana.Init(aShape, Standard_False);
+    if (!ana.IsValid())
+      qDebug("Algorithm have produced an invalid shape result");
+  }
+  
+return aShape;
+
+
+	}
 TopoDS_Shape HSF::AddNewSweep2sec(TopoDS_Shape path, TopoDS_Shape crossection1,TopoDS_Shape crossection2)
 	{
 
@@ -2488,6 +2704,11 @@ Vx = viewnormal.X();
 Vy = viewnormal.Y();
 Vz = viewnormal.Z();
 
+gp_Pnt viewpnt(0,0,1);  //probably doesn't matter what this point is
+gp_Dir xDir(-1,0,0);
+gp_Trsf pTrsf;
+pTrsf.SetTransformation(gp_Ax3(viewpnt,gp_Dir(viewnormal),xDir));
+
 
 
 Prs3d_Projector aPrs3dProjector(false,1,DX,DY,DZ,XAt,YAt,ZAt,Vx,Vy,Vz);
@@ -2497,7 +2718,8 @@ Handle_HLRBRep_Algo myAlgo = new HLRBRep_Algo();
 // Build the extraction object :
 HLRBRep_HLRToShape aHLRToShape(myAlgo);
 
-myAlgo->Projector(aProjector);
+//myAlgo->Projector(aProjector);
+myAlgo->Projector(HLRAlgo_Projector (pTrsf,false,0));
 
 // Add Shapes into the algorithm
 
@@ -2524,6 +2746,8 @@ try
 	int viscount=0;
 
 TopoDS_Shape VCompound = aHLRToShape.VCompound();
+
+
 TopoDS_Shape Rg1LineVCompound = aHLRToShape.Rg1LineVCompound();
 TopoDS_Shape RgNLineVCompound = aHLRToShape.RgNLineVCompound();
 TopoDS_Shape OutLineVCompound = aHLRToShape.OutLineVCompound();
@@ -2534,10 +2758,12 @@ TopoDS_Shape RgNLineHCompound = aHLRToShape.RgNLineHCompound();
 TopoDS_Shape OutLineHCompound = aHLRToShape.OutLineHCompound();
 TopoDS_Shape IsoLineHCompound = aHLRToShape.IsoLineHCompound();
 
+BRepMesh::Mesh(VCompound ,1);
 if(!VCompound.IsNull()) B.Add(folder,VCompound);
+
 if(!Rg1LineVCompound.IsNull()) B.Add(folder,Rg1LineVCompound);
-if(!RgNLineVCompound.IsNull()) B.Add(folder,RgNLineVCompound);
-if(!OutLineVCompound.IsNull()) B.Add(folder,OutLineVCompound);
+//if(!RgNLineVCompound.IsNull()) B.Add(folder,RgNLineVCompound);
+//if(!OutLineVCompound.IsNull()) B.Add(folder,OutLineVCompound);
 //if(!IsoLineVCompound.IsNull()) B.Add(folder,IsoLineVCompound);
 //if(!HCompound.IsNull()) B.Add(folder,HCompound);
 //if(!Rg1LineHCompound.IsNull()) B.Add(folder,Rg1LineHCompound);
@@ -2550,7 +2776,60 @@ result = folder;
 	}
 catch(...){}
 
-return result;
+//return result;
+
+//
+//BRepCheck_Analyzer ana (result, Standard_False);
+//  if (!ana.IsValid()) {
+//    ShapeFix_ShapeTolerance aSFT;
+//    aSFT.LimitTolerance(result,Precision::Confusion(),Precision::Confusion());
+//    Handle(ShapeFix_Shape) aSfs = new ShapeFix_Shape(result);
+//    aSfs->SetPrecision(Precision::Confusion());
+//    aSfs->Perform();
+//    result = aSfs->Shape();
+//
+//    ana.Init(result, Standard_False);
+//    if (!ana.IsValid())
+//      qDebug("Algorithm have produced an invalid shape result");
+//  }
+
+
+QList<TopoDS_Shape> edgelist;
+
+BRepMesh::Mesh(result,1.0);
+
+TopoDS_Compound folder;
+BRep_Builder B;
+B.MakeCompound(folder);
+
+//convert drawing to edges
+TopExp_Explorer edges( result, TopAbs_EDGE );
+     for (int i = 1 ; edges.More(); edges.Next(),i++ ) {
+       TopoDS_Edge edge = TopoDS::Edge( edges.Current() );
+       TopLoc_Location location;
+       Handle( Poly_Polygon3D ) polygon = BRep_Tool::Polygon3D( edge, location );
+       if ( !polygon.IsNull() ) {
+         const TColgp_Array1OfPnt& nodes = polygon->Nodes();
+		 gp_Pnt prevpoint;
+         for ( int i = nodes.Lower(); i<= nodes.Upper()-1; i++ ){
+			 gp_Pnt p1(nodes(i).X(),nodes(i).Y(),0);
+			 gp_Pnt p2(nodes(i+1).X(),nodes(i+1).Y(),0);
+			 if (p1.Distance(p2) > 0)
+				 {
+					 TopoDS_Shape l1 = hsf::AddNewLineptpt(p1,p2);
+					 B.Add(folder,l1);
+				 }
+				
+            
+         }
+         
+       }
+     }
+
+	 result = folder;
+	 return result;
+
+//return result;
 
 	}
 

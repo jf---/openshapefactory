@@ -174,6 +174,9 @@ static __declspec(dllexport) TopoDS_Shape AddNewSphereSurfacePatch(gp_Pnt center
 	static __declspec(dllexport) TopoDS_Shape AddNewRevolveSurface(TopoDS_Shape crv1, gp_Pnt origin, gp_Vec dir);
 	//add new sweep
     static __declspec(dllexport) TopoDS_Shape AddNewSweep(TopoDS_Shape path, TopoDS_Shape crossection);
+	static __declspec(dllexport) TopoDS_Shape AddNewSweepBrep(TopoDS_Shape path, TopoDS_Shape crossection);
+	static __declspec(dllexport) TopoDS_Shape AddNewSweepGeom(TopoDS_Shape aShapePath, TopoDS_Shape crossection,int transition);
+	
 	static __declspec(dllexport) TopoDS_Shape AddNewSweep2sec(TopoDS_Shape path, TopoDS_Shape crossection1,TopoDS_Shape crossection2);
 
 	//add new blend surface
@@ -197,6 +200,8 @@ static __declspec(dllexport) TopoDS_Shape AddNewOffsetSurface(TopoDS_Shape surfa
 static __declspec(dllexport) TopoDS_Shape AddNewFillSurface(QList<TopoDS_Shape> shapelist);
 static __declspec(dllexport) TopoDS_Shape AddNewFillSurface(TopoDS_Shape edge);
 static __declspec(dllexport) TopoDS_Shape AddNewTrimmedSrf(TopoDS_Shape srf, double u1, double u2,double v1, double v2);
+
+static __declspec(dllexport) TopoDS_Shape AddNewSolid(TopoDS_Shape theshape);
 
 	//add new fillet edge
 	//add new chamfer edge
@@ -361,7 +366,10 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 	static __declspec(dllexport) TopoDS_Shape AddNew2dLineOnSurface(TopoDS_Shape face, gp_Pnt2d p1, gp_Pnt2d p2);
 	static __declspec(dllexport) TopoDS_Shape AddNewSplineOnSurface(TopoDS_Shape face, QList<gp_Pnt2d> Points);
 	static __declspec(dllexport) TopoDS_Shape AddNewFace(TopoDS_Shape face,TopoDS_Shape wire,bool orientation);
+	static __declspec(dllexport) TopoDS_Shape AddNewFace(TopoDS_Shape wire, bool orientation);
 	static __declspec(dllexport) TopoDS_Shape AddNewWire(QList<TopoDS_Shape> edgelist);
+	static __declspec(dllexport) TopoDS_Shape AddNewShell(QList<TopoDS_Shape> edgelist);
+	
 
 
 

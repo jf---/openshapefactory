@@ -562,6 +562,70 @@ QScriptValue HsfScriptingInterface::makewire()
 
 	}
 
+QScriptValue HsfScriptingInterface::makeshell()
+	{
+
+	//QList<gp_Pnt2d> mypointlist;
+   
+	 if (context()->argumentCount() == 1)
+	 {
+		 QList<TopoDS_Shape> shapelist = context()->argument(0).toVariant().value<QList<TopoDS_Shape>>();
+		 TopoDS_Shape shell = hsf::AddNewShell(shapelist); 
+		
+	     return  engine()->toScriptValue(shell);
+	  }
+
+	 return  engine()->toScriptValue(false);
+
+
+	}
+
+QScriptValue HsfScriptingInterface::makecompound()
+	{
+
+	//QList<gp_Pnt2d> mypointlist;
+   TopoDS_Compound resultofoperation;
+   BRep_Builder builder;
+   builder.MakeCompound(resultofoperation);
+
+	 if (context()->argumentCount() == 1)
+	 {
+		 QList<TopoDS_Shape> shapelist = context()->argument(0).toVariant().value<QList<TopoDS_Shape>>();
+		 for(int i=0;i<shapelist.count();i++)
+			 {
+				TopoDS_Shape curshape = shapelist.at(i);
+				builder.Add(resultofoperation,curshape);
+				
+			 }
+		 
+		TopoDS_Shape resultshape = resultofoperation;
+	     return  engine()->toScriptValue(resultshape);
+	  }
+
+	 return  engine()->toScriptValue(false);
+
+
+	}
+
+
+QScriptValue HsfScriptingInterface::makesolid()
+	{
+
+	//QList<gp_Pnt2d> mypointlist;
+   
+	 if (context()->argumentCount() == 1)
+	 {
+		 TopoDS_Shape shell = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		 TopoDS_Shape solid = hsf::AddNewSolid(shell); 
+		
+	     return  engine()->toScriptValue(solid);
+	  }
+
+	 return  engine()->toScriptValue(false);
+
+
+	}
+
 
 QScriptValue HsfScriptingInterface::makerandomvoronoi()
 	{
@@ -907,15 +971,15 @@ QScriptValue HsfScriptingInterface::makeface()
 
 	//QList<gp_Pnt2d> mypointlist;
    
-	 if (context()->argumentCount() == 3)
+	 if (context()->argumentCount() == 1)
 	 {
-		 TopoDS_Shape face = context()->argument(0).toVariant().value<TopoDS_Shape>();
-		 TopoDS_Shape  wire = context()->argument(1).toVariant().value<TopoDS_Shape>();
-		 bool  dir = context()->argument(2).toBool();
+		 //TopoDS_Shape face = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		 TopoDS_Shape  wire = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		 //bool  dir = context()->argument(2).toBool();
 
-		 face = hsf::getfacefromshape(face);
+		 //face = hsf::getfacefromshape(face);
 
-		 TopoDS_Shape trim = hsf::AddNewFace(face,wire,dir);
+		 TopoDS_Shape trim = hsf::AddNewFace(wire,true);
 		 		
 	     return  engine()->toScriptValue(trim);
 	  }
@@ -2526,6 +2590,8 @@ QScriptValue HsfScriptingInterface::vis(QScriptValue obj)
 
 
 
+
+
 QScriptValue HsfScriptingInterface::viscurvature ()
  {
      
@@ -2987,6 +3053,45 @@ QScriptValue HsfScriptingInterface::makesweep()
 	return engine()->toScriptValue(myshape);
 
 	}
+
+
+QScriptValue HsfScriptingInterface::makesweepbrep()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 3)
+	{
+		TopoDS_Shape rail = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape section = context()->argument(1).toVariant().value<TopoDS_Shape>();
+		
+
+		if (!rail.IsNull() && !section.IsNull())
+		{
+		myshape = hsf::AddNewSweepBrep(rail,section);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
+QScriptValue HsfScriptingInterface::makesweepgeom()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 3)
+	{
+		TopoDS_Shape rail = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape section = context()->argument(1).toVariant().value<TopoDS_Shape>();
+		int transition = context()->argument(2).toNumber();
+
+		if (!rail.IsNull() && !section.IsNull())
+		{
+		myshape = hsf::AddNewSweepGeom(rail,section,transition);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
+
 QScriptValue HsfScriptingInterface::makesweep2sec()
 	{
  TopoDS_Shape myshape;
@@ -4129,6 +4234,9 @@ QScriptValue HsfScriptingInterface::initpart()
 	meshviscount = 0;
 	B.MakeCompound(folder);
 	B.MakeCompound(gaussfolder);
+
+
+	objectproperties.clear();
 
 	currentslidermap.clear();
 

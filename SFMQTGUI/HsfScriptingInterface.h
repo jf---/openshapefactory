@@ -112,6 +112,8 @@ class QoccInputOutput;
 	int gaussviscount;
 	int meshviscount;
 
+	QMap<QString,QString> objectproperties;
+
 	TopoDS_Compound folder;
 	TopoDS_Compound gaussfolder;
 	BRep_Builder B;
@@ -263,6 +265,7 @@ class QoccInputOutput;
 	  QScriptValue makepointlist();
 	  QScriptValue addshapetolist();
 	  QScriptValue addpointtolist();
+	  QScriptValue makecompound();
 
  //     //object factory
 
@@ -310,6 +313,9 @@ class QoccInputOutput;
 		QScriptValue makeface();
 		QScriptValue makecorner();
 
+		QScriptValue makesolid();
+		QScriptValue makeshell();
+
 		QScriptValue makerandomvoronoi();
 		QScriptValue getshapelist();
 		QScriptValue getshapelistcount();
@@ -328,6 +334,9 @@ class QoccInputOutput;
 		QScriptValue makeextrude();
 		QScriptValue makeintsrfsrf();
 		QScriptValue makesweep();
+		QScriptValue makesweepbrep();
+		QScriptValue makesweepgeom();
+
 		QScriptValue makesweep2sec();
 		QScriptValue makefillsrf();
 		QScriptValue volmesh();

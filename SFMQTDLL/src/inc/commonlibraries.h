@@ -47,6 +47,13 @@
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepOffsetAPI_MakePipeShell.hxx>
 #include <BRepBuilderAPI_TransitionMode.hxx>
+#include <BRepBuilderAPI_Copy.hxx>
+#include <BRepOffsetAPI_MakePipe.hxx>
+#include <BRepCheck_Analyzer.hxx>
+#include <ShapeFix_ShapeTolerance.hxx>
+#include <Handle_ShapeFix_Shape.hxx>
+#include <ShapeFix_Shape.hxx>
+
 //#include <BRepBuilderAPI_RoundCorner.hxx>
 #include <BRepFill_Filling.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
@@ -70,6 +77,7 @@
 #include <BRepPrimAPI_MakeRevol.hxx>
 #include <BRepPrimAPI_MakeRevolution.hxx>
 #include <BRepPrimAPI_MakeBox.hxx>
+#include <BRepBuilderAPI_MakeSolid.hxx>
 #include <BRepProj_Projection.hxx>
 #include <BRepBuilderAPI_MakePolygon.hxx>
 #include <BRepTools.hxx>
@@ -91,6 +99,7 @@
 #include <GeomPlate_MakeApprox.hxx>
 #include <GeomFill_Pipe.hxx>
 #include <BRepFill_Pipe.hxx> 
+#include <BRepOffsetAPI_Sewing.hxx>
 #include <Geom_BezierCurve.hxx>
 #include <Geom2dAPI_PointsToBSpline.hxx>
 #include <AIS_Text.h>
