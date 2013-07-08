@@ -49,6 +49,7 @@
 #include <BRepBuilderAPI_TransitionMode.hxx>
 #include <BRepBuilderAPI_Copy.hxx>
 #include <BRepOffsetAPI_MakePipe.hxx>
+#include <BRepPrimAPI_MakeSphere.hxx>
 #include <BRepCheck_Analyzer.hxx>
 #include <ShapeFix_ShapeTolerance.hxx>
 #include <Handle_ShapeFix_Shape.hxx>
@@ -61,6 +62,7 @@
 #include <BRepExtrema_ExtPF.hxx>
 #include <BRepExtrema_ExtCC.hxx>
 #include <BRepFeat_SplitShape.hxx>
+#include <BRepFeat_MakePrism.hxx>
 #include <BRepGProp_Face.hxx>
 #include <GProp_PEquation.hxx>
 #include <BRepLib.hxx>

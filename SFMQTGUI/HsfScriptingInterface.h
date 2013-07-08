@@ -231,6 +231,7 @@ class QoccInputOutput;
 	 QScriptValue getpointsinsideshape();
 
 	 QScriptValue makepointgrid();
+	 QScriptValue makefacetrim();
 
 
 
@@ -334,8 +335,13 @@ class QoccInputOutput;
 		QScriptValue makeextrude();
 		QScriptValue makeintsrfsrf();
 		QScriptValue makesweep();
+		QScriptValue getsurfacearea();
+		QScriptValue makesplit();
 		QScriptValue makesweepbrep();
 		QScriptValue makesweepgeom();
+		QScriptValue makesisocrv();
+
+		QScriptValue makeblendcurve();
 
 		QScriptValue makesweep2sec();
 		QScriptValue makefillsrf();
@@ -351,6 +357,8 @@ class QoccInputOutput;
 
 		QScriptValue makeaffinity();
 		QScriptValue makeaxistoaxis();
+		QScriptValue maketranslateptpt();
+		QScriptValue makeprojectpointplane();
 
 		// build panels
 		QScriptValue buildpanelarray();

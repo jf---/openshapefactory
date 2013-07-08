@@ -988,6 +988,29 @@ QScriptValue HsfScriptingInterface::makeface()
 
 
 	}
+QScriptValue HsfScriptingInterface::makefacetrim()
+	{
+
+	//QList<gp_Pnt2d> mypointlist;
+   
+	 if (context()->argumentCount() == 3)
+	 {
+		 TopoDS_Shape face = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		 TopoDS_Shape  wire = context()->argument(1).toVariant().value<TopoDS_Shape>();
+		 bool  dir = context()->argument(2).toBool();
+
+		 face = hsf::getfacefromshape(face);
+
+		 TopoDS_Shape trim = hsf::AddNewFace(face,wire,true);
+		 if(trim.IsNull()) return engine()->toScriptValue(false);
+		 		
+	     return  engine()->toScriptValue(trim);
+	  }
+
+	 return  engine()->toScriptValue(false);
+
+
+	}
 
 
 QScriptValue HsfScriptingInterface::makesplineonsurface()
@@ -2872,7 +2895,8 @@ QScriptValue HsfScriptingInterface::makefillsrf()
 
 QScriptValue HsfScriptingInterface::makeextrude()
 	{
-TopoDS_Shape myshape;
+	
+	TopoDS_Shape myshape;
     if (context()->argumentCount() == 3)
 	{
 		TopoDS_Shape curve = context()->argument(0).toVariant().value<TopoDS_Shape>();
@@ -2883,7 +2907,25 @@ TopoDS_Shape myshape;
 		{
 		myshape = hsf::AddNewExtrude(curve,dir,magnitude);
 		}
+	} 
+	else if(context()->argumentCount() == 4)
+	{
+		TopoDS_Shape sketch = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		gp_Vec dir = context()->argument(1).toVariant().value<gp_Vec>();
+		TopoDS_Shape fromface = context()->argument(2).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape toface = context()->argument(3).toVariant().value<TopoDS_Shape>();
+		
+		
+
+		if (!sketch.IsNull() && !fromface.IsNull() && !toface.IsNull())
+		{
+			myshape = hsf::AddNewExtrude(sketch,dir,fromface,toface);
+		}
+
 	}
+
+
+
 	return engine()->toScriptValue(myshape);
 
 	}
@@ -2897,7 +2939,7 @@ QScriptValue HsfScriptingInterface::makesphericalsurface()
 		gp_Pnt origin = context()->argument(0).toVariant().value<gp_Pnt>();
 		double radius = context()->argument(1).toNumber();
 			
-		TopoDS_Shape surface = hsf::AddNewSphereSurfacePatch(origin,radius);
+		TopoDS_Shape surface = hsf::AddNewSphereSurface(origin,radius);
 		myshape = surface;
 		return engine()->toScriptValue(myshape);
 
@@ -2947,6 +2989,43 @@ QScriptValue HsfScriptingInterface::makeaxistoaxis()
 	
 	}
 
+QScriptValue HsfScriptingInterface::maketranslateptpt()
+	{
+
+	TopoDS_Shape myshape;
+    if (context()->argumentCount() == 3)
+	{
+		TopoDS_Shape obj = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		gp_Pnt origin = hsf::getpointfromshape(context()->argument(1).toVariant().value<TopoDS_Shape>());
+		gp_Pnt target = hsf::getpointfromshape(context()->argument(2).toVariant().value<TopoDS_Shape>());
+		TopoDS_Shape result = HSF::movepointopoint(obj,origin,target);
+					
+		if (result.IsNull()) return engine()->toScriptValue(false);
+		return engine()->toScriptValue(result);
+	}
+
+	return QScriptValue(false);
+	
+	}
+QScriptValue HsfScriptingInterface::makeprojectpointplane()
+	{
+
+	TopoDS_Shape myshape;
+    if (context()->argumentCount() == 2)
+	{
+		gp_Pnt obj = hsf::getpointfromshape(context()->argument(0).toVariant().value<TopoDS_Shape>());
+		gp_Pln plane = context()->argument(1).toVariant().value<gp_Pln>();
+		
+		TopoDS_Shape result = HSF::AddNewPoint(HSF::ProjectPoint(obj,plane));
+					
+		if (result.IsNull()) return engine()->toScriptValue(false);
+		return engine()->toScriptValue(result);
+	}
+
+	return QScriptValue(false);
+	
+	}
+
 QScriptValue HsfScriptingInterface::makeaffinity()
 	{
 
@@ -2979,7 +3058,8 @@ TopoDS_Shape myshape;
 
 		if (!srf1.IsNull() && !srf2.IsNull())
 		{
-		myshape = hsf::AddNewIntersectSrf(srf1,srf2);
+		myshape = hsf::AddNewSection(srf1,srf2);
+		
 		}
 	}
 	return engine()->toScriptValue(myshape);
@@ -3054,6 +3134,41 @@ QScriptValue HsfScriptingInterface::makesweep()
 
 	}
 
+QScriptValue HsfScriptingInterface::makesplit()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 2)
+	{
+		TopoDS_Shape shape = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		gp_Pln plane = context()->argument(1).toVariant().value<gp_Pln>();
+
+		if (!shape.IsNull())
+		{
+		myshape = hsf::AddNewSplit(shape,plane);
+
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
+QScriptValue HsfScriptingInterface::getsurfacearea()
+	{
+ 
+    if (context()->argumentCount() == 1)
+	{
+		TopoDS_Shape shape = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		
+		if (!shape.IsNull() )
+		{
+		double area = hsf::GetArea(shape);
+		return engine()->toScriptValue(area);
+
+		}
+	}
+	return engine()->toScriptValue(false);
+
+	}
 
 QScriptValue HsfScriptingInterface::makesweepbrep()
 	{
@@ -3073,6 +3188,26 @@ QScriptValue HsfScriptingInterface::makesweepbrep()
 
 	}
 
+QScriptValue HsfScriptingInterface::makesisocrv()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 3)
+	{
+		TopoDS_Shape srf = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		bool dir = context()->argument(1).toBool();
+		double val = context()->argument(2).toNumber();
+
+		
+
+		if (!srf.IsNull())
+		{
+		myshape = hsf::AddNewIsoCurve(srf,dir,val);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
 QScriptValue HsfScriptingInterface::makesweepgeom()
 	{
  TopoDS_Shape myshape;
@@ -3085,6 +3220,39 @@ QScriptValue HsfScriptingInterface::makesweepgeom()
 		if (!rail.IsNull() && !section.IsNull())
 		{
 		myshape = hsf::AddNewSweepGeom(rail,section,transition);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
+
+QScriptValue HsfScriptingInterface::makeblendcurve()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 4)
+	{
+		TopoDS_Shape crv1 = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape crv2 = context()->argument(1).toVariant().value<TopoDS_Shape>();
+		bool bool1 = context()->argument(2).toBool();
+		bool bool2 = context()->argument(3).toBool();
+
+		
+
+		if (!crv1.IsNull() && !crv2.IsNull())
+		{
+		double mul1,mul2;
+		bool1 ? mul1 = 1 : mul1 = 0;
+		bool2 ? mul2 = 1 : mul2 = 0;
+
+		gp_Pnt p1 = hsf::AddNewPointonCurve(crv1,mul1);
+		gp_Pnt p2 = hsf::AddNewPointonCurve(crv2,mul2);
+		gp_Vec v1 = hsf::getVectorTangentToCurveAtPoint(crv1,mul1);
+		gp_Vec v2 = hsf::getVectorTangentToCurveAtPoint(crv2,mul2);
+		
+		
+		myshape = hsf::AddNewBlendCurve(p1,v1,p2,v2);
+
 		}
 	}
 	return engine()->toScriptValue(myshape);

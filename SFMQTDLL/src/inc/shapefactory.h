@@ -167,7 +167,7 @@ static __declspec(dllexport) TopoDS_Shape AddNewSphereSurfacePatch(gp_Pnt center
 	//add new extrude
 
 	static __declspec(dllexport) TopoDS_Shape AddNewExtrude(TopoDS_Shape crv1 , gp_Vec dir , double length);
-	
+	static __declspec(dllexport) TopoDS_Shape AddNewExtrude(TopoDS_Shape sketch ,gp_Vec dir , TopoDS_Shape fromshape , TopoDS_Shape toshape);
 	// add new constrained surface
 	static __declspec(dllexport) TopoDS_Shape AddNewConstrainedSurface(QList<TopoDS_Shape> shapelist);
 	//add new revolve
@@ -181,6 +181,7 @@ static __declspec(dllexport) TopoDS_Shape AddNewSphereSurfacePatch(gp_Pnt center
 
 	//add new blend surface
 	static __declspec(dllexport) TopoDS_Shape AddNewBlendSurface(TopoDS_Shape crv1, TopoDS_Shape crv2);
+	static __declspec(dllexport) TopoDS_Shape AddNewBlendCurve(gp_Pnt p1, gp_Vec v1, gp_Pnt p2, gp_Vec v2);
 
 		//add new multisection surface
 	static __declspec(dllexport) TopoDS_Shape AddNewLoftSurface(QList<TopoDS_Shape> sections);
@@ -335,6 +336,7 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 		static __declspec(dllexport) bool isintersecting(TopoDS_Shape srf1,TopoDS_Shape srf2);
 		static __declspec(dllexport) TopoDS_Shape AddNewIntersectSrf(TopoDS_Shape srf1,TopoDS_Shape srf2);
 		static __declspec(dllexport) TopoDS_Shape AddNewIntersectSrfMulti(TopoDS_Shape srf1,TopoDS_Shape srf2);
+		static __declspec(dllexport) TopoDS_Shape AddNewSection(TopoDS_Shape srf1,TopoDS_Shape srf2); 
 		
 		static __declspec(dllexport) TopoDS_Shape AddNewIntersectSrf(gp_Pln plane1,TopoDS_Shape srf);
 		static __declspec(dllexport) TopoDS_Shape AddNewIntersectSrf(gp_Pln pln1,gp_Pln pln2);

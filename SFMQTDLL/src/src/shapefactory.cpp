@@ -1697,6 +1697,44 @@ TopoDS_Shape HSF::AddNewRectangle(gp_Pnt center, gp_Vec orient, double width, do
 
 
 	}
+
+TopoDS_Shape HSF::AddNewBlendCurve(gp_Pnt p1, gp_Vec v1, gp_Pnt p2, gp_Vec v2)
+	{
+
+	TopoDS_Shape aShape;
+	Handle_TColgp_HArray1OfPnt pnts;
+	Standard_Boolean bPeriod = Standard_False, bScale = Standard_False;
+	double tol= 1.0e-7;
+
+try
+{
+	pnts = new TColgp_HArray1OfPnt(1,2);
+	pnts->SetValue(1, p1);
+	pnts->SetValue(2, p2);
+
+	GeomAPI_Interpolate hGI(pnts, bPeriod, tol);
+	hGI.Load(v1, v2, bScale);
+	hGI.Perform();
+	if(!hGI.IsDone()) return aShape;
+
+
+	Handle(Geom_BSplineCurve) SPL1 = hGI.Curve();
+
+	double fp,lp;
+	fp = SPL1->FirstParameter();
+	lp = SPL1->LastParameter();
+	aShape = BRepBuilderAPI_MakeEdge(SPL1,fp,lp);
+	return aShape;
+
+
+}
+catch(...)
+{
+return aShape;
+}
+
+}
+
 TopoDS_Shape HSF::AddNewBlendSurface(TopoDS_Shape crv1, TopoDS_Shape crv2)
 	{
 
@@ -2110,6 +2148,7 @@ TopoDS_Shape HSF::AddNewSweepGeom(TopoDS_Shape aShapePath, TopoDS_Shape crossect
       }
 
       BRepOffsetAPI_MakePipeShell Sweep (aWirePath);
+	  
       BRepBuilderAPI_MakeFace FaceBuilder (aWirePath, Standard_True); //to find the plane of spine
       if (FaceBuilder.IsDone())
         Sweep.SetMode(FaceBuilder.Face());
@@ -2535,7 +2574,8 @@ TopoDS_Shape HSF::AddNewSphereSurfacePatch(gp_Pnt center, double radius)
   fixParam(v1s);
   fixParam(v2s);
 
-  TopoDS_Shape Result1 = BRepBuilderAPI_MakeFace(SP);
+  //TopoDS_Shape Result1 = BRepBuilderAPI_MakeFace(SP);
+  TopoDS_Shape Result1 =BRepPrimAPI_MakeSphere(center, radius/*, theVCoordStart, theVCoordEnd*/, PI * 2).Shape();
  
 
   return Result1;
@@ -3015,6 +3055,7 @@ TopoDS_Shape HSF::AddNewSplit(TopoDS_Shape Stock, gp_Pln plane1)
 				
 
 		BRepAlgoAPI_Section asect(Stock,plane1,Standard_False);
+		
 		asect.ComputePCurveOn1(Standard_True);
 		asect.Approximation(Standard_True);
 		asect.Build();
@@ -3035,6 +3076,9 @@ TopoDS_Shape HSF::AddNewSplit(TopoDS_Shape Stock, gp_Pln plane1)
 			 }
 		}
 
+
+		
+			
 		try
 			{
 		asplit.Build();
@@ -3044,6 +3088,7 @@ TopoDS_Shape HSF::AddNewSplit(TopoDS_Shape Stock, gp_Pln plane1)
 			{
 			 return nullshape;
 			}
+			
 
 		if(!asplit.Shape().IsNull())
 			{
@@ -3051,8 +3096,9 @@ TopoDS_Shape HSF::AddNewSplit(TopoDS_Shape Stock, gp_Pln plane1)
 			} else {
 			
 			return nullshape;
-				
 			}
+				
+			
 
 
 	}
@@ -3887,6 +3933,23 @@ return nullshape;
 }
 }
 
+TopoDS_Shape HSF::AddNewSection(TopoDS_Shape srf1,TopoDS_Shape srf2) 
+{
+
+TopoDS_Shape nullshape;
+				
+
+		BRepAlgoAPI_Section asect(srf1, srf2,Standard_False);
+		asect.ComputePCurveOn1(Standard_True);
+		asect.Approximation(Standard_True);
+		asect.Build();
+		TopoDS_Shape R = asect.Shape();
+		return R;
+
+
+}
+
+
 
 
 TopoDS_Shape HSF::AddNewIntersectSrf(gp_Pln pln1,gp_Pln pln2) 
@@ -4196,6 +4259,27 @@ TopoDS_Shape aShape = BRepPrimAPI_MakePrism(crv1, dir.Normalized() * length, tru
 
 
 	}
+
+TopoDS_Shape HSF::AddNewExtrude(TopoDS_Shape sketch ,gp_Vec dir , TopoDS_Shape fromshape , TopoDS_Shape toshape)
+{
+TopoDS_Shape theResult;
+//TopoDS_Shape aShape = BRepPrimAPI_MakePrism(crv1, dir.Normalized() * length, true).Shape();
+	
+// An empty face is given as the sketch face
+BRepFeat_MakePrism thePrism(sketch, sketch, TopoDS_Face(), dir, Standard_True, Standard_True);
+thePrism.Perform(fromshape,toshape);
+if (thePrism.IsDone()) {
+ theResult = thePrism;
+	} else {qDebug() << "brepfeatprism status error:" << thePrism.CurrentStatusError();}
+
+
+	  return theResult;
+	
+	
+
+
+	}
+
 
 void HSF::updateUserAIS(TopoDS_Shape aShape, Handle_User_AIS &anAIS, Handle_AIS_InteractiveContext ic)
 	{

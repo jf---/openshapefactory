@@ -463,7 +463,7 @@ void occviewport::mouseMoveEvent( QMouseEvent* e )
 		onMouseMove( e->buttons(), myKeyboardFlags, e->pos() );
 	}
 
-	gizmo->OnMouseMove(width() - e->globalX(),e->globalY());
+//	gizmo->OnMouseMove(width() - e->globalX(),e->globalY());
 	redraw();
 
 
@@ -1387,99 +1387,99 @@ void occviewport::paintOCC( void )
 {
 
 
-	 if (gizmo)
-    {
-	    //glEnable( GL_BLEND );
-	    //glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
-		
-		//glPushMatrix();
-
-		float modelview[16];
-		float modelproj[16];
-		glGetFloatv( GL_MODELVIEW_MATRIX, modelview );
-		glGetFloatv( GL_PROJECTION_MATRIX, modelproj);
-
-		gizmo->SetCameraMatrix( modelview, modelproj );
-        gizmo->Draw();
-
-		//glDisable(GL_BLEND);
-	    //glPopMatrix();
-    }
-
-
-	GLboolean isPlaneActive[GL_MAX_CLIP_PLANES];
-	int i;
-
-	glDisable( GL_LIGHTING );
-	glMatrixMode( GL_MODELVIEW );
-	glPushMatrix();
-	glLoadIdentity();
-    glMatrixMode( GL_PROJECTION );
-	glPushMatrix();
-    glLoadIdentity();
-
-	GLfloat left   = -1.0f;
-	GLfloat right  =  1.0f;
-	GLfloat bottom = -1.0f;
-	GLfloat top    =  1.0f;
-	GLfloat depth  =  1.0f;
-
-	for (i = 0; i < GL_MAX_CLIP_PLANES; i++)
-	{
-		isPlaneActive[i] = glIsEnabled(GL_CLIP_PLANE0 + i);
-		glDisable(GL_CLIP_PLANE0 + i);
-	}
-
-    glOrtho( left, right, bottom, top, 1.0, -1.0 );
-	glEnable( GL_BLEND );
-	glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
-	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-		
-
-	GLfloat redval = 24.0/255.0;
-	GLfloat greenval = 62.0/255.0;
-	GLfloat blueval = 101/255.0;
-
-	/*GLfloat redval = 1.0;
-	GLfloat greenval = 1.0;
-	GLfloat blueval = 1.0;*/
-
-    glBegin( GL_QUADS);
-    {
-		glColor4f  (  0.4f, 0.4f, 0.4f, 0.4f );
-	  //glColor4f  (  redval, greenval, blueval, 1.0f );
-      glVertex3d (  left, bottom, depth );
-      glVertex3d ( right, bottom, depth );
-      glColor4f  (  redval, greenval, blueval, 1.0f );
-      glVertex3d ( right,    top, depth );
-      glVertex3d (  left,    top, depth );
-    }
-    glEnd();
-
-	
-
-	//lets make our circles look a little nicer!
-	//ofSetCircleResolution(40);
-//	int elapsedtime = TheTime->restart();
-	
-	/*if (elapsedtime > 200)
-	{
-	 drawlayer();
-	 TheTime->start();
-	}*/
-
-	glDisable(GL_BLEND);
-	glPopMatrix();
-	glMatrixMode( GL_MODELVIEW );
-	glPopMatrix();
-
-	for (i = 0; i < GL_MAX_CLIP_PLANES; i++)
-	{
-		if (isPlaneActive[i])
-		{ 
-			glEnable(GL_CLIP_PLANE0 + i);
-		}
-	}
+//	 if (gizmo)
+//    {
+//	    //glEnable( GL_BLEND );
+//	    //glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
+//		
+//		//glPushMatrix();
+//
+//		float modelview[16];
+//		float modelproj[16];
+//		glGetFloatv( GL_MODELVIEW_MATRIX, modelview );
+//		glGetFloatv( GL_PROJECTION_MATRIX, modelproj);
+//
+//		gizmo->SetCameraMatrix( modelview, modelproj );
+//        gizmo->Draw();
+//
+//		//glDisable(GL_BLEND);
+//	    //glPopMatrix();
+//    }
+//
+//
+//	GLboolean isPlaneActive[GL_MAX_CLIP_PLANES];
+//	int i;
+//
+//	glDisable( GL_LIGHTING );
+//	glMatrixMode( GL_MODELVIEW );
+//	glPushMatrix();
+//	glLoadIdentity();
+//    glMatrixMode( GL_PROJECTION );
+//	glPushMatrix();
+//    glLoadIdentity();
+//
+//	GLfloat left   = -1.0f;
+//	GLfloat right  =  1.0f;
+//	GLfloat bottom = -1.0f;
+//	GLfloat top    =  1.0f;
+//	GLfloat depth  =  1.0f;
+//
+//	for (i = 0; i < GL_MAX_CLIP_PLANES; i++)
+//	{
+//		isPlaneActive[i] = glIsEnabled(GL_CLIP_PLANE0 + i);
+//		glDisable(GL_CLIP_PLANE0 + i);
+//	}
+//
+//    glOrtho( left, right, bottom, top, 1.0, -1.0 );
+//	glEnable( GL_BLEND );
+//	glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
+//	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+//		
+//
+//	GLfloat redval = 24.0/255.0;
+//	GLfloat greenval = 62.0/255.0;
+//	GLfloat blueval = 101/255.0;
+//
+//	/*GLfloat redval = 1.0;
+//	GLfloat greenval = 1.0;
+//	GLfloat blueval = 1.0;*/
+//
+//    glBegin( GL_QUADS);
+//    {
+//		glColor4f  (  0.4f, 0.4f, 0.4f, 0.4f );
+//	  //glColor4f  (  redval, greenval, blueval, 1.0f );
+//      glVertex3d (  left, bottom, depth );
+//      glVertex3d ( right, bottom, depth );
+//      glColor4f  (  redval, greenval, blueval, 1.0f );
+//      glVertex3d ( right,    top, depth );
+//      glVertex3d (  left,    top, depth );
+//    }
+//    glEnd();
+//
+//	
+//
+//	//lets make our circles look a little nicer!
+//	//ofSetCircleResolution(40);
+////	int elapsedtime = TheTime->restart();
+//	
+//	/*if (elapsedtime > 200)
+//	{
+//	 drawlayer();
+//	 TheTime->start();
+//	}*/
+//
+//	glDisable(GL_BLEND);
+//	glPopMatrix();
+//	glMatrixMode( GL_MODELVIEW );
+//	glPopMatrix();
+//
+//	for (i = 0; i < GL_MAX_CLIP_PLANES; i++)
+//	{
+//		if (isPlaneActive[i])
+//		{ 
+//			glEnable(GL_CLIP_PLANE0 + i);
+//		}
+//	}
 }
 
 
