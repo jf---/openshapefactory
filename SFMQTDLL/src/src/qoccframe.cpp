@@ -114,7 +114,7 @@ QoccFrame::QoccFrame(	QoccController* aController,
 
 
 
-	GraphWidget* symboltree = new GraphWidget(parent);
+	//GraphWidget* symboltree = new GraphWidget(parent);
 
 
 	createActions();
@@ -158,7 +158,7 @@ QoccFrame::QoccFrame(	QoccController* aController,
 	vflow->setMargin(0);
 	vflow->setSpacing(0);
 	vflow->addWidget(toolbarflowwidget);
-	vflow->addWidget(new GenericFrame(aController,myParent,symboltree));
+	//vflow->addWidget(new GenericFrame(aController,myParent,symboltree));
 
 	myTabWidget->addTab(vflowwidget, tr( "symbolic tree" ) );
 	
@@ -172,16 +172,16 @@ QoccFrame::QoccFrame(	QoccController* aController,
 
 	
 
-
+	//mySubLayout->addWidget( myToolBar );
 	mySubLayout->addWidget( splitter);
 	//mySubLayout->addWidget( myWidget );
 
-
+	
 	myLayout->insertLayout(0, mySubLayout);
 
-	myLayout->addWidget( myToolBar );
+	//myLayout->addWidget( myToolBar );
 	qGeomApp->myview = myWidget;
-	qGeomApp->symboltree = symboltree;
+	//qGeomApp->symboltree = symboltree;
 
 	  this->setStyleSheet(QString::fromUtf8("background-color: rgb(104, 104, 104);\n" "color: rgb(255, 255, 255);"));
 

@@ -45,6 +45,7 @@
 #include <QSplitter>
 #include <QCleanlooksStyle>
 
+#include "tbb/tbbmalloc_proxy.h"
 
 int main(int argc, char **argv) //Boot Loader Function
 {
@@ -71,6 +72,21 @@ qRegisterMetaType<QMap<QString,QVariant>>("QMap<QString,QVariant>");
 	{
 	
 	QString scriptfilename = arguments.at(1);
+
+	if(scriptfilename.contains("igs") || scriptfilename.contains("IGS"))
+		{
+       
+		scriptfilename.replace("\\","\\\\");
+		
+		QString code = QString("shape = importigs(\"") + scriptfilename + QString(" \" ) \n vis(shape) \n fitall()");
+	    
+		scriptw->settext(code);
+        scriptw->evaluatetext();
+
+		goto runapp;
+		
+	}
+
 	QFile data(scriptfilename);
 
 	if (data.open(QFile::ReadOnly)) {
@@ -81,12 +97,18 @@ qRegisterMetaType<QMap<QString,QVariant>>("QMap<QString,QVariant>");
 	 scriptw->evaluatetextonly(code);
 	 qDebug() << scriptw->resultstream;
 	}
-		
+	
+
+
+
 	app.quit();
 	return app.exit();
 
 
 	}
+
+
+	runapp:
 
 	appui::getInstance()->ShowMaximized(); // shows the app window maximized
 
@@ -94,7 +116,7 @@ qRegisterMetaType<QMap<QString,QVariant>>("QMap<QString,QVariant>");
 	qGeomApp->splitter->insertWidget(0,scriptw);
 	
 	
-	qGeomApp->myview->getView()->SetAnimationModeOn();
+//	qGeomApp->myview->getView()->SetAnimationModeOn();
 	//qGeomApp->myview->getView()->EnableGLLight();
 	qGeomApp->myview->getView()->SetAntialiasingOff();
 	qGeomApp->myview->getView()->SetLightOff();

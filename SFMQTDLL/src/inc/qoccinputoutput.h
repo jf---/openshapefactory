@@ -68,6 +68,8 @@ public:
 	Handle(TopTools_HSequenceOfShape) importBREP ( const QString& );
 
 	Handle(TopTools_HSequenceOfShape) importIGES ( const QString& );
+	Handle(TopTools_HSequenceOfShape) importIGESprogress ( const QString& );
+	
 	Handle(TopTools_HSequenceOfShape) importSTEP ( const QString& );
 	Handle(TopTools_HSequenceOfShape) importCSFDB( const QString& );
 	Handle(TopTools_HSequenceOfShape) importCATIA( const QString& );

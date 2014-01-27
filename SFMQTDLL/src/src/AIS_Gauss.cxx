@@ -38,13 +38,13 @@ IMPLEMENT_STANDARD_SUPERTYPE_ARRAY_END()
 IMPLEMENT_STANDARD_TYPE_END(AIS_Gauss)
 
 
-#include <Graphic2d_Text.hxx>
-#include <Select2D_SensitiveBox.hxx>
-#include <Graphic2d_Segment.hxx>
+//#include <Graphic2d_Text.hxx>
+//#include <Select2D_SensitiveBox.hxx>
+//#include <Graphic2d_Segment.hxx>
 #include <OSD_Environment.hxx>
-#include <Graphic2d_View.hxx>
-#include <Graphic2d_Drawer.hxx>
-#include "PrsMgr_PresentationManager2d.hxx"
+//#include <Graphic2d_View.hxx>
+//#include <Graphic2d_Drawer.hxx>
+//#include "PrsMgr_PresentationManager2d.hxx"
 #include "SelectMgr_Selection.hxx"
 #include <AIS_Drawer.hxx>
 #include <Graphic3d_AspectMarker3d.hxx>
@@ -58,7 +58,7 @@ IMPLEMENT_STANDARD_TYPE_END(AIS_Gauss)
 #include <Handle_Poly_Triangulation.hxx>
 #include <Poly_Triangulation.hxx>
 #include <Poly_Connect.hxx>
-#include <Graphic3d_Array1OfVertexNC.hxx>
+//#include <Graphic3d_Array1OfVertexNC.hxx>
 #include <Aspect_Array1OfEdge.hxx>
 #include <TColgp_Array1OfPnt.hxx>
 #include <TColgp_Array1OfPnt2d.hxx>
@@ -75,8 +75,8 @@ IMPLEMENT_STANDARD_TYPE_END(AIS_Gauss)
 
 #include <Graphic3d_Group.hxx>
 #include <Graphic3d_Vertex.hxx>
-#include <Graphic3d_VertexN.hxx>
-#include <Graphic3d_Array1OfVertexN.hxx>
+//#include <Graphic3d_VertexN.hxx>
+//#include <Graphic3d_Array1OfVertexN.hxx>
 #include <gp_Vec.hxx>
 #include <Prs3d_ShadingAspect.hxx>
 #include <Prs3d_IsoAspect.hxx>
@@ -237,9 +237,11 @@ const TColgp_Array1OfPnt2d& UVNodes = myT->UVNodes();
 const Poly_Array1OfTriangle& triangles = myT->Triangles();
 
 Handle(Graphic3d_ArrayOfTriangles) trianglearr = new Graphic3d_ArrayOfTriangles(triangles.Length()* 3,0,false,true);
-Graphic3d_Array1OfVertexNC Points(1,triangles.Length()* 3);
+//Graphic3d_Array1OfVertexNC Points(1,triangles.Length()* 3);
 
 Handle(Graphic3d_ArrayOfPolylines) polylines = new Graphic3d_ArrayOfPolylines ( triangles.Length()* 6,triangles.Length()* 6 );
+
+Handle(Graphic3d_ArrayOfPolylines) vectorlines = new Graphic3d_ArrayOfPolylines ( nbnodes * 2,nbnodes * 2 );
 
 
 Standard_Real fUMin, fUMax, fVMin, fVMax;
@@ -287,6 +289,30 @@ double B;
 
 //For each triangle get the three nodes
 //Graphic3d_Array1OfVertexNC Points(1,3);
+for (int i = 1; i < nbnodes; i++)
+{
+
+prop.SetParameters(UVNodes.Value(i).X(),UVNodes.Value(i).Y());
+gp_Dir mindir;
+gp_Dir maxdir;
+prop.CurvatureDirections(maxdir,mindir);
+
+gp_Pnt orpoint = Nodes.Value(i);
+
+gp_Vec aV  = gp_Vec(mindir).Normalized();
+aV = aV.Multiplied(200);
+gp_Pnt newpoint;
+newpoint.SetXYZ(orpoint.XYZ() + aV.XYZ());
+
+
+
+// edge1
+vectorlines->AddBound ( 2 );
+vectorlines->AddVertex ( orpoint.X(), orpoint.Y(), orpoint.Z() );
+vectorlines->AddVertex ( newpoint.X(), newpoint.Y(), newpoint.Z() );
+         
+}
+
 
 if (myT->HasUVNodes())
 {
@@ -302,6 +328,8 @@ for (int i = 1; i < triangles.Length()+1; i++)
 	gp_Pnt p1 = Nodes.Value(n1);
 	gp_Pnt p2 = Nodes.Value(n2);
 	gp_Pnt p3 = Nodes.Value(n3);
+
+
 
 	if (_showedges)
 	{
@@ -343,7 +371,8 @@ for (int i = 1; i < triangles.Length()+1; i++)
             
 			// switch curvature types later like the mean curvature or the max curvature.
               double curvature = prop.MeanCurvature();//GaussianCurvature();
-         
+
+			  
 
               visualizationDone = true;
 
@@ -425,19 +454,33 @@ for (int i = 1; i < triangles.Length()+1; i++)
 Handle(Graphic3d_AspectFillArea3d) aspect = new Graphic3d_AspectFillArea3d();
 aspect->SetInteriorStyle(Aspect_IS_SOLID);
 //mygroup->Clear();
-mygroup->BeginPrimitives();
 
-mygroup->SetPrimitivesAspect(aspect);
-mygroup->AddPrimitiveArray(trianglearr);
-mygroup->EndPrimitives();
+//*******changes for occ 6.6.0
+//mygroup->BeginPrimitives();
+//
+//mygroup->SetPrimitivesAspect(aspect);
+//mygroup->AddPrimitiveArray(trianglearr);
+//mygroup->EndPrimitives();
+//*******changes for occ 6.6.0
+
+//*********changes for occ 6.6.0
+//// draw mesh edges inside polylines array
+//mygroup->SetPrimitivesAspect ( new Graphic3d_AspectLine3d( Quantity_NameOfColor::Quantity_NOC_BLACK , Aspect_TOL_SOLID, 0.1 ) );
+//mygroup->BeginPrimitives ();
+//mygroup->AddPrimitiveArray ( vectorlines);
+//mygroup->EndPrimitives ();
+//*********changes for occ 6.6.0
+
 
 if(_showedges)
 {
 // draw mesh edges inside polylines array
-mygroup->SetPrimitivesAspect ( new Graphic3d_AspectLine3d( Quantity_NameOfColor::Quantity_NOC_BLACK , Aspect_TOL_SOLID, 0.1 ) );
-mygroup->BeginPrimitives ();
-mygroup->AddPrimitiveArray ( polylines );
-mygroup->EndPrimitives ();
+////*********changes for occ 6.6.0
+//mygroup->SetPrimitivesAspect ( new Graphic3d_AspectLine3d( Quantity_NameOfColor::Quantity_NOC_BLACK , Aspect_TOL_SOLID, 0.1 ) );
+//mygroup->BeginPrimitives ();
+//mygroup->AddPrimitiveArray ( polylines );
+//mygroup->EndPrimitives ();
+////*********changes for occ 6.6.0
 }
 
 //delete mygroup;
@@ -480,11 +523,11 @@ void AIS_Gauss::Compute(const Handle(Prs3d_Projector)& aProjector,
  {
  }
 
-void AIS_Gauss::Compute(const Handle(PrsMgr_PresentationManager2d)& aPresentationManager, 
-                         const Handle(Graphic2d_GraphicObject)& aGrObj, 
-                         const Standard_Integer unMode)
-{
-}
+//void AIS_Gauss::Compute(const Handle(PrsMgr_PresentationManager2d)& aPresentationManager, 
+//                         const Handle(Graphic2d_GraphicObject)& aGrObj, 
+//                         const Standard_Integer unMode)
+//{
+//}
 
 void AIS_Gauss::ComputeSelection(const Handle(SelectMgr_Selection)& aSelection, 
 				      const Standard_Integer unMode)

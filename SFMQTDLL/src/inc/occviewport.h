@@ -165,7 +165,7 @@ protected: // methods
 private: // members
 
 #ifdef WNT
-    Handle_WNT_Window	  myWindow;
+    Handle(WNT_Window)	  myWindow;
 #else
     Handle_Xw_Window	  myWindow;
 #endif // WNT

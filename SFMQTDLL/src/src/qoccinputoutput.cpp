@@ -368,9 +368,51 @@ Handle(TopTools_HSequenceOfShape) QoccInputOutput::importIGES( const QString& fi
     aSequence = new TopTools_HSequenceOfShape();
     Reader.TransferRoots();
 	
+	
     TopoDS_Shape aShape = Reader.OneShape();
     aSequence->Append( aShape );
   }
+	return aSequence;
+}
+
+Handle(TopTools_HSequenceOfShape) QoccInputOutput::importIGESprogress( const QString& file )
+{
+  Handle(TopTools_HSequenceOfShape) aSequence;
+  IGESControl_Reader Reader;
+  int status = Reader.ReadFile( file.toAscii().data() );
+
+  QProgressDialog progress("Exporting IGES File", "Abort Copy", 1,100);
+  if ( status == IFSelect_RetDone )
+  {
+	  // Interface_TraceFile::SetDefault();
+	  bool failsonly = false;
+	  Reader.PrintCheckLoad( failsonly, IFSelect_ItemsByEntity );
+
+	  int nbr = Reader.NbRootsForTransfer();
+	  
+	  Reader.PrintCheckTransfer( failsonly, IFSelect_ItemsByEntity );
+	  for ( Standard_Integer n = 1; n <= nbr; n++ )
+	  {
+	    bool ok = Reader.TransferOneRoot( n );
+			if (ok)
+			{
+				int nbs = Reader.NbShapes();
+				if ( nbs > 0 )
+				{
+					aSequence = new TopTools_HSequenceOfShape();
+					for ( int i = 1; i <= nbs; i++ )
+					{
+						TopoDS_Shape shape = Reader.Shape( i );
+						aSequence->Append( shape );
+						double percent = (n/nbr) * (i/nbs) * 100 ;
+						progress.setValue(percent);
+					}
+				}
+			}
+    }
+  }
+
+
 	return aSequence;
 }
 

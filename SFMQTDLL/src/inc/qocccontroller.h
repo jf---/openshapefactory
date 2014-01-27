@@ -33,9 +33,12 @@ public:
 	int								id( void )         { return myDocument->id(); }
 
 	Handle(V3d_Viewer) createViewer( const Standard_CString aDisplay,
-									 const Standard_ExtString aName,
-									 const Standard_CString aDomain,
-									 const Standard_Real ViewSize );
+				                     const Standard_ExtString aName,
+				                     const Standard_CString aDomain,
+				                     const Standard_Real ViewSize,
+				                     const V3d_TypeOfOrientation ViewProj,
+				                     const Standard_Boolean ComputedMode,
+				                     const Standard_Boolean aDefaultComputedMode );
 
 	TopAbs_ShapeEnum localContext() { return myLcType; }
 	void setLocalContext( TopAbs_ShapeEnum lcType );

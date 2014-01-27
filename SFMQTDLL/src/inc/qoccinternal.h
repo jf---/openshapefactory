@@ -81,18 +81,18 @@
 #include <GC_MakeEllipse.hxx>
 
 #include <Geom2d_Ellipse.hxx>
-#include <Graphic2d_Array1OfVertex.hxx>
-#include <Graphic2d_Buffer.hxx>
-#include <Graphic2d_CircleMarker.hxx>
-#include <Graphic2d_DisplayList.hxx>
-#include <Graphic2d_Drawer.hxx>
-#include <Graphic2d_Polyline.hxx>
-#include <Graphic2d_Segment.hxx>
-#include <GGraphic2d_SetOfCurves.hxx>
-#include <Graphic2d_SetOfSegments.hxx>
-#include <Graphic2d_Text.hxx>
-#include <Graphic2d_Vertex.hxx>
-#include <Graphic2d_View.hxx>
+//#include <Graphic2d_Array1OfVertex.hxx>
+//#include <Graphic2d_Buffer.hxx>
+//#include <Graphic2d_CircleMarker.hxx>
+//#include <Graphic2d_DisplayList.hxx>
+//#include <Graphic2d_Drawer.hxx>
+//#include <Graphic2d_Polyline.hxx>
+//#include <Graphic2d_Segment.hxx>
+//#include <GGraphic2d_SetOfCurves.hxx>
+//#include <Graphic2d_SetOfSegments.hxx>
+//#include <Graphic2d_Text.hxx>
+//#include <Graphic2d_Vertex.hxx>
+//#include <Graphic2d_View.hxx>
 #include <Graphic3d_AspectMarker3d.hxx>
 #include <Graphic3d_NameOfMaterial.hxx>
 #include <MMgt_TShared.hxx>
@@ -102,17 +102,17 @@
 #include <Prs3d_LineAspect.hxx>
 #include <Prs3d_Projector.hxx>
 #include <Prs3d_Text.hxx>
-#include <PrsMgr_PresentationManager2d.hxx>
+//#include <PrsMgr_PresentationManager2d.hxx>
 #include <Quantity_Factor.hxx>
 #include <Quantity_Length.hxx>
 #include <Quantity_NameOfColor.hxx>
 #include <Quantity_PhysicalQuantity.hxx>
 #include <Quantity_PlaneAngle.hxx>
 #include <Quantity_TypeOfColor.hxx>
-#include <Select2D_SensitiveArc.hxx>
-#include <Select2D_SensitiveBox.hxx>
-#include <Select2D_SensitiveEntity.hxx>
-#include <Select2D_SensitiveSegment.hxx>
+//#include <Select2D_SensitiveArc.hxx>
+//#include <Select2D_SensitiveBox.hxx>
+//#include <Select2D_SensitiveEntity.hxx>
+//#include <Select2D_SensitiveSegment.hxx>
 #include <SelectBasics_BasicTool.hxx>
 #include <SelectBasics_ListOfBox2d.hxx>
 #include <SelectMgr_EntityOwner.hxx>
@@ -132,12 +132,12 @@
 #include <StdPrs_Curve.hxx>
 #include <StdPrs_Point.hxx>
 #include <StdPrs_PoleCurve.hxx>
-#include <StdSelect_SensitiveText2d.hxx>
-#include <StdSelect_TextProjector2d.hxx>
-#include <StdSelect_ViewerSelector2d.hxx>
+//#include <StdSelect_SensitiveText2d.hxx>
+//#include <StdSelect_TextProjector2d.hxx>
+//#include <StdSelect_ViewerSelector2d.hxx>
 #include <TCollection_AsciiString.hxx>
-#include <TColgp_Array1OfPnt2d.hxx>
-#include <TColgp_HArray1OfPnt2d.hxx>
+//#include <TColgp_Array1OfPnt2d.hxx>
+//#include <TColgp_HArray1OfPnt2d.hxx>
 #include <TCollection_AsciiString.hxx>
 #include <TCollection_ExtendedString.hxx>
 #include <TColStd_HSequenceOfTransient.hxx>
@@ -165,8 +165,8 @@
 #include <TPrsStd_AISViewer.hxx>
 
 #include <UnitsAPI.hxx>
-#include <V2d_View.hxx>
-#include <V2d_Viewer.hxx>
+//#include <V2d_View.hxx>
+//#include <V2d_Viewer.hxx>
 #include <V3d_ColorScale.hxx>
 #include <V3d_RectangularGrid.hxx>
 #include <V3d_View.hxx>
@@ -237,9 +237,9 @@
 // The OpenCASCADE includes...
 #include <AIS_InteractiveContext.hxx>
 #ifdef WNT
-#include <WNT_WDriver.hxx>
+//#include <WNT_WDriver.hxx>
 #include <WNT_Window.hxx>
-#include <Graphic3d_WNTGraphicDevice.hxx>
+//#include <Graphic3d_WNTGraphicDevice.hxx>
 #endif
 
 #endif // QOCCINTERNAL_H

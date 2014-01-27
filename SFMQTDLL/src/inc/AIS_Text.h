@@ -18,19 +18,19 @@
 #include <Standard_Integer.hxx>
 #include <Quantity_Factor.hxx>
 #include <Quantity_PlaneAngle.hxx>
-#include <Handle_PrsMgr_PresentationManager2d.hxx>
-#include <Handle_Graphic2d_GraphicObject.hxx>
+//#include <Handle_PrsMgr_PresentationManager2d.hxx>
+//#include <Handle_Graphic2d_GraphicObject.hxx>
 #include <Handle_SelectMgr_Selection.hxx>
 #include <Standard_OStream.hxx>
 #include <Standard_IStream.hxx>
 #include <Standard_CString.hxx>
 #include <SelectMgr_SelectableObject.hxx>
-#include <Graphic2d_Text.hxx>
+//#include <Graphic2d_Text.hxx>
 #include <AIS_InteractiveObject.hxx>
-#include <Graphic2d_PolylineMarker.hxx>
+//#include <Graphic2d_PolylineMarker.hxx>
 #include <Graphic3d_Group.hxx>
 //#include <Graphic2d_Group.hxx>
-#include <Graphic2d_Array1OfVertex.hxx>
+//#include <Graphic2d_Array1OfVertex.hxx>
 #include <Graphic3d_Array1OfVertex.hxx>
 
 

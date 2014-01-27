@@ -14,8 +14,9 @@
 #include <Prs3d_Presentation.hxx>
 #include <Qsci/qsciscintilla.h>
 #include <QLabel>
+#include <BRepClass3d_SolidClassifier.hxx>
 
-#include "volumemeshsettings.h"#include <Handle_MeshVS_Drawer.hxx>
+//#include "volumemeshsettings.h"#include <Handle_MeshVS_Drawer.hxx>
 #include <MeshVS_Mesh.hxx>
 #include <MeshVS_DrawerAttribute.hxx>
 #include <MeshVS_MeshPrsBuilder.hxx>
@@ -143,7 +144,11 @@ void kmeanscluster(int familycount,QList<panelinstance> &mypanels)
 HsfScriptingInterface::HsfScriptingInterface()
 :ftp(0)
 {
-	UnitsAPI::SetLocalSystem(UnitsAPI_MDTV);
+	//UnitsAPI::SetLocalSystem(UnitsAPI_MDTV);
+    
+//UnitsAPI units = new UnitsAPI();
+//units->SetLocalSystem(UnitsAPI_MDTV);
+
 	Handle_AIS_InteractiveContext ic = appui::getInstance()->getWindowContext();
 	viscount = 0;	 
 	setuprunonce();
@@ -156,6 +161,8 @@ HsfScriptingInterface::HsfScriptingInterface()
 
 
 	ftp = new QFtp(0);
+
+	objectcache = new QMap<QString,QVariant> ;
 	
 
 	//aMeshVS = new MeshVS_Mesh(Standard_True);
@@ -183,6 +190,21 @@ void HsfScriptingInterface::setmousepos(gp_Pnt pos)
 {
 CurrentMousePoint = pos;
 }
+
+
+QScriptValue HsfScriptingInterface::viewtext()
+	{
+     if (context()->argumentCount() == 1)
+		 {
+			QString stringval = context()->argument(0).toString();
+			QsciScintilla *textwindow = new QsciScintilla();
+			textwindow->setText(stringval);
+			textwindow->show();
+			return engine()->toScriptValue(true);
+		 }
+	return engine()->toScriptValue(false);
+	}
+
 
 QScriptValue HsfScriptingInterface::readcsv(QScriptValue filename)
 {
@@ -291,6 +313,35 @@ QScriptValue HsfScriptingInterface::getnextuvname()
 
 	}
 
+
+
+
+QScriptValue HsfScriptingInterface::make2dpointonsurfacefrompoint()
+{
+	
+
+
+	 
+	 if (context()->argumentCount() == 2)
+	 {
+		 
+		 TopoDS_Shape surface = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		 gp_Pnt point = hsf::getpointfromshape(context()->argument(1).toVariant().value<TopoDS_Shape>());
+
+		 gp_Pnt2d thepoint2d = hsf::Get2dPntonSurfacefromPoint(surface,point);
+
+		 QScriptValue myptval = engine()->toScriptValue(thepoint2d);
+		 myptval.setProperty(QString("x"),engine()->toScriptValue(thepoint2d.X() ));
+		 myptval.setProperty(QString("y"),engine()->toScriptValue(thepoint2d.Y()));
+
+		 return myptval;
+		 
+
+
+	 }
+
+	 return engine()->toScriptValue(false);
+}
 
 QScriptValue HsfScriptingInterface::make2dpoint()
  {
@@ -1482,96 +1533,96 @@ QScriptValue HsfScriptingInterface::getdironce()
 }
 
 // mesh the shape using the volumetric mesher from salome
-QScriptValue HsfScriptingInterface::volmesh()
-{
-	 if(context()->argumentCount() == 1)
-	 {
-	     TopoDS_Shape aShape = context()->argument(0).toVariant().value<TopoDS_Shape>();
-		 if (aShape.IsNull()) 
-		 {
-			 return engine()->toScriptValue(false);
-		 }
-
-//****************************************************************************
-//***************************CREATE SMESH OBJECTS*****************************
-SMESH_Gen *aMeshGen = new SMESH_Gen();
-SMESH_Mesh *aMesh = aMeshGen->CreateMesh(0,true);
-
-
-//NETGENPlugin_Mesher* netgensettings = new NETGENPlugin_Mesher(0,0,aMeshGen);
-//NETGENPlugin_NETGEN_2D3D * netgenhypo = new NETGENPlugin_NETGEN_2D3D (1,0, aMeshGen);
-//NETGENPlugin_SimpleHypothesis_3D* netgensettings = new NETGENPlugin_SimpleHypothesis_3D(0,0,aMeshGen);
-
-StdMeshers_Arithmetic1D *an1DHypothesis = new StdMeshers_Arithmetic1D(0,0,aMeshGen);
-an1DHypothesis->SetLength(100, false);
-an1DHypothesis->SetLength(500., true);
-
-StdMeshers_Regular_1D *an1DAlgo = new StdMeshers_Regular_1D(1,0,aMeshGen);
-
-
-StdMeshers_QuadranglePreference *a2DHypothesis = new StdMeshers_QuadranglePreference(2,0,aMeshGen);
-
-StdMeshers_Quadrangle_2D *a2DAlgo = new StdMeshers_Quadrangle_2D(3,0,aMeshGen);
-
-
-StdMeshers_Prism_3D* a3dHypothesis = new StdMeshers_Prism_3D(4,0,aMeshGen);StdMeshers_MaxElementVolume* maxvol = new StdMeshers_MaxElementVolume(5,0,aMeshGen);
-//StdMeshers_Hexa_3D* a3dHypothesis = new StdMeshers_Hexa_3D(4,0,aMeshGen);//a3dHypothesis->SetMaxVolume(1000000000/30);
-//#a3dHypothesis = StdMeshers_CompositeHexa_3D(4,0,aMeshGen) #Ok
-//#a3dHypothesis = StdMeshers_RadialPrism_3D(4,0,aMeshGen) # Don't work?
-
-
-//****************************************************************************
-//**************************CALCULATE MESH************************************
-//ADD SHAPE TO MESH
-aMesh->ShapeToMesh(aShape);
-
-//ASSIGN FIRST EDGE WITH HYPOTHESIS //Somehow smesh needs 1d algo to be assigned directly to an edge ... ???
-TopExp_Explorer Exp3 (aMesh->GetShapeToMesh(), TopAbs_EDGE);
-while ( Exp3.More() ) {
-aMesh->AddHypothesis( Exp3.Current() , 0 );
-//aMesh->RebuildPropagationChains();
-break;
-}
-
-//ASSIGN HYPOTHESIS TO MESH
-aMesh->AddHypothesis( aShape , 0 );
-aMesh->AddHypothesis( aShape , 1 );
-aMesh->AddHypothesis( aShape , 2 );
-aMesh->AddHypothesis( aShape , 3 );
-aMesh->AddHypothesis( aShape , 4 );
-
-//COMPUTE THE DATA
-aMeshGen->Compute(*aMesh, aMesh->GetShapeToMesh() );
-
-//****************************************************************************
-//****************************EXPORT THE DATA*********************************
-
-//int groupindex=0;
-//TopExp_Explorer Exp4;
+//QScriptValue HsfScriptingInterface::volmesh()
+//{
+//	 if(context()->argumentCount() == 1)
+//	 {
+//	     TopoDS_Shape aShape = context()->argument(0).toVariant().value<TopoDS_Shape>();
+//		 if (aShape.IsNull()) 
+//		 {
+//			 return engine()->toScriptValue(false);
+//		 }
 //
-//for (Exp4.Init(aMesh->GetShapeToMesh(),TopAbs_FACE); Exp4.More(); Exp4.Next())
-//     {
-//          TopoDS_Shape curshape = Exp4.Current();
+////****************************************************************************
+////***************************CREATE SMESH OBJECTS*****************************
+//SMESH_Gen *aMeshGen = new SMESH_Gen();
+//SMESH_Mesh *aMesh = aMeshGen->CreateMesh(0,true);
 //
-// 
-//  char* groupname = QString::number(groupindex).toAscii().data();
-// SMESHDS_GroupOnGeom* group_load = new SMESHDS_GroupOnGeom(groupindex,aMesh->GetMeshDS(),SMDSAbs_Face, curshape);// aMesh->AddGroup( SMDSAbs_Face,groupname,groupindex,group_load->GetShape());// groupindex +=1;//// break;//
+//
+////NETGENPlugin_Mesher* netgensettings = new NETGENPlugin_Mesher(0,0,aMeshGen);
+////NETGENPlugin_NETGEN_2D3D * netgenhypo = new NETGENPlugin_NETGEN_2D3D (1,0, aMeshGen);
+////NETGENPlugin_SimpleHypothesis_3D* netgensettings = new NETGENPlugin_SimpleHypothesis_3D(0,0,aMeshGen);
+//
+//StdMeshers_Arithmetic1D *an1DHypothesis = new StdMeshers_Arithmetic1D(0,0,aMeshGen);
+//an1DHypothesis->SetLength(100, false);
+//an1DHypothesis->SetLength(500., true);
+//
+//StdMeshers_Regular_1D *an1DAlgo = new StdMeshers_Regular_1D(1,0,aMeshGen);
+//
+//
+//StdMeshers_QuadranglePreference *a2DHypothesis = new StdMeshers_QuadranglePreference(2,0,aMeshGen);
+//
+//StdMeshers_Quadrangle_2D *a2DAlgo = new StdMeshers_Quadrangle_2D(3,0,aMeshGen);
+//
+//
+//StdMeshers_Prism_3D* a3dHypothesis = new StdMeshers_Prism_3D(4,0,aMeshGen);//StdMeshers_MaxElementVolume* maxvol = new StdMeshers_MaxElementVolume(5,0,aMeshGen);//
+////StdMeshers_Hexa_3D* a3dHypothesis = new StdMeshers_Hexa_3D(4,0,aMeshGen);////a3dHypothesis->SetMaxVolume(1000000000/30);//
+////#a3dHypothesis = StdMeshers_CompositeHexa_3D(4,0,aMeshGen) #Ok//
+////#a3dHypothesis = StdMeshers_RadialPrism_3D(4,0,aMeshGen) # Don't work?
+//
+//
+////****************************************************************************
+////**************************CALCULATE MESH************************************
+////ADD SHAPE TO MESH
+//aMesh->ShapeToMesh(aShape);
+//
+////ASSIGN FIRST EDGE WITH HYPOTHESIS //Somehow smesh needs 1d algo to be assigned directly to an edge ... ???
+//TopExp_Explorer Exp3 (aMesh->GetShapeToMesh(), TopAbs_EDGE);
+//while ( Exp3.More() ) {
+//aMesh->AddHypothesis( Exp3.Current() , 0 );
+////aMesh->RebuildPropagationChains();
+//break;
 //}
-
-
-aMesh->ExportDAT("_TEST.DAT");
-aMesh->ExportUNV("_TEST.UNV");
-//aMesh->ExportSTL("_TEST.stl",true);
-
-
-//print 'Done.'
-return engine()->toScriptValue(QString("smeshworked"));
-
-
-	  } else { return engine()->toScriptValue(false);}
-
-	}
-
+//
+////ASSIGN HYPOTHESIS TO MESH
+//aMesh->AddHypothesis( aShape , 0 );
+//aMesh->AddHypothesis( aShape , 1 );
+//aMesh->AddHypothesis( aShape , 2 );
+//aMesh->AddHypothesis( aShape , 3 );
+//aMesh->AddHypothesis( aShape , 4 );
+//
+////COMPUTE THE DATA
+//aMeshGen->Compute(*aMesh, aMesh->GetShapeToMesh() );
+//
+////****************************************************************************
+////****************************EXPORT THE DATA*********************************
+//
+////int groupindex=0;
+////TopExp_Explorer Exp4;
+////
+////for (Exp4.Init(aMesh->GetShapeToMesh(),TopAbs_FACE); Exp4.More(); Exp4.Next())
+////     {
+////          TopoDS_Shape curshape = Exp4.Current();
+////
+//// 
+////  char* groupname = QString::number(groupindex).toAscii().data();
+//// SMESHDS_GroupOnGeom* group_load = new SMESHDS_GroupOnGeom(groupindex,aMesh->GetMeshDS(),SMDSAbs_Face, curshape);//// aMesh->AddGroup( SMDSAbs_Face,groupname,groupindex,group_load->GetShape());//// groupindex +=1;//////// break;////
+////}
+//
+//
+//aMesh->ExportDAT("_TEST.DAT");
+//aMesh->ExportUNV("_TEST.UNV");
+////aMesh->ExportSTL("_TEST.stl",true);
+//
+////////
+////print 'Done.'//
+//return engine()->toScriptValue(QString("smeshworked"));
+//
+//
+//	  } else { return engine()->toScriptValue(false);}
+//
+//	}
+//
 
  QScriptValue HsfScriptingInterface::importstp()
  {
@@ -2288,6 +2339,26 @@ QScriptValue HsfScriptingInterface::makeplane()
      return engine()->toScriptValue(false);
  }
 
+QScriptValue HsfScriptingInterface::makemeanplane()
+ {
+	 
+	 
+
+	 if (context()->argumentCount() == 1)
+	 {
+		
+		 QList<gp_Pnt> plist = context()->argument(0).toVariant().value<QList<gp_Pnt>>();
+    	 
+		 gp_Pln mypln = hsf::AddNewMeanPlane(plist);
+
+		 return engine()->toScriptValue(mypln);
+		 
+	 }
+	     
+		
+     return engine()->toScriptValue(false);
+ }
+
 QScriptValue HsfScriptingInterface::makepoint(double x, double y, double z)
 {
 	 TopoDS_Shape myptshape;
@@ -2642,11 +2713,77 @@ QScriptValue HsfScriptingInterface::viscurvature ()
  }
 
 
+
+QScriptValue HsfScriptingInterface::getprincipaldirection ()
+{
+
+if(context()->argumentCount() == 3)
+{
+TopoDS_Shape myshape = context()->argument(0).toVariant().value<TopoDS_Shape>();
+int uval = context()->argument(1).toNumber();
+int vval = context()->argument(2).toNumber();
+
+
+gp_Pnt p1 = hsf::AddNewUVPt(myshape,uval,vval);
+
+Handle(Geom_Surface) mysurf =hsf::convertfacetogeom(myshape);
+
+TopoDS_Face myFace = TopoDS::Face(myshape);
+
+Standard_Real fUMin, fUMax, fVMin, fVMax;
+BRepTools::UVBounds(TopoDS::Face(myFace), fUMin, fUMax, fVMin, fVMax);
+Standard_Real fU = (fUMax-fUMin);
+Standard_Real fV = (fVMax-fVMin);
+
+double umapped = HSF::map(uval,0,1,fUMin,fUMax);
+double vmapped = HSF::map(vval,0,1,fVMin,fVMax);
+
+gp_Pnt2d uvpt = hsf::Get2dPntonSurfacefromPoint(myshape,p1);
+
+
+
+GeomLProp_SLProps prop(mysurf, fUMin, fVMin, 1, Precision::Confusion());
+
+prop.SetParameters(uval,vval);
+gp_Dir maxdir;
+gp_Dir mindir;
+
+prop.CurvatureDirections(maxdir,mindir);//GaussianCurvature()
+
+gp_Vec maxvec = gp_Vec(maxdir);
+gp_Vec minvec = gp_Vec(mindir);
+
+QScriptValue myptval = engine()->toScriptValue(minvec);
+myptval.setProperty(QString("min"),engine()->toScriptValue(minvec));
+myptval.setProperty(QString("max"),engine()->toScriptValue(maxvec));
+
+return myptval;
+
+
+}
+
+ return engine()->toScriptValue(false);
+
+}
+
+
 QScriptValue HsfScriptingInterface::makevector()
  {
     gp_Vec myvec;
-	 if (context()->argumentCount() == 3)
+	if (context()->argumentCount() == 1)
 	 {
+		 QScriptValue arg1 =context()->argument(0);
+		 QVariant arg1variant = arg1.toVariant();
+		 QString type1(arg1variant.typeName());
+		 
+		 if( type1 == "gp_Pln" )
+		 {
+			gp_Pln pln = arg1variant.value<gp_Pln>();
+			myvec = pln.Axis().Direction();
+		 }
+
+		} else if (context()->argumentCount() == 3) {
+	 
 		 double x,y,z;
 		 if (context()->argument(0).toString().toLower() == "infinity") {x = 0;} else { x = context()->argument(0).toNumber();}
 		 if (context()->argument(1).toString().toLower() == "infinity") {y = 0;} else { y = context()->argument(1).toNumber();}
@@ -3060,6 +3197,9 @@ TopoDS_Shape myshape;
 		{
 		myshape = hsf::AddNewSection(srf1,srf2);
 		
+		//myshape = hsf::AddNewIntersectSrf(srf1,srf2);
+
+		
 		}
 	}
 	return engine()->toScriptValue(myshape);
@@ -3079,6 +3219,7 @@ TopoDS_Shape myshape;
 		if (!srf1.IsNull() )
 		{
 		myshape = hsf::AddNewIntersectSrf(pl,srf1);
+		if (myshape.IsNull()) return engine()->toScriptValue(false);
 		}
 	}
 	return engine()->toScriptValue(myshape);
@@ -3091,14 +3232,22 @@ TopoDS_Shape myshape;
 QScriptValue HsfScriptingInterface::makerevolve()
 	{
 TopoDS_Shape myshape;
-    if (context()->argumentCount() == 3)
+    if (context()->argumentCount() == 4)
 	{
 		TopoDS_Shape crv = context()->argument(0).toVariant().value<TopoDS_Shape>();
 		gp_Pnt origin = hsf::getpointfromshape(context()->argument(1).toVariant().value<TopoDS_Shape>());
 		gp_Vec vec = context()->argument(2).toVariant().value<gp_Vec>();
+		double angle = context()->argument(3).toNumber();
 		///double angle = context()->argument(2).toNumber();
 		
-		myshape = hsf::AddNewRevolveSurface(crv,origin,vec);
+		if(crv.IsNull()) return engine()->toScriptValue(false);
+		if(std::abs(angle) <= 360)
+		{
+			angle = (angle  * (2 * M_PI))/ 360;
+			myshape = hsf::AddNewRevolveShape(crv,origin,vec,angle);
+		} else {
+			return engine()->toScriptValue(false);
+		}
 
 		
 		
@@ -3134,6 +3283,76 @@ QScriptValue HsfScriptingInterface::makesweep()
 
 	}
 
+
+QScriptValue HsfScriptingInterface::makesweepnormaltosurface()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 3)
+	{
+		TopoDS_Shape rail = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape section = context()->argument(1).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape surface = context()->argument(2).toVariant().value<TopoDS_Shape>();
+
+		if (!rail.IsNull() && !section.IsNull() && !surface.IsNull())
+		{
+		myshape = hsf::AddNewSweepNormalToSurface(rail,surface,section);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
+
+QScriptValue HsfScriptingInterface::makebooleancut()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 2)
+	{
+		TopoDS_Shape stock = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape tool = context()->argument(1).toVariant().value<TopoDS_Shape>();
+
+		if (!stock.IsNull() && !tool.IsNull())
+		{
+		myshape = hsf::BooleanSubstract(stock,tool);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
+QScriptValue HsfScriptingInterface::makebooleancommon()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 2)
+	{
+		TopoDS_Shape stock = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape tool = context()->argument(1).toVariant().value<TopoDS_Shape>();
+
+		if (!stock.IsNull() && !tool.IsNull())
+		{
+			myshape = hsf::BooleanCommon(stock,tool);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
+QScriptValue HsfScriptingInterface::makebooleanfuse()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 1)
+	{
+		QList<TopoDS_Shape> argumentlist = context()->argument(0).toVariant().value<QList<TopoDS_Shape>>();
+		
+		if (argumentlist.count() > 1)
+		{
+		myshape = hsf::BooleanGlue(argumentlist);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
+
 QScriptValue HsfScriptingInterface::makesplit()
 	{
  TopoDS_Shape myshape;
@@ -3151,7 +3370,22 @@ QScriptValue HsfScriptingInterface::makesplit()
 	return engine()->toScriptValue(myshape);
 
 	}
+QScriptValue HsfScriptingInterface::makesplit2()
+	{
+ TopoDS_Shape myshape;
+    if (context()->argumentCount() == 2)
+	{
+		TopoDS_Shape shape1 = context()->argument(0).toVariant().value<TopoDS_Shape>();
+		TopoDS_Shape shape2 = context()->argument(1).toVariant().value<TopoDS_Shape>();
 
+		if (!shape1.IsNull() && !shape2.IsNull())
+		{
+		myshape = hsf::AddNewSplit(shape1,shape2);
+		}
+	}
+	return engine()->toScriptValue(myshape);
+
+	}
 QScriptValue HsfScriptingInterface::getsurfacearea()
 	{
  
@@ -3202,24 +3436,26 @@ QScriptValue HsfScriptingInterface::makesisocrv()
 		if (!srf.IsNull())
 		{
 		myshape = hsf::AddNewIsoCurve(srf,dir,val);
+		return engine()->toScriptValue(myshape);
 		}
 	}
-	return engine()->toScriptValue(myshape);
+	return engine()->toScriptValue(false);
 
 	}
 
 QScriptValue HsfScriptingInterface::makesweepgeom()
 	{
  TopoDS_Shape myshape;
-    if (context()->argumentCount() == 3)
+    if (context()->argumentCount() == 4)
 	{
 		TopoDS_Shape rail = context()->argument(0).toVariant().value<TopoDS_Shape>();
 		TopoDS_Shape section = context()->argument(1).toVariant().value<TopoDS_Shape>();
 		int transition = context()->argument(2).toNumber();
+		bool issolid = context()->argument(3).toBool();
 
 		if (!rail.IsNull() && !section.IsNull())
 		{
-		myshape = hsf::AddNewSweepGeom(rail,section,transition);
+			myshape = hsf::AddNewSweepGeom(rail,section,transition,issolid);
 		}
 	}
 	return engine()->toScriptValue(myshape);
@@ -3387,6 +3623,7 @@ QScriptValue HsfScriptingInterface::makehyberbola()
 
 			gp_Ax2 axis(p1,up,v1);
 			gp_Hypr myhb( axis, major, minor);
+			
 
 			myshape = BRepBuilderAPI_MakeEdge(myhb,-2,2);
 
@@ -3493,16 +3730,20 @@ QScriptValue HsfScriptingInterface::makelineptdir()
 			 QString type2(arg2variant.typeName());
 			 gp_Pnt p1;
 			 gp_Vec v1;
-			 if( type1 == "gp_Pnt" && type2 == "gp_Vec" )
+			 gp_Pln pln;
+			 if( (type1 == "gp_Pnt" && type2 == "gp_Vec") || (type1 == "gp_Pnt" && type2 == "gp_Pln") )
 			 {
 				p1 = arg1variant.value<gp_Pnt>();
-				v1 = arg2variant.value<gp_Vec>();
+				if (type2 == "gp_Vec") v1 = arg2variant.value<gp_Vec>();
+				if (type2 == "gp_Pln") {pln = arg2variant.value<gp_Pln>(); v1 = pln.Axis().Direction(); }
 
 				
-			 } else if( type1 == "TopoDS_Shape" && type2 == "gp_Vec" )
+			 } else if( (type1 == "TopoDS_Shape" && type2 == "gp_Vec") || (type1 == "gp_Pnt" && type2 == "gp_Pln") )
 			 {
 				 p1 = hsf::getpointfromshape(arg1variant.value<TopoDS_Shape>());
-				 v1 = arg2variant.value<gp_Vec>();
+				 
+				 if (type2 == "gp_Vec") v1 = arg2variant.value<gp_Vec>();
+				 if (type2 == "gp_Pln") {pln = arg2variant.value<gp_Pln>(); v1 = pln.Axis().Direction(); }
 				
 			 }
 
@@ -3709,23 +3950,27 @@ QScriptValue HsfScriptingInterface::buildpanel()
 
      QScriptValue HsfScriptingInterface::makemap()
 		 {
-		 QMap<QString,QVariant> map;
-		 return engine()->toScriptValue(map);
+		 QMap<QString,QVariant>* mymap = new QMap<QString,QVariant> ;
+		 //QVariant mymapvariant(mymap);
+
+		 return engine()->toScriptValue(mymap);
 
 		 }
+
+
 	 QScriptValue HsfScriptingInterface::mapinsert()
 		 {
-		  if (context()->argumentCount() > 2)
+		  if (context()->argumentCount() == 3)
 			{
-			QMap<QString,QVariant> map = context()->argument(0).toVariant().value<QMap<QString,QVariant>>();
+			//qDebug() << context()->argument(0).toVariant().typeName();
+			variantmap* mymap = context()->argument(0).toVariant().value<variantmap*>();
 			QString key = context()->argument(1).toString();
-			for(int i=2;i < context()->argumentCount();i++)
-			{
-				QVariant curval = context()->argument(i).toVariant();
-				map.insert(key,curval);
-
-			}
-			return engine()->toScriptValue(map);
+			QVariant curval = context()->argument(2).toVariant();
+			
+			//qDebug() << "mapcount:" << mymap->count();
+			//qDebug() << key;
+			mymap->insert(key,curval);
+			return engine()->toScriptValue(mymap);
 			}
 	
 		return engine()->toScriptValue(false);
@@ -3735,8 +3980,10 @@ QScriptValue HsfScriptingInterface::buildpanel()
 		 {
 		  if (context()->argumentCount() == 1)
 			{
-			QMap<QString,QVariant> map = context()->argument(0).toVariant().value<QMap<QString,QVariant>>();
-			return engine()->toScriptValue(map.count());
+			variantmap* map = context()->argument(0).toVariant().value<variantmap*>();
+			int count= map->count();
+			//qDebug() << "count:" << count;
+			return engine()->toScriptValue(count);
 			}
 		 return engine()->toScriptValue(false); 
 		 }
@@ -3744,8 +3991,8 @@ QScriptValue HsfScriptingInterface::buildpanel()
 			 {
 		  if (context()->argumentCount() == 1)
 			{
-			QMap<QString,QVariant> map = context()->argument(0).toVariant().value<QMap<QString,QVariant>>();
-			return engine()->toScriptValue(map.keys());
+			variantmap* map = context()->argument(0).toVariant().value<variantmap*>();
+			return engine()->toScriptValue(map->keys());
 			}
 		 return engine()->toScriptValue(false); 
 		 }
@@ -3760,12 +4007,82 @@ QScriptValue HsfScriptingInterface::buildpanel()
 			}
 		 return engine()->toScriptValue(false); 
 		 }
+
+	QScriptValue HsfScriptingInterface::clearcache()
+	 {
+		try {  this->objectcache->clear(); return engine()->toScriptValue(true); } 
+		catch(...) {return engine()->toScriptValue(false);}
+     }
+
+	QScriptValue HsfScriptingInterface::cachecontains()
+	 {
+	  if (context()->argumentCount() == 1)
+		  {
+			QString key = context()->argument(0).toString();
+			try {  return engine()->toScriptValue(objectcache->contains(key)); } 
+			catch(...) {return engine()->toScriptValue(false);}
+		  }
+     }
+
+	QScriptValue HsfScriptingInterface::getcacheobject()
+	 {
+	  if (context()->argumentCount() == 1)
+		  {
+			QString key = context()->argument(0).toString();
+			try {  return engine()->toScriptValue(objectcache->value(key)); } 
+			catch(...) {return engine()->toScriptValue(false);}
+		  }
+     }
+
+	QScriptValue HsfScriptingInterface::insertcacheobject()
+	 {
+	  if (context()->argumentCount() == 2)
+		  {
+			QString key = context()->argument(0).toString();
+			QVariant curval = context()->argument(1).toVariant();
+			try {  
+				objectcache->insert(key,curval);
+				return engine()->toScriptValue(true);
+				} 
+			catch(...) {return engine()->toScriptValue(false);}
+		  }
+     }
+
+	
+
+	QScriptValue HsfScriptingInterface::cacheobject()
+	 {
+	 if (context()->argumentCount() == 2)
+	   {
+		QString key = context()->argument(0).toString();
+		QVariant curval = context()->argument(1).toVariant();
+		
+
+		try {  
+				if( objectcache->contains(key))
+					{						
+						return engine()->toScriptValue( objectcache->value(key));
+					} else
+					{
+					   objectcache->insert(key,curval);
+					   return engine()->toScriptValue(false);
+					}
+			} 
+		catch(...) 
+			{
+				return engine()->toScriptValue(false);
+			}
+	   }
+     }
+
+
+
 	 QScriptValue HsfScriptingInterface::getmapvalues()
 	 {
 		  if (context()->argumentCount() == 1)
 			{
-			QMap<QString,QVariant> map = context()->argument(0).toVariant().value<QMap<QString,QVariant>>();
-			return engine()->toScriptValue(map.values());
+			variantmap* map = context()->argument(0).toVariant().value<variantmap*>();
+			return engine()->toScriptValue(map->values());
 			}
 		 return engine()->toScriptValue(false); 
 		 }
@@ -3773,9 +4090,9 @@ QScriptValue HsfScriptingInterface::buildpanel()
 	 {
 		  if (context()->argumentCount() == 2)
 			{
-			QMap<QString,QVariant> map = context()->argument(0).toVariant().value<QMap<QString,QVariant>>();
+			variantmap* map = context()->argument(0).toVariant().value<variantmap*>();
 			QString key = context()->argument(1).toString();
-			return engine()->toScriptValue(map.contains(key));
+			return engine()->toScriptValue(map->contains(key));
 			}
 		 return engine()->toScriptValue(false); 
 		 }
@@ -3784,11 +4101,11 @@ QScriptValue HsfScriptingInterface::buildpanel()
 		 {
 		  if (context()->argumentCount() == 2)
 			{
-			QMap<QString,QVariant> map = context()->argument(0).toVariant().value<QMap<QString,QVariant>>();
+			variantmap* map = context()->argument(0).toVariant().value<variantmap*>();
 			QString key = context()->argument(1).toString();
-			if (map.contains(key))
+			if (map->contains(key))
 				{
-					return engine()->toScriptValue(map.value(key));
+					return engine()->toScriptValue(map->value(key));
 				} else
 				{
 					return engine()->toScriptValue(false);
@@ -4438,17 +4755,22 @@ QScriptValue HsfScriptingInterface::endpart()
 
 		}
 
-
+qDebug() <<"End part/viscount area" ;
 
      if (viscount>0)
 	 {
+	 qDebug() <<"End part/viscount greater then zero" ;
 		 if (!aisp.IsNull())
-		 {
+		 { 
+		     qDebug() <<"End part/viscount aisp not null" ;
 			 if (!aisp->Presentation()->IsVisible())
 			 {
+			    qDebug() <<"End part/viscount presentation not visible" ;
 				ic->Remove(aisp);
 				//delete aisp;
+				//aisp = new AIS_Shape(folder);
 				aisp = new User_AIS(folder,ic);
+			
 				ic->SetMaterial(aisp,Graphic3d_NOM_NEON_GNC);
 				ic->SetColor(aisp, Quantity_NOC_BLACK);
 				ic->SetPreselectionColor(Quantity_NOC_YELLOW);
@@ -4459,12 +4781,15 @@ QScriptValue HsfScriptingInterface::endpart()
 				ic->Display(aisp);
 				
 			 }else{
+			   qDebug() <<"End part/viscount presentation visible updating user ais" ;
 			   ic = appui::getInstance()->getWindowContext();
-		       HSF::updateUserAIS(folder,aisp,ic);
+			   HSF::updateUserAIS(folder,aisp,ic);
 			 }
 		 } else {
+			   qDebug() <<"End part/viscount aisp is null start" ;
 			   ic = appui::getInstance()->getWindowContext();
 		       HSF::updateUserAIS(folder,aisp,ic);
+			   qDebug() <<"End part/viscount aisp is null done" ;
 	     }
 	    
 		

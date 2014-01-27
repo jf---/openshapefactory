@@ -172,10 +172,12 @@ static __declspec(dllexport) TopoDS_Shape AddNewSphereSurfacePatch(gp_Pnt center
 	static __declspec(dllexport) TopoDS_Shape AddNewConstrainedSurface(QList<TopoDS_Shape> shapelist);
 	//add new revolve
 	static __declspec(dllexport) TopoDS_Shape AddNewRevolveSurface(TopoDS_Shape crv1, gp_Pnt origin, gp_Vec dir);
+	static __declspec(dllexport) TopoDS_Shape AddNewRevolveShape(TopoDS_Shape shape, gp_Pnt origin, gp_Vec dir,double angle);
 	//add new sweep
     static __declspec(dllexport) TopoDS_Shape AddNewSweep(TopoDS_Shape path, TopoDS_Shape crossection);
+	static __declspec(dllexport) TopoDS_Shape AddNewSweepNormalToSurface(TopoDS_Shape path, TopoDS_Shape srf, TopoDS_Shape crossection);
 	static __declspec(dllexport) TopoDS_Shape AddNewSweepBrep(TopoDS_Shape path, TopoDS_Shape crossection);
-	static __declspec(dllexport) TopoDS_Shape AddNewSweepGeom(TopoDS_Shape aShapePath, TopoDS_Shape crossection,int transition);
+	static __declspec(dllexport) TopoDS_Shape AddNewSweepGeom(TopoDS_Shape aShapePath, TopoDS_Shape crossection,int transition,bool issolid);
 	
 	static __declspec(dllexport) TopoDS_Shape AddNewSweep2sec(TopoDS_Shape path, TopoDS_Shape crossection1,TopoDS_Shape crossection2);
 
@@ -225,8 +227,8 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 	//shape operations
 	static __declspec(dllexport) TopoDS_Shape BooleanCommon(TopoDS_Shape Stock,TopoDS_Shape Tool);
 	static __declspec(dllexport) TopoDS_Shape BooleanSubstract(TopoDS_Shape Stock,TopoDS_Shape Tool);
-	static __declspec(dllexport) TopoDS_Shape BooleanGlue(TopoDS_Shape Stock,TopoDS_Shape Tool);
-	static __declspec(dllexport) TopoDS_Shape BooleanSubstractFiller(TopoDS_Shape Stock,TopoDS_Shape Tool,const BOPTools_DSFiller& filler);
+	static __declspec(dllexport) TopoDS_Shape BooleanGlue(QList<TopoDS_Shape> argumentlist);
+//	static __declspec(dllexport) TopoDS_Shape BooleanSubstractFiller(TopoDS_Shape Stock,TopoDS_Shape Tool,const BOPTools_DSFiller& filler);
 	
 
 
@@ -362,6 +364,8 @@ static __declspec(dllexport) TopoDS_Shape getedgefromshape(TopoDS_Shape shape1);
 	static __declspec(dllexport) gp_Pnt AddNewUVPt(TopoDS_Shape srf,double u,double v);
 	static __declspec(dllexport) gp_Vec AddNewUVVec(TopoDS_Shape srf,double u,double v);
 	static __declspec(dllexport) TopoDS_Shape AddNewIsoCurve(TopoDS_Shape srf,bool orientation, double uv);
+	static __declspec(dllexport) TopoDS_Shape AddNewIsoCurveExact(TopoDS_Shape srf,bool orientation, double uv);
+	
 	static __declspec(dllexport) gp_Pnt getpointfromshape(TopoDS_Shape point);
 
 	static __declspec(dllexport) TopoDS_Shape AddNew2dLineOnSurface(TopoDS_Shape face, TopoDS_Shape curve);

@@ -98,6 +98,9 @@ scriptwidget::scriptwidget(QWidget *parent)
 	hsfapi = new HsfScriptingInterface() ;
 	hsfapi->setparentwidget(this);
 	//myengine.globalObject().setProperty("hsf",myengine.newQObject(hsfapi));
+	
+	myengine.importExtension("qt.core");
+	myengine.importExtension("qt.gui");
 	QScriptValue myglobal =  myengine.newQObject(hsfapi);
 	myglobal.setPrototype(myengine.globalObject());
 	myengine.setGlobalObject(myglobal);

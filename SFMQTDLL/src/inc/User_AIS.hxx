@@ -18,6 +18,14 @@
 #include <StdPrs_WFDeflectionShape.hxx>
 #include <StdSelect_BRepSelectionTool.hxx>
 #include <Geom_Plane.hxx>
+#include <StdSelect.hxx>
+#include <BRepBndLib.hxx>
+#include <StdSelect_BRepOwner.hxx>
+#include <Bnd_Box.hxx>
+#include <Select3D_SensitiveBox.hxx>
+#include <StdSelect_BRepSelectionTool.hxx>
+#include <Geom_Transformation.hxx>
+#include <SelectMgr_Selection.hxx>
 
 // Handle definition
 //
@@ -40,9 +48,17 @@ public:
 	TopoDS_Shape Shape() { return myShape;}
 
 private:
+
+    virtual const Bnd_Box& BoundingBox() ;
+	Standard_EXPORT   static  TopAbs_ShapeEnum SelectionType(const Standard_Integer aDecompositionMode) ;
+	Standard_EXPORT   static  Standard_Integer SelectionMode(const TopAbs_ShapeEnum aShapeType) ;
+    Standard_EXPORT   static  Standard_Real GetDeflection(const TopoDS_Shape& aShape,const Handle(Prs3d_Drawer)& aDrawer) ;
+
+
 	void Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationManager,
 				 const Handle_Prs3d_Presentation& aPresentation,
 				 const Standard_Integer aMode = 0) ;
+	
 	void ComputeSelection(const Handle_SelectMgr_Selection& aSelection,
 						  const Standard_Integer aMode) ;
 	void Compute(const Handle_Prs3d_Projector& aProjector,const Handle_Prs3d_Presentation& aPresentation);
@@ -55,6 +71,10 @@ private:
 	Handle_AIS_InteractiveContext      mycontext;
 //
 DEFINE_STANDARD_RTTI(User_AIS)
+
+Bnd_Box myBB;
+Standard_Boolean myCompBB;
+
 private:
 //	Quantity_NameOfColor myCylindricalFaceColor;
 //	Quantity_NameOfColor myPlanarFaceColor;

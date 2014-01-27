@@ -11,13 +11,19 @@
 
 
 #include "AIS_MapOfInteractive.hxx"	//put this in the right place!!!!!!
+#include "Aspect_DisplayConnection.hxx"
+#include "Graphic3d.hxx"
 
 
 QoccController::QoccController()
 {
 	// Create the OCC Viewers
-	TCollection_ExtendedString a3DName( "Visual3D" );
-	myViewer = createViewer( "DISPLAY", a3DName.ToExtString(), "", 1000.0 );
+  TCollection_ExtendedString a3DName("Visu3D");
+  myViewer = createViewer( getenv("DISPLAY"), a3DName.ToExtString(), "", 1000.0,
+		               V3d_XposYnegZpos, Standard_True, Standard_True );
+
+	//TCollection_ExtendedString a3DName( "Visual3D" );
+	//myViewer = createViewer("DISPLAY", a3DName.ToExtString(), "", 1000.0 );
 	myViewer->Init();
 	myViewer->SetZBufferManagment( Standard_False );
 	myViewer->SetDefaultViewProj( V3d_Zpos );	// Top view
@@ -46,7 +52,10 @@ QoccController::QoccController( QoccDocument* qDoc )
 {
 	// Create the OCC Viewers
 	TCollection_ExtendedString a3DName( "Visual3D" );
-	myViewer = createViewer( "DISPLAY", a3DName.ToExtString(), "", 1000.0 );
+	//myViewer = createViewer( "DISPLAY", a3DName.ToExtString(), "", 1000.0 );
+	
+	myViewer=createViewer( getenv("DISPLAY"), a3DName.ToExtString(), "", 1000.0,
+		               V3d_XposYnegZpos, Standard_True, Standard_True );
 	myViewer->Init();
 	myViewer->SetZBufferManagment( Standard_False );
 	myViewer->SetDefaultViewProj( V3d_Zpos );	// Top view
@@ -55,6 +64,7 @@ QoccController::QoccController( QoccDocument* qDoc )
 	myContext = new AIS_InteractiveContext( myViewer );
 	myContext->SetDisplayMode( AIS_Shaded );
 	myContext->HiddenLineAspect();
+	myContext->SetHilightColor(Quantity_NameOfColor::Quantity_NOC_YELLOW);
 
 	myGridType       = Aspect_GT_Rectangular;
 	myGridMode       = Aspect_GDM_Lines;
@@ -103,11 +113,37 @@ Handle(V3d_Viewer) QoccController::createViewer(	const Standard_CString aDisplay
 							V3d_WAIT );
 }
 #else
-Handle(V3d_Viewer) QoccController::createViewer(	const Standard_CString /* aDisplay */,
-													const Standard_ExtString aName,
-													const Standard_CString aDomain,
-													const Standard_Real ViewSize )
+Handle(V3d_Viewer) QoccController::createViewer(	const Standard_CString aDisplay,
+				                     const Standard_ExtString aName,
+				                     const Standard_CString aDomain,
+				                     const Standard_Real ViewSize,
+				                     const V3d_TypeOfOrientation ViewProj,
+				                     const Standard_Boolean ComputedMode,
+				                     const Standard_Boolean aDefaultComputedMode )
 {
+
+static Handle(Graphic3d_GraphicDriver) aGraphicDriver;
+
+  if (aGraphicDriver.IsNull())
+  {
+    Handle(Aspect_DisplayConnection) aDisplayConnection;
+#if !defined(_WIN32) && !defined(__WIN32__) && (!defined(__APPLE__) || defined(MACOSX_USE_GLX))
+    aDisplayConnection = new Aspect_DisplayConnection (aDisplay);
+#endif
+    aGraphicDriver = Graphic3d::InitGraphicDriver (aDisplayConnection);
+  }
+
+  return new V3d_Viewer(aGraphicDriver,aName,aDomain,ViewSize,ViewProj,
+           Quantity_NOC_GRAY30,V3d_ZBUFFER,V3d_GOURAUD,V3d_WAIT,
+           ComputedMode,aDefaultComputedMode,V3d_TEX_NONE);
+
+
+
+	/* if (myView.IsNull())
+     myView = myContext->CurrentViewer()->CreateView();
+
+	 return myView;
+
     static Handle(Graphic3d_WNTGraphicDevice) defaultdevice;
     if( defaultdevice.IsNull() )
 	{
@@ -122,7 +158,7 @@ Handle(V3d_Viewer) QoccController::createViewer(	const Standard_CString /* aDisp
 							Quantity_NOC_BLACK,
                     		V3d_ZBUFFER,
 							V3d_GOURAUD,
-							V3d_WAIT );
+							V3d_WAIT );*/
 }
 #endif  // WNT
 

@@ -38,13 +38,13 @@ IMPLEMENT_STANDARD_SUPERTYPE_ARRAY_END()
 IMPLEMENT_STANDARD_TYPE_END(AIS_PointCloud)
 
 
-#include <Graphic2d_Text.hxx>
-#include <Select2D_SensitiveBox.hxx>
-#include <Graphic2d_Segment.hxx>
+//#include <Graphic2d_Text.hxx>
+//#include <Select2D_SensitiveBox.hxx>
+//#include <Graphic2d_Segment.hxx>
 #include <OSD_Environment.hxx>
-#include <Graphic2d_View.hxx>
-#include <Graphic2d_Drawer.hxx>
-#include "PrsMgr_PresentationManager2d.hxx"
+//#include <Graphic2d_View.hxx>
+//#include <Graphic2d_Drawer.hxx>
+//#include "PrsMgr_PresentationManager2d.hxx"
 #include "SelectMgr_Selection.hxx"
 #include <AIS_Drawer.hxx>
 #include <Graphic3d_AspectMarker3d.hxx>
@@ -125,11 +125,11 @@ void AIS_PointCloud::Compute(const Handle(Prs3d_Projector)& aProjector,
  {
  }
 
-void AIS_PointCloud::Compute(const Handle(PrsMgr_PresentationManager2d)& aPresentationManager, 
-                         const Handle(Graphic2d_GraphicObject)& aGrObj, 
-                         const Standard_Integer unMode)
-{
-}
+//void AIS_PointCloud::Compute(const Handle(PrsMgr_PresentationManager2d)& aPresentationManager, 
+//                         const Handle(Graphic2d_GraphicObject)& aGrObj, 
+//                         const Standard_Integer unMode)
+//{
+//}
 
 void AIS_PointCloud::ComputeSelection(const Handle(SelectMgr_Selection)& aSelection, 
 				      const Standard_Integer unMode)

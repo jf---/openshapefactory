@@ -24,6 +24,13 @@
 #include "cowbellprogress.h"
 #include "QGLwidget"
 
+#include <WNT_Window.hxx>
+#include <Visual3d_View.hxx>
+#include <Graphic3d_ExportFormat.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
+#include <QWindowsStyle>
+#include <Aspect_DisplayConnection.hxx>
+
 //#include <windows.h>		// Header File For Windows
 //#include <stdio.h>			// Header File For Standard Input/Output
 //#include <gl\gl.h>			// Header File For The OpenGL32 Library
@@ -116,10 +123,10 @@ occviewport::occviewport( const QoccController* aController,
 	getContext()->SetToHilightSelected( true );
 	//getContext()->SetDeviationCoefficient( 0.001);
 
-	getContext()->SetDeviationCoefficient( 0.0006);
+	//getContext()->SetDeviationCoefficient( 0.0006);
 	//getContext()->SetDeviationAngle(4);
 	//myView->SetBackgroundColor(Quantity_NameOfColor::Quantity_NOC_GRAY);
-	myView->SetBackgroundColor(Quantity_NameOfColor::Quantity_NOC_LIGHTGRAY);
+	myView->SetBackgroundColor(Quantity_NameOfColor::Quantity_NOC_ALICEBLUE);
 	
 	myView->EnableGLLight(true);
 	myView->SetAntialiasingOff();
@@ -209,24 +216,39 @@ void occviewport::initializeOCC()
 	Aspect_RenderingContext rc = 0;
 	//myController = aContext;
 
-	int windowHandle = (int) winId();
+	/*int windowHandle = (int) winId();
     short lo = (short)   windowHandle;
     short hi = (short) ( windowHandle >> 16 );
 
 #ifdef WNT
 	
-	
-    myWindow = new WNT_Window( Handle(Graphic3d_WNTGraphicDevice)
+	*/
+    /*myWindow = new WNT_Window( Handle(Graphic3d_WNTGraphicDevice)
 							   ::DownCast( myController->getViewer()->Device() ) ,
-							   (int) hi, (int) lo );
+							   (int) hi, (int) lo );*/
+
+	
+  Aspect_Handle aWindowHandle = (Aspect_Handle )winId();
+  Handle(WNT_Window) myWindow = new WNT_Window (aWindowHandle);
+
+  myView->SetWindow (myWindow);
+  if (!myWindow->IsMapped())
+  {
+    myWindow->Map();
+  }
+  //myView->SetBackgroundColor (Quantity_NOC_BLACK);
+  myView->MustBeResized();
+
+
+
 	// Turn off background erasing in OCC's window
 	myWindow->SetFlags( WDF_NOERASEBKGRND );
-#else
-	// rc = (Aspect_RenderingContext) glXGetCurrentContext(); // Untested!
-    myWindow = new Xw_Window( Handle(Graphic3d_GraphicDevice)
-									::DownCast( myController->getViewer()->Device() ),
-							  (int) hi, (int) lo, Xw_WQ_SAMEQUALITY, Quantity_NOC_BLACK );
-#endif // WNT
+//#else
+//	// rc = (Aspect_RenderingContext) glXGetCurrentContext(); // Untested!
+//    myWindow = new Xw_Window( Handle(Graphic3d_GraphicDevice)
+//									::DownCast( myController->getViewer()->Device() ),
+//							  (int) hi, (int) lo, Xw_WQ_SAMEQUALITY, Quantity_NOC_BLACK );
+//#endif // WNT
 
 	if (!myView.IsNull())
 	{
@@ -234,22 +256,22 @@ void occviewport::initializeOCC()
 
 		//rc = (Aspect_RenderingContext) wglGetCurrentContext();
 		// Set my window (Hwnd) into the OCC view
-	    myView->SetWindow( myWindow, rc , paintCallBack, this  );
+	    //myView->SetWindow( myWindow, rc , paintCallBack, this  );
 		//myView->SetWindow( myWindow);
 		V3d_TypeOfVisualization aMode;
         		
 #ifdef OCC_PATCHED
 		aMode = V3d_ZBUFFER;
 #else
-		aMode = V3d_WIREFRAME;
-		//aMode = V3d_ZBUFFER;
+		//aMode = V3d_WIREFRAME;
+		aMode = V3d_ZBUFFER;
 #endif
 
 		// Set up axes (Trihedron).
-		myView->TriedronDisplay( Aspect_TypeOfTriedronPosition::Aspect_TOTP_LEFT_LOWER, Quantity_NOC_BLACK, 0.1, aMode );
+		myView->TriedronDisplay( Aspect_TypeOfTriedronPosition::Aspect_TOTP_RIGHT_UPPER, Quantity_NOC_BLACK, 0.1, aMode );
 
 		// For testing OCC patches
-		//myView->ColorScaleDisplay();
+		myView->ColorScaleDisplay();
 
 		// Map the window
 		if (!myWindow->IsMapped())
@@ -258,7 +280,7 @@ void occviewport::initializeOCC()
 		}
 		
 		myView->EnableDepthTest(true);
-		//myView->SetShadingModel(V3d_TypeOfShadingModel::V3d_GOURAUD);
+		myView->SetShadingModel(V3d_TypeOfShadingModel::V3d_GOURAUD);
 
 		myViewResized = Standard_True;		// Force a redraw to the new window on next paint event
 		myViewInitialized = Standard_True;	// This is to signal any connected slots that the view is ready.
@@ -968,6 +990,29 @@ void occviewport::onMouseMove( Qt::MouseButtons buttons,
 	Handle(V3d_View) aview = this->getView();
 	
 	AIS_StatusOfDetection status = myController->getContext()->MoveTo( point.x(), point.y(), aview );
+	if (status == AIS_StatusOfDetection::AIS_SOD_OnlyOneDetected)
+		{
+			qDebug() << "something selected";
+			//myController->getContext()->
+			Handle_AIS_InteractiveContext ctx = myController->getContext();
+			Handle_AIS_InteractiveObject curais;
+			if (ctx->NbSelected() > 0)
+				{
+				myController->getContext()->InitSelected();
+				curais = myController->getContext()->SelectedInteractive();
+			
+				}
+			else 
+				{
+				if (ctx->NbCurrents() > 0)
+					{
+					myController->getContext()->InitCurrent();
+					curais = myController->getContext()->Current();
+					}
+				
+				}
+
+		}
 
 	if ( buttons & Qt::LeftButton )
 	{
@@ -1518,7 +1563,7 @@ void occviewport::drawlayer()
      int yPos = myCurrentPoint.y(); 
      int textSize = 15;
 	 myLayer->SetColor(Quantity_NOC_ORANGE);
-	 myLayer->SetTextAttributes( Graphic3d_NameOfFont::Graphic3d_NOF_ASCII_ITALIC_COMPLEX, Aspect_TODT_NORMAL, Quantity_NOC_ORANGE );
+//	 myLayer->SetTextAttributes( Graphic3d_NameOfFont::Graphic3d_NOF_ASCII_ITALIC_COMPLEX, Aspect_TODT_NORMAL, Quantity_NOC_ORANGE );
      myLayer->DrawText(aString, myCurrentPoint.x(), myCurrentPoint.y(), textSize);// !!!!! CRASH ERROR !!!!!!!!
      
    /*   draw a polyline
@@ -1545,7 +1590,7 @@ void occviewport::drawlayer()
 	 myLayer->SetColor(Quantity_NOC_GREEN);
      //myLayer->DrawRectangle(71,200,50,150);
 	 myLayer->SetColor(Quantity_NOC_YELLOW);
-     myLayer->SetTextAttributes( Graphic3d_NameOfFont::Graphic3d_NOF_ASCII_ITALIC_COMPLEX, Aspect_TODT_NORMAL, Quantity_NOC_YELLOW );
+//     myLayer->SetTextAttributes( Graphic3d_NameOfFont::Graphic3d_NOF_ASCII_ITALIC_COMPLEX, Aspect_TODT_NORMAL, Quantity_NOC_YELLOW );
      //myLayer->DrawText(nameofdetected.ToCString(), 20, 200, textSize);// !!!!! CRASH ERROR !!!!!!!!
      
           // and close the layer and redraw

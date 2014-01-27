@@ -58,6 +58,8 @@ typedef QMap<QString,QVariant> variantmap;
 typedef QMap<QString,gp_Pnt> pointmap;
 typedef QList<gp_Pnt> pointlist;
 
+ //Q_DECLARE_METATYPE(variantmap)
+ Q_DECLARE_METATYPE(variantmap*)
  Q_DECLARE_METATYPE(shapefactory)
  Q_DECLARE_METATYPE(gp_Pnt)
  Q_DECLARE_METATYPE(gp_Vec)
@@ -80,7 +82,8 @@ typedef QList<gp_Pnt> pointlist;
  Q_DECLARE_METATYPE(QList<int>)
  Q_DECLARE_METATYPE(MeshVS_ElementalColorPrsBuilder*)
  Q_DECLARE_METATYPE(QList<QVariant>)
- Q_DECLARE_METATYPE(variantmap)
+ //Q_DECLARE_METATYPE(variantmap)
+ //Q_DECLARE_METATYPE(QMap<QString,QVariant>)
  Q_DECLARE_METATYPE(gp_Ax1)
  Q_DECLARE_METATYPE(gp_Ax3)
  Q_DECLARE_METATYPE(gp_Pnt2d)
@@ -121,6 +124,7 @@ class QoccInputOutput;
 	QSqlDatabase *db;
 
 
+	//Handle_AIS_Shape aisp;
 	Handle_User_AIS aisp;
 	Handle(AIS_Gauss) mygauss;
 	//Handle( StlMesh_Mesh ) aSTLMesh;
@@ -163,6 +167,9 @@ class QoccInputOutput;
 	QFileSystemWatcher* filewatch;
 
 	QKinect::QKinectWrapper kinect;
+	
+	variantmap* objectcache;
+
 
 	
 
@@ -194,6 +201,7 @@ class QoccInputOutput;
 	 QScriptValue getcsvrow(QScriptValue csv,QScriptValue row , QScriptValue column);
 	 QScriptValue getcsvrowcount(QScriptValue csv);
 	 QScriptValue getcsvcolumncount(QScriptValue csv,QScriptValue row);
+	 QScriptValue viewtext();
 	
 
 	 QScriptValue kinectstart();
@@ -216,6 +224,13 @@ class QoccInputOutput;
 	 QScriptValue getmapvalues();
 	 QScriptValue mapcontains();
 	 QScriptValue mapgetvalue();
+
+	 QScriptValue clearcache();
+	 QScriptValue cacheobject();
+	 QScriptValue cachecontains();
+	 QScriptValue getcacheobject();
+	 QScriptValue insertcacheobject();
+
 
 	 QScriptValue make2ddrawing();
 	 QScriptValue make2ddrawingpoly();
@@ -255,6 +270,7 @@ class QoccInputOutput;
 	  QScriptValue vislist();
 	  QScriptValue vis(QScriptValue obj);
 	  QScriptValue viscurvature();
+	  QScriptValue getprincipaldirection();
 	  QScriptValue initpart();
 	  QScriptValue endpart();
 	  QScriptValue panelize();
@@ -274,6 +290,7 @@ class QoccInputOutput;
 		QScriptValue makepoint();
 		QScriptValue makepoint(double x, double y, double z);
 		QScriptValue makeplane();
+		QScriptValue makemeanplane();
 	    QScriptValue makepointoncurve();
 		QScriptValue makepointmovebyvector();
 
@@ -305,6 +322,7 @@ class QoccInputOutput;
 	//  QScriptValue makeparabola;
 	//  QScriptValue makeoffsetcurve();
 		QScriptValue make2dpoint();
+		QScriptValue make2dpointonsurfacefrompoint();
 		QScriptValue make2dpointlist();
 		QScriptValue insert2dpointtolist();
 		QScriptValue makesplineonsurface();
@@ -335,8 +353,13 @@ class QoccInputOutput;
 		QScriptValue makeextrude();
 		QScriptValue makeintsrfsrf();
 		QScriptValue makesweep();
+		QScriptValue makesweepnormaltosurface();
+		QScriptValue makebooleancut();
+		QScriptValue makebooleancommon();
+		QScriptValue makebooleanfuse();
 		QScriptValue getsurfacearea();
 		QScriptValue makesplit();
+		QScriptValue makesplit2();
 		QScriptValue makesweepbrep();
 		QScriptValue makesweepgeom();
 		QScriptValue makesisocrv();
@@ -345,7 +368,7 @@ class QoccInputOutput;
 
 		QScriptValue makesweep2sec();
 		QScriptValue makefillsrf();
-		QScriptValue volmesh();
+		//QScriptValue volmesh();
 		QScriptValue makeoffsetsurface();
 		QScriptValue makeprojectcrvtosrf();
 		QScriptValue makecontrainedsrf();

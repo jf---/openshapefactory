@@ -31,7 +31,7 @@ IMPLEMENT_STANDARD_TYPE_END(User_AIS)
 #include <Poly_Triangulation.hxx>
 #include <TColgp_Array1OfDir.hxx>
 #include <GProp_PGProps.hxx>
-#include <Graphic3d_Array1OfVertexNC.hxx>
+//#include <Graphic3d_Array1OfVertexNC.hxx>
 #include <Aspect_Array1OfEdge.hxx>
 #include <Quantity_Color.hxx>
 #include <BRepBuilderAPI_NurbsConvert.hxx>
@@ -63,7 +63,7 @@ AIS_InteractiveObject(PrsMgr_TOP_ProjectorDependant)
 	myShape = theshape;
 	SetHilightMode(0);
 	
-	SetSelectionMode(0);
+	SetSelectionMode(1);
 	myDrawer->SetShadingAspect(new Prs3d_ShadingAspect());
 
 	myPlanarFaceColor = Quantity_NOC_FIREBRICK3;
@@ -112,7 +112,7 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 	case 0:
 		aColor = AIS_InteractiveObject::Color();
 		SetColor(aColor);
-		//myDrawer->WireAspect()->SetColor (Quantity_NameOfColor::Quantity_NOC_WHITE);
+		myDrawer->WireAspect()->SetColor (Quantity_NameOfColor::Quantity_NOC_YELLOW);
 		StdPrs_WFDeflectionShape::Add(aPresentation,myShape, myDrawer );
 		break;
 	case 1:
@@ -120,7 +120,7 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 				
 					myDrawer->SetShadingAspectGlobal(Standard_False);
 					myDrawer->WireAspect()->SetColor(myOwnColor);
-					myDrawer->WireAspect()->SetWidth(2);	
+					//myDrawer->WireAspect()->SetWidth(4);	
 					StdPrs_WFDeflectionShape::Add(aPresentation,myShape, myDrawer );
 
 
@@ -152,8 +152,9 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 					myDrawer->PointAspect()->SetScale(1);
 					myDrawer->PointAspect()->SetTypeOfMarker(Aspect_TypeOfMarker::Aspect_TOM_O_STAR);
 
+					//here we set the line color
 					myDrawer->WireAspect()->SetColor(Quantity_NameOfColor::Quantity_NOC_BLACK);
-					myDrawer->WireAspect()->SetWidth(0.8);	
+					//myDrawer->WireAspect()->SetWidth(4);	
 					StdPrs_ShadedShape::Add(aPresentation,myShape, myDrawer);
 
 					
@@ -165,7 +166,7 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 								
 						//myDrawer->WireAspect()->SetColor(Quantity_NOC_BLACK);
 						//myDrawer->WireAspect()->SetColor(myOwnColor);
-						myDrawer->WireAspect()->SetWidth(2.0);	
+						//myDrawer->WireAspect()->SetWidth(4.0);	
 						StdPrs_WFDeflectionShape::Add(aPresentation,Ex.Current(), myDrawer );
 						//StdPrs_WFDeflectionShape::Add(aPresentation,myShape, myDrawer );
 
@@ -199,7 +200,7 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 					myDrawer->SetShadingAspectGlobal(Standard_False);
 					myDrawer->WireAspect()->SetColor(myOwnColor);
 					//myDrawer->WireAspect()->SetColor(Quantity_NOC_BLACK);
-					myDrawer->WireAspect()->SetWidth(2);	
+					//myDrawer->WireAspect()->SetWidth(4);	
 					StdPrs_ShadedShape::Add(aPresentation,myShape, myDrawer);
 					
 					if (myShape.IsNull()) return;
@@ -215,7 +216,7 @@ void User_AIS::Compute(const Handle_PrsMgr_PresentationManager3d& aPresentationM
 										
 								myDrawer->WireAspect()->SetColor(Quantity_NOC_BLACK);
 							    //myDrawer->WireAspect()->SetColor(myOwnColor);
-								myDrawer->WireAspect()->SetWidth(2);	
+								//myDrawer->WireAspect()->SetWidth(4);	
 								StdPrs_WFDeflectionShape::Add(aPresentation,Ex.Current(), myDrawer );
 								//StdPrs_WFDeflectionShape::Add(aPresentation,myShape, myDrawer );
 
@@ -246,31 +247,176 @@ void User_AIS::Compute(const Handle_Prs3d_Projector& aProjector,
 	StdPrs_HLRPolyShape::Add(aPresentation,myShape,myDrawer,aProjector);
 }
 
-void User_AIS::ComputeSelection(const Handle_SelectMgr_Selection& aSelection,
-									 const Standard_Integer aMode)
+//=======================================================================
+//function : SelectionType
+//purpose  : gives the type according to the Index of Selection Mode
+//=======================================================================
+
+TopAbs_ShapeEnum User_AIS::SelectionType(const Standard_Integer aMode)
 {
-	switch(aMode){
-	case 0:
-		StdSelect_BRepSelectionTool::Load(aSelection,this,myShape,TopAbs_SHAPE);
-		break;
-	case 1:
-		StdSelect_BRepSelectionTool::Load(aSelection,this,myShape,TopAbs_VERTEX);
-		break;
-	case 2:
-		StdSelect_BRepSelectionTool::Load(aSelection,this,myShape,TopAbs_EDGE);
-		break;
-	case 3:
-		StdSelect_BRepSelectionTool::Load(aSelection,this,myShape,TopAbs_WIRE);
-		break;
-	case 4:
-		StdSelect_BRepSelectionTool::Load(aSelection,this,myShape,TopAbs_FACE);
-		break;
-	}
+  switch(aMode){
+  case 1:
+    return TopAbs_VERTEX;
+  case 2:
+    return TopAbs_EDGE;
+  case 3:
+    return TopAbs_WIRE;
+  case 4:
+    return TopAbs_FACE;
+  case 5:
+    return TopAbs_SHELL;
+  case 6:
+    return TopAbs_SOLID;
+  case 7:
+    return TopAbs_COMPSOLID;
+  case 8:
+    return TopAbs_COMPOUND;
+  case 0:
+  default:
+    return TopAbs_SHAPE;
+  }
+  
 }
+//=======================================================================
+//function : SelectionType
+//purpose  : gives the SelectionMode according to the Type od Decomposition...
+//=======================================================================
+Standard_Integer User_AIS::SelectionMode(const TopAbs_ShapeEnum aType)
+{
+  switch(aType){
+  case TopAbs_VERTEX:
+    return 1;
+  case TopAbs_EDGE:
+    return 2;
+  case TopAbs_WIRE:
+    return 3;
+  case  TopAbs_FACE:
+    return 4;
+  case TopAbs_SHELL:
+    return 5;
+  case TopAbs_SOLID:
+    return 6;
+  case TopAbs_COMPSOLID:
+    return 7;
+  case TopAbs_COMPOUND:
+    return 8;
+  case TopAbs_SHAPE:
+  default:
+    return 0;
+  }
+}
+
+void User_AIS::ComputeSelection(const Handle(SelectMgr_Selection)& aSelection,
+                                              const Standard_Integer aMode)
+{
+  if(myShape.IsNull()) return;
+  if (myShape.ShapeType() == TopAbs_COMPOUND) {
+    TopoDS_Iterator anExplor (myShape);
+
+    if (!anExplor.More()) // empty Shape -> empty Assembly.
+      return;
+  }
+
+  static TopAbs_ShapeEnum TypOfSel;
+  TypOfSel = User_AIS::SelectionType(aMode);
+  TopoDS_Shape shape = myShape;
+  if( HasTransformation() ) {
+    Handle(Geom_Transformation) trsf = Transformation();
+    shape = shape.Located(TopLoc_Location(trsf->Trsf())*shape.Location());
+  }
+
+// POP protection against crash in low layers
+
+  Standard_Real aDeflection = GetDeflection(shape, myDrawer);
+  Standard_Boolean autoTriangulation = Standard_True;
+  try {  
+    //OCC_CATCH_SIGNALS
+    StdSelect_BRepSelectionTool::Load(aSelection,
+                                      this,
+                                      shape,
+                                      TypOfSel,
+                                      aDeflection,
+                                      myDrawer->HLRAngle(),
+                                      autoTriangulation); 
+  } catch ( Standard_Failure ) {
+//    cout << "a Shape should be incorrect : A Selection on the Bnd  is activated   "<<endl;
+    if ( aMode == 0 ) {
+      Bnd_Box B = BoundingBox();
+      Handle(StdSelect_BRepOwner) aOwner = new StdSelect_BRepOwner(shape,this);
+      Handle(Select3D_SensitiveBox) aSensitiveBox = new Select3D_SensitiveBox(aOwner,B);
+      aSelection->Add(aSensitiveBox);
+    }
+  }
+
+  // insert the drawer in the BrepOwners for hilight...
+  StdSelect::SetDrawerForBRepOwner(aSelection,myDrawer);
+}
+
+
+Standard_Real User_AIS::GetDeflection(const TopoDS_Shape& aShape,
+                                       const Handle(Prs3d_Drawer)& aDrawer)
+{
+  // WARNING: this same piece of code appears several times in Prs3d classes
+  Standard_Real aDeflection = aDrawer->MaximalChordialDeviation();
+  if (aDrawer->TypeOfDeflection() == Aspect_TOD_RELATIVE) {
+    Bnd_Box B;
+    BRepBndLib::Add(aShape, B, Standard_False);
+    if ( ! B.IsVoid() )
+    {
+      Standard_Real aXmin, aYmin, aZmin, aXmax, aYmax, aZmax;
+      B.Get(aXmin, aYmin, aZmin, aXmax, aYmax, aZmax);
+      aDeflection = Max( aXmax-aXmin, Max(aYmax-aYmin, aZmax-aZmin)) *
+                    aDrawer->DeviationCoefficient() * 4;
+    }
+  }
+  return aDeflection;
+}
+
+
+
+//void User_AIS::ComputeSelection(const Handle_SelectMgr_Selection& aSelection,
+//									 const Standard_Integer aMode)
+//{
+//	switch(aMode){
+//	case 0:
+//		StdSelect_BRepSelectionTool::Load(aSelection,myShape,TopAbs_COMPOUND,Precision::Confusion(),Precision::Angular());
+//		break;
+//	case 1:
+//		StdSelect_BRepSelectionTool::Load(aSelection,myShape,TopAbs_VERTEX,Precision::Confusion(),Precision::Angular());
+//		break;
+//	case 2:
+//		StdSelect_BRepSelectionTool::Load(aSelection,myShape,TopAbs_EDGE,Precision::Confusion(),Precision::Angular());
+//		break;
+//	case 3:
+//		StdSelect_BRepSelectionTool::Load(aSelection,myShape,TopAbs_WIRE,Precision::Confusion(),Precision::Angular());
+//		break;
+//	case 4:
+//		StdSelect_BRepSelectionTool::Load(aSelection,myShape,TopAbs_FACE,Precision::Confusion(),Precision::Angular());
+//		break;
+//	}
+//}
 
 Standard_Integer User_AIS::NbPossibleSelection() const
 {
 	return 5;
+}
+
+const Bnd_Box& User_AIS::BoundingBox()  
+{
+  if (myShape.ShapeType() == TopAbs_COMPOUND) {
+    TopoDS_Iterator anExplor (myShape);
+
+    if (!anExplor.More()) { // empty Shape  -> empty Assembly.
+      myBB.SetVoid();
+      return myBB;
+    }
+  }
+
+  if(myCompBB) {
+    BRepBndLib::AddClose(myShape, myBB);
+    myCompBB = Standard_False;
+  }
+  return myBB;
 }
 
 Standard_Boolean User_AIS::AcceptShapeDecomposition() const
