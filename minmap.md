@@ -1,0 +1,1 @@
+&lt;wiki:gadget url="http://openshapefactory.googlecode.com/hg/doc/openshapefactorymindmap/openshapefactorymindmapgadget.xml"  width="600" height="500"/&gt;
